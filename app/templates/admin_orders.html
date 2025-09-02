@@ -266,10 +266,12 @@
 
         .btn-danger {
             background-color: var(--danger-color);
+            color: white;
         }
 
         .btn-danger:hover {
             background-color: #c82333;
+            transform: translateY(-2px);
         }
 
         .btn-success {
@@ -287,6 +289,17 @@
 
         .btn-warning:hover {
             background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-warning:disabled:hover {
+            transform: none;
+            background-color: var(--warning-color);
         }
 
         .form-row {
@@ -339,6 +352,10 @@
             color: var(--accent-color);
         }
 
+        .card-header form {
+            margin: 0;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 992px) {
             .sidebar {
@@ -368,6 +385,11 @@
             }
             .action-buttons {
                 flex-direction: column;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
             }
         }
     </style>
@@ -400,6 +422,10 @@
                 <a href="/admin/financial-analytics" class="sidebar-link">
                     <i class="fas fa-chart-line"></i>
                     <span>Финансовая аналитика</span>
+                </a>
+                <a href="/admin/data-management" class="sidebar-link">
+                    <i class="fas fa-database"></i>
+                    <span>Data Management</span>
                 </a>
                 <a href="/admin/steam-settings" class="sidebar-link">
                     <i class="fas fa-cog"></i>
@@ -517,8 +543,25 @@
         </div>
 
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <h2>Заказы пользователей</h2>
+                <div style="display: flex; gap: 10px;">
+                    <!-- Кнопка удаления всех заказов всех пользователей -->
+                    <form action="{{ url_for('delete_all_orders') }}" method="POST" 
+                          onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ заказы ВСЕХ пользователей? Это действие нельзя отменить!');">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Удалить все заказы
+                        </button>
+                    </form>
+                    
+                    <!-- Кнопка удаления заказов выбранного пользователя -->
+                    <form id="deleteUserOrdersForm" method="POST" 
+                          onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ заказы этого пользователя? Это действие нельзя отменить!');">
+                        <button type="submit" class="btn btn-warning" id="deleteUserOrdersBtn" disabled>
+                            <i class="fas fa-trash"></i> Удалить заказы пользователя
+                        </button>
+                    </form>
+                </div>
             </div>
             
             <div class="user-selector">
@@ -766,22 +809,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Установка текущей даты и времени для поля даты
-            const now = new Date();
-            const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
-            
-            dateInputs.forEach(input => {
-                if (!input.value) {
-                    input.value = now.toISOString().slice(0, 19);
-                }
-            });
-
-            // Фильтрация заказов
             const userFilter = document.getElementById('user_filter');
+            const deleteUserOrdersForm = document.getElementById('deleteUserOrdersForm');
+            const deleteUserOrdersBtn = document.getElementById('deleteUserOrdersBtn');
             const recentOrdersSection = document.getElementById('orders-recent');
             const allOrdersSection = document.getElementById('orders-all');
             const userOrdersSections = document.querySelectorAll('.user-orders:not(#orders-all)');
             
+            let currentSelectedUser = null;
+
             // Показываем последние заказы по умолчанию
             recentOrdersSection.classList.add('active');
             allOrdersSection.classList.remove('active');
@@ -790,18 +826,39 @@
             userFilter.addEventListener('change', function() {
                 const selectedValue = this.value;
                 
-                // Скрываем все секции
+                // Активируем кнопку только если выбран конкретный пользователь
+                if (selectedValue !== 'recent' && selectedValue !== 'all') {
+                    currentSelectedUser = selectedValue;
+                    deleteUserOrdersBtn.disabled = false;
+                    
+                    // Обновляем action формы
+                    deleteUserOrdersForm.action = `/admin/delete_user_orders/${selectedValue}`;
+                } else {
+                    currentSelectedUser = null;
+                    deleteUserOrdersBtn.disabled = true;
+                }
+                
+                // Логика фильтрации заказов
                 recentOrdersSection.classList.remove('active');
                 allOrdersSection.classList.remove('active');
                 userOrdersSections.forEach(section => section.classList.remove('active'));
                 
-                // Показываем выбранную секцию
                 if (selectedValue === 'recent') {
                     recentOrdersSection.classList.add('active');
                 } else if (selectedValue === 'all') {
                     allOrdersSection.classList.add('active');
                 } else {
                     document.getElementById(`orders-${selectedValue}`).classList.add('active');
+                }
+            });
+
+            // Установка текущей даты и времени для поля даты
+            const now = new Date();
+            const dateInputs = document.querySelectorAll('input[type="datetime-local"]');
+            
+            dateInputs.forEach(input => {
+                if (!input.value) {
+                    input.value = now.toISOString().slice(0, 19);
                 }
             });
         });

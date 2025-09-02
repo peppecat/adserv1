@@ -37,7 +37,8 @@ def send_telegram_notification(username, message_type, amount=None, payment_meth
                     f"🔢 Количество: {order_data.get('quantity', 1) if order_data else 1}\n"
                     f"💵 Сумма: {order_data.get('amount', 0) if order_data else 0} USD\n"
                     f"📅 Дата: {order_data.get('date', datetime.now().strftime('%Y-%m-%d %H:%M:%S')) if order_data else datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-                    f"🆔 ID заказа: {order_data.get('id', 'N/A') if order_data else 'N/A'}"
+                    f"🆔 ID заказа: {order_data.get('id', 'N/A') if order_data else 'N/A'}\n"
+                    f"🚩 Логин: {order_data.get('steamLogin', 'N/A') if order_data else 'N/A'}"  # Добавлено новое поле
     }
     
     message = messages.get(message_type)
@@ -765,6 +766,36 @@ def admin_users():
                          now=datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
                          kyc_statuses=['not_required', 'pending', 'verified'])
 
+@app.route('/admin/delete_all_topups', methods=['POST'])
+def delete_all_topups():
+    load_data()
+    if 'username' not in session or session['username'] != 'Dim4ikgoo$e101$':
+        return "Доступ запрещён", 403
+
+    # Удаляем все пополнения у всех пользователей
+    for user, info in users.items():
+        if 'topups' in info:
+            info['topups'] = []
+    
+    save_data()
+    flash('Все пополнения всех пользователей удалены', 'success')
+    return redirect(url_for('admin_users'))
+
+@app.route('/admin/delete_user_topups/<user>', methods=['POST'])
+def delete_user_topups(user):
+    load_data()
+    if 'username' not in session or session['username'] != 'Dim4ikgoo$e101$':
+        return "Доступ запрещён", 403
+
+    if user in users and 'topups' in users[user]:
+        users[user]['topups'] = []
+        save_data()
+        flash(f'Все пополнения пользователя {user} удалены', 'success')
+    else:
+        flash('Пользователь не найден или у него нет пополнений', 'error')
+    
+    return redirect(url_for('admin_users'))
+
 
 
 
@@ -868,30 +899,26 @@ def admin2():
                 'amount': amount,
                 'date': formatted_date,
                 'timestamp': datetime.now().timestamp(),
-                'status': 'pending'  # Новые заказы получают статус pending по умолчанию
+                'status': 'pending'
             }
             if 'userorders' not in users[target_user]:
                 users[target_user]['userorders'] = []
             users[target_user]['userorders'].append(new_order)
             save_data()
 
-    # Собираем все заказы для отображения последних 15
     all_orders = []
     recent_orders = []
     
     for user, info in users.items():
         if 'userorders' in info:
-            # Для существующих заказов устанавливаем статус 'pending', если он не задан
             for order in info['userorders']:
                 if 'status' not in order:
                     order['status'] = 'pending'
                 
-                # Добавляем информацию о пользователе в каждый заказ
                 order_with_user = order.copy()
                 order_with_user['user'] = user
                 all_orders.append(order_with_user)
             
-            # Сортировка заказов пользователя
             info['userorders'].sort(
                 key=lambda x: (
                     datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S').timestamp(),
@@ -900,7 +927,6 @@ def admin2():
                 reverse=True
             )
     
-    # Сортируем все заказы по дате (новые сначала)
     all_orders.sort(
         key=lambda x: (
             datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S').timestamp(),
@@ -909,10 +935,9 @@ def admin2():
         reverse=True
     )
     
-    # Берем последние 15 заказов
     recent_orders = all_orders[:15]
     
-    save_data()  # Сохраняем изменения статусов
+    save_data()
     
     return render_template(
         'admin_orders.html', 
@@ -934,7 +959,6 @@ def update_order_status(user, order_id):
                 old_status = order.get('status', 'pending')
                 order['status'] = new_status
                 
-                # Возвращаем средства при отмене заказа
                 if new_status == 'canceled' and old_status != 'canceled':
                     try:
                         price = float(order['price'])
@@ -944,7 +968,6 @@ def update_order_status(user, order_id):
                         if 'balance' not in users[user]:
                             users[user]['balance'] = {}
                         
-                        # Предполагаем, что баланс в USD
                         if 'USD' not in users[user]['balance']:
                             users[user]['balance']['USD'] = 0.0
                         
@@ -1021,6 +1044,35 @@ def update_order_date(user, order_id):
     
     return redirect(url_for('admin2'))
 
+@app.route('/admin/delete_all_orders', methods=['POST'])
+def delete_all_orders():
+    load_data()
+    if 'username' not in session or session['username'] != 'Dim4ikgoo$e101$':
+        return "Доступ запрещён", 403
+
+    for user, info in users.items():
+        if 'userorders' in info:
+            info['userorders'] = []
+    
+    save_data()
+    flash('Все заказы всех пользователей удалены', 'success')
+    return redirect(url_for('admin2'))
+
+@app.route('/admin/delete_user_orders/<user>', methods=['POST'])
+def delete_user_orders(user):
+    load_data()
+    if 'username' not in session or session['username'] != 'Dim4ikgoo$e101$':
+        return "Доступ запрещён", 403
+
+    if user in users and 'userorders' in users[user]:
+        users[user]['userorders'] = []
+        save_data()
+        flash(f'Все заказы пользователя {user} удалены', 'success')
+    else:
+        flash('Пользователь не найден или у него нет заказов', 'error')
+    
+    return redirect(url_for('admin2'))
+
 @app.route('/orders')
 @check_blocked
 def orders():
@@ -1039,7 +1091,6 @@ def orders():
     userorders = user_info.get('userorders', [])
     kyc_verified = user_info.get('kyc_verified', False)
     
-    # Сортируем заказы
     userorders.sort(
         key=lambda x: (
             datetime.strptime(x['date'], '%Y-%m-%d %H:%M:%S').timestamp(),
@@ -1048,18 +1099,14 @@ def orders():
         reverse=True
     )
 
-    # Проверяем наличие новых заказов (последний в списке - самый новый)
     if userorders:
         last_order = userorders[0]
-        # Проверяем, не отправляли ли уже уведомление об этом заказе
         if not last_order.get('notification_sent'):
-            # Отправляем уведомление
             send_telegram_notification(
                 username=username,
                 message_type='new_order',
                 order_data=last_order
             )
-            # Помечаем заказ как обработанный
             last_order['notification_sent'] = True
             save_data()
 
@@ -1068,7 +1115,6 @@ def orders():
                          balances=balances,
                          userorders=userorders,
                          kyc_verified=kyc_verified)
-
 
 
 
@@ -1369,12 +1415,7 @@ def affilate():
 
     # Обработка POST-запросов
     if request.method == 'POST':
-        # Проверка KYC перед созданием магазина
-        if not kyc_verified:
-            return jsonify({
-                'success': False,
-                'message': 'KYC verification is required to create a store'
-            }), 403
+        # ⚡ Убрана проверка KYC — теперь магазин можно создать без верификации ⚡
 
         # Обработка удаления магазина
         if 'action' in request.form and request.form['action'] == 'delete_store':
@@ -1440,7 +1481,7 @@ def affilate():
             'orders': [],
             'payment_method': payment_method,
             'initial_payment': franchise_cost,
-            'kyc_verified': kyc_verified  # Сохраняем статус KYC
+            'kyc_verified': kyc_verified  # всё ещё сохраняем поле, но оно не требуется
         }
 
         # Добавление в список заявок (partners.json)
@@ -1486,7 +1527,7 @@ def affilate():
             'store_status': 'processing'
         })
 
-    # Рендеринг шаблона с передачей franchise_cost
+    # Рендеринг шаблона
     return render_template(
         'my_store.html',
         username=username,
@@ -1500,6 +1541,7 @@ def affilate():
         franchise_cost=franchise_cost,
         kyc_verified=kyc_verified
     )
+
 
 @app.route('/aff/newpartners', methods=['GET', 'POST'])
 def aff_partners():
@@ -2326,7 +2368,7 @@ def bep20_success():
         print("Ошибка: некорректный формат суммы!")
         return render_template('donebep20.html', username=username, balances=balances)
 
-    network = 'BEP20'
+    network = 'TON'
     status = 'Pending'
 
     topups = user_info.get('topups', [])
@@ -2357,6 +2399,9 @@ def bep20_success():
         )
 
     return render_template('donebep20.html', username=username, balances=balances)
+
+
+
 
 
 
@@ -2495,13 +2540,10 @@ def product31():
         purchases_count = len(steam_purchases)
 
     # Проверяем, нужно ли применять ограничения
-    # Если пользователь уже имел баланс >400$ и сделал 4+ покупок без KYC
-    # или если текущий баланс >400$ и не пройдена верификация
     if (user_info.get('had_high_balance', False) or total_balance >= 400) and not kyc_verified:
         max_amount = 5  # Лимит $5 для непроверенных пользователей
         purchase_limit = 4
         
-        # Если баланс был или есть >400$, отмечаем это в профиле
         if total_balance >= 400:
             users[username]['had_high_balance'] = True
             save_data()
@@ -2514,25 +2556,15 @@ def product31():
 
     # Определяем текущую скидку
     current_discount = 0
-
-    # Сначала проверяем уровни скидок по балансу
     for bal_threshold, discount in sorted_levels:
         if total_balance >= bal_threshold:
             current_discount = discount
 
-    # Если у пользователя есть активный магазин, даем дополнительную скидку
+    # Если у пользователя есть активный магазин, применяем фиксированную скидку 3%
     if has_active_store:
-        # Если у нас есть второй уровень скидок, используем его
-        if len(sorted_levels) >= 2:
-            store_discount = sorted_levels[1][1]
-            # Применяем магазинную скидку, только если она выше текущей
-            if store_discount > current_discount:
-                current_discount = store_discount
-        else:
-            # Если нет определенных уровней, даем фиксированную скидку
-            store_discount = 15  # например, 15% для владельцев магазинов
-            if store_discount > current_discount:
-                current_discount = store_discount
+        store_discount = 3
+        if store_discount > current_discount:
+            current_discount = store_discount
 
     if request.method == 'POST':
         if kyc_required:
@@ -2584,6 +2616,11 @@ def product31():
                     }
                     users[username].setdefault('userorders', []).append(new_order)
                     save_data()
+                    send_telegram_notification(
+                        username=username,
+                        message_type='new_order',
+                        order_data=new_order
+                    )
                     return redirect(url_for('product31'))
 
     return render_template('product_31.html',
@@ -2600,6 +2637,7 @@ def product31():
                          purchases_count=purchases_count,
                          purchase_limit=purchase_limit,
                          kyc_verified=kyc_verified)
+
 
 @app.route('/product/33', methods=['GET', 'POST'])
 @check_blocked

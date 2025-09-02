@@ -291,6 +291,10 @@
                     <i class="fas fa-chart-line"></i>
                     <span>Финансовая аналитика</span>
                 </a>
+                <a href="/admin/data-management" class="sidebar-link">
+                    <i class="fas fa-database"></i>
+                    <span>Data Management</span>
+                </a>
                 <a href="/admin/steam-settings" class="sidebar-link">
                     <i class="fas fa-cog"></i>
                     <span>Steam Settings</span>
@@ -345,10 +349,10 @@
             <div class="settings-info">
                 <h3>Инструкция по настройке</h3>
                 <p>1. Создайте бота через @BotFather в Telegram и получите токен</p>
-                <p>2. Добавьте бота в чат, куда должны приходить уведомления</p>
-                <p>3. Отправьте любое сообщение в чат</p>
-                <p>4. Перейдите по ссылке: <code>https://api.telegram.org/bot&lt;ВАШ_ТОКЕН_БОТА&gt;/getUpdates</code></p>
-                <p>5. Найдите <code>chat.id</code> в JSON-ответе и введите его ниже</p>
+                <p>2. Вставьте полученный токен в поле "Токен Telegram бота"</p>
+                <p>3. Откройте бот @myidbot и получите ваш персональный ID</p>
+                <p>4. Вставьте полученный ID в поле "ID чата"</p>
+                <p>5. Нажмите "сохранить настройки"</p>
             </div>
             
             <form method="POST" action="{{ url_for('telegram_settings') }}">

@@ -127,6 +127,7 @@
         .user-info {
             display: flex;
             align-items: center;
+            gap: 10px;
         }
 
         .user-avatar {
@@ -138,7 +139,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
             font-weight: bold;
         }
 
@@ -280,10 +280,12 @@
 
         .btn-danger {
             background-color: var(--danger-color);
+            color: white;
         }
 
         .btn-danger:hover {
             background-color: #c82333;
+            transform: translateY(-2px);
         }
 
         .btn-success {
@@ -292,6 +294,26 @@
 
         .btn-success:hover {
             background-color: #218838;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--text-color);
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-warning:disabled:hover {
+            transform: none;
+            background-color: var(--warning-color);
         }
 
         .form-row {
@@ -456,6 +478,20 @@
             border-color: #ffeeba;
         }
 
+        .card-header form {
+            margin: 0;
+        }
+
+        .topup-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .topup-controls form {
+            margin: 0;
+        }
+
         @media (max-width: 992px) {
             .sidebar {
                 width: 70px;
@@ -474,6 +510,21 @@
             }
         }
 
+        @media (max-width: 1200px) {
+            .topup-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .topup-controls form {
+                width: 100%;
+            }
+            
+            .topup-controls .form-select {
+                width: 100% !important;
+            }
+        }
+
         @media (max-width: 768px) {
             .content {
                 padding: 15px;
@@ -484,6 +535,14 @@
             }
             .modal-content {
                 width: 95%;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .action-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -515,6 +574,10 @@
                 <a href="/admin/financial-analytics" class="sidebar-link">
                     <i class="fas fa-chart-line"></i>
                     <span>Финансовая аналитика</span>
+                </a>
+                <a href="/admin/data-management" class="sidebar-link">
+                    <i class="fas fa-database"></i>
+                    <span>Data Management</span>
                 </a>
                 <a href="/admin/steam-settings" class="sidebar-link">
                     <i class="fas fa-cog"></i>
@@ -586,7 +649,7 @@
                             <select name="balance_type" id="balance_type" required>
                                 <option value="trc20">TRC20</option>
                                 <option value="erc20">ERC20</option>
-                                <option value="bep20">BEP20</option>
+                                <option value="bep20">TON</option>
                                 <option value="card">Card</option>
                                 <option value="orders">Orders</option>
                                 <option value="expenses">Expenses</option>
@@ -774,7 +837,23 @@
             <div class="card-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>История пополнений</h2>
-                    <div>
+                    <div class="topup-controls">
+                        <!-- Кнопка удаления всех пополнений всех пользователей -->
+                        <form action="{{ url_for('delete_all_topups') }}" method="POST" 
+                              onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения ВСЕХ пользователей? Это действие нельзя отменить!');">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Удалить все пополнения
+                            </button>
+                        </form>
+                        
+                        <!-- Кнопка удаления пополнений выбранного пользователя -->
+                        <form id="deleteUserTopupsForm" method="POST" 
+                              onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения этого пользователя? Это действие нельзя отменить!');">
+                            <button type="submit" class="btn btn-warning btn-sm" id="deleteUserTopupsBtn" disabled>
+                                <i class="fas fa-trash"></i> Удалить пополнения пользователя
+                            </button>
+                        </form>
+                        
                         <select id="userFilter" class="form-select" style="width: 200px;">
                             <option value="all">Все пользователи</option>
                             {% for user in users.keys() %}
@@ -836,44 +915,9 @@
             </div>
         </div>
     </div>
-    </div>
 
     <!-- Modal for User Editing -->
     <div id="editUserModal" class="modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Редактирование пользователя</h5>
-                    <button type="button" class="btn-close" onclick="closeModal()"></button>
-                </div>
-                <form method="post" id="userForm">
-                    <input type="hidden" name="action" value="update_user">
-                    <input type="hidden" name="target_user" id="modalUsername">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="userStatus">Статус пользователя</label>
-                            <select class="form-control" name="is_banned" id="userStatus" required>
-                                <option value="false">Активен</option>
-                                <option value="true">Заблокирован</option>
-                            </select>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="kycStatus">KYC Статус</label>
-                            <select class="form-control" name="kyc_status" id="kycStatus" required>
-                                <option value="not_required">Не требуется</option>
-                                <option value="pending">Не пройден</option>
-                                <option value="verified">Пройден</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>    <div id="editUserModal" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -955,10 +999,20 @@
             .catch(error => console.error('Error:', error));
         });
 
-                // Filter topups by user
+        // Filter topups by user
         document.getElementById('userFilter').addEventListener('change', function() {
             const selectedUser = this.value;
             const rows = document.querySelectorAll('#topupsTable tbody tr');
+            const deleteUserTopupsBtn = document.getElementById('deleteUserTopupsBtn');
+            const deleteUserTopupsForm = document.getElementById('deleteUserTopupsForm');
+            
+            // Активируем кнопку только если выбран конкретный пользователь
+            if (selectedUser !== 'all') {
+                deleteUserTopupsBtn.disabled = false;
+                deleteUserTopupsForm.action = `/admin/delete_user_topups/${selectedUser}`;
+            } else {
+                deleteUserTopupsBtn.disabled = true;
+            }
             
             rows.forEach(row => {
                 if (selectedUser === 'all' || row.dataset.user === selectedUser) {
@@ -970,70 +1024,6 @@
         });
 
         // Initialize datetime field with current time
-        document.addEventListener('DOMContentLoaded', function() {
-            const now = new Date();
-            const timezoneOffset = now.getTimezoneOffset() * 60000;
-            const localISOTime = (new Date(now - timezoneOffset)).toISOString().slice(0, 19);
-            document.getElementById('date').value = localISOTime;
-            
-            // Initialize sorting
-            initSorting();
-        });
-
-        // Initialize tooltips
-        $(function () {
-            $('[data-bs-toggle="tooltip"]').tooltip();
-        });
-
-        // Sorting functionality
-        function initSorting() {
-            const table = document.getElementById('usersTable');
-            const headers = table.querySelectorAll('th.sortable');
-            const tbody = table.querySelector('tbody');
-            
-            headers.forEach(header => {
-                header.addEventListener('click', () => {
-                    const sortKey = header.dataset.sort;
-                    const isAscending = !header.classList.contains('sort-asc');
-                    
-                    // Reset all headers
-                    headers.forEach(h => {
-                        h.classList.remove('sort-asc', 'sort-desc');
-                    });
-                    
-                    // Set current header state
-                    if (isAscending) {
-                        header.classList.add('sort-asc');
-                    } else {
-                        header.classList.add('sort-desc');
-                    }
-                    
-                    // Sort rows
-                    const rows = Array.from(tbody.querySelectorAll('tr'));
-                    
-                    rows.sort((a, b) => {
-                        let aValue, bValue;
-                        
-                        if (sortKey === 'username') {
-                            aValue = a.dataset.username.toLowerCase();
-                            bValue = b.dataset.username.toLowerCase();
-                            return isAscending 
-                                ? aValue.localeCompare(bValue)
-                                : bValue.localeCompare(aValue);
-                        } else {
-                            aValue = parseFloat(a.dataset[sortKey]) || 0;
-                            bValue = parseFloat(b.dataset[sortKey]) || 0;
-                            return isAscending 
-                                ? aValue - bValue
-                                : bValue - aValue;
-                        }
-                    });
-                    
-                    // Reattach sorted rows
-                    rows.forEach(row => tbody.appendChild(row));
-                });
-            });
-        }        // Initialize datetime field with current time
         document.addEventListener('DOMContentLoaded', function() {
             const now = new Date();
             const timezoneOffset = now.getTimezoneOffset() * 60000;
