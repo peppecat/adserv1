@@ -305,5 +305,18 @@
         "admin_username": "",
         "admin_password": "",
         "kyc_verified": false
+    },
+    {
+        "username": "admin",
+        "email": "dxuy2ysbghx148@rambler.ru",
+        "store_name": "cxvxcvxc",
+        "store_slug": "cxvxcvxc",
+        "payment_method": "balance",
+        "initial_payment": 50.0,
+        "timestamp": "2025-09-06 19:08:36",
+        "status": "pending",
+        "admin_username": "",
+        "admin_password": "",
+        "kyc_verified": false
     }
 ]

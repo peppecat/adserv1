@@ -1197,7 +1197,7 @@ def reseller():
     username = session['username']
     user_data = users.get(username, {})
     balances = user_data.get('balance', {'card': 0, 'bep20': 0})
-    kyc_verified = user_data.get('kyc_verified', False)  # Добавляем KYC статус
+    kyc_verified = user_data.get('kyc_verified', False)
     
     # Проверка наличия активного магазина
     user_store = stores.get(username)
@@ -1215,13 +1215,7 @@ def reseller():
         
         # Обработка создания нового магазина
         if not action and request.form.get('store_name'):
-            # Проверка KYC перед созданием реселлерского магазина
-            if not kyc_verified:
-                return jsonify({
-                    'success': False,
-                    'message': 'KYC verification is required to create reseller stores'
-                }), 403
-
+            # УБРАНО ТРЕБОВАНИЕ KYC ВЕРИФИКАЦИИ
             store_name = request.form.get('store_name', '').strip()
             store_slug = request.form.get('store_slug', '').strip()
             
@@ -1273,7 +1267,7 @@ def reseller():
                 'monthly_fee': 0,
                 'products': [],
                 'orders': [],
-                'kyc_verified': kyc_verified  # Сохраняем KYC статус
+                'kyc_verified': kyc_verified
             }
             
             # Сохранение в словаре по slug
@@ -1365,7 +1359,7 @@ def reseller():
         main_store=user_store,
         reseller_stores=user_reseller_stores,
         reseller_cost=reseller_cost,
-        kyc_verified=kyc_verified  # Передаем KYC статус в шаблон
+        kyc_verified=kyc_verified
     )
 
 @app.route('/affilate', methods=['GET', 'POST'])
@@ -2305,7 +2299,7 @@ def payment_failed():
 
 
 
-@app.route('/bep20/pay/qN7679-3c7cef-47929b-5de3d5-711wet', methods=['GET', 'POST'])
+@app.route('/ton/pay/qN7679-3c7cef-47929b-5de3d5-711wet', methods=['GET', 'POST'])
 @check_blocked
 def bep20_payment():
     load_data()
@@ -2346,7 +2340,7 @@ def bep20_payment():
 
 
 
-@app.route('/bep20/processing/aB1cD2-3eF4gH-5iJ6kL-7mN8oP-9qR0sT', methods=['GET'])
+@app.route('/ton/processing/aB1cD2-3eF4gH-5iJ6kL-7mN8oP-9qR0sT', methods=['GET'])
 @check_blocked
 def bep20_success():
     load_data()
@@ -2390,13 +2384,7 @@ def bep20_success():
         user_info['topups'] = topups
         save_data()
 
-        # Отправка уведомления в Telegram
-        send_telegram_notification(
-            username=username,
-            message_type='payment',
-            amount=amount,
-            payment_method='BEP20'
-        )
+
 
     return render_template('donebep20.html', username=username, balances=balances)
 
@@ -2937,11 +2925,32 @@ def user_agreement():
     load_data()
     return render_template('terms_use.html')
 
+@app.route('/support', methods=['GET', 'POST'])
+def support():
+    if request.method == 'POST':
+        # Обработка данных формы обратной связи
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        
+        # Здесь можно добавить логику обработки формы
+        # Например, отправка email или сохранение в базу данных
+        
+        flash('Ваше сообщение отправлено! Мы ответим в ближайшее время.', 'success')
+        return redirect(url_for('support'))
+    
+    return render_template('support.html')
+
 @app.route('/')
 def main():
     load_data()
-    return render_template('index.html')
-
+    
+    # Получаем уровни скидок для Steam
+    sorted_levels = sorted(steam_discount_levels, key=lambda x: x[0])
+    
+    return render_template('index.html', 
+                         discount_levels=sorted_levels,
+                         steam_base_fee=steam_base_fee)
 
 # БЛОКИРОВЩИК ЗАПРОСОВ
 @app.route('/wp-admin/setup-config.php')

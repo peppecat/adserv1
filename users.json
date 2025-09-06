@@ -7,23 +7,88 @@
         "near": ""
     },
     "Dim4ikgoo$e101$": {
-        "password": "Dim4ikgoo$e101$",
+        "password": "12345",
         "balance": {
             "trc20": 0,
             "erc20": 0,
-            "bep20": 1.0,
-            "card": 0,
-            "USD": 20355.5
+            "bep20": 5.0,
+            "card": 0
         },
-        "orders": 0.0,
-        "expenses": 1403.7399999999998,
+        "orders": 0,
+        "expenses": 5.0,
+        "userorders": [
+            {
+                "id": "845656d5-41c0-4435-9045-c718dbd16b57",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 5.0,
+                "amount": 1,
+                "date": "2025-09-06 03:06:28",
+                "timestamp": 1757117188.189744,
+                "notification_sent": true,
+                "status": "pending"
+            }
+        ],
+        "topups": [
+            {
+                "date": "2025-09-06 01:00:36",
+                "network": "TON",
+                "amount": 22.0,
+                "status": "Pending"
+            },
+            {
+                "date": "2025-09-06 01:01:00",
+                "network": "TON",
+                "amount": 12.0,
+                "status": "Pending"
+            },
+            {
+                "date": "2025-09-06 01:01:09",
+                "network": "TON",
+                "amount": 55.0,
+                "status": "Pending"
+            },
+            {
+                "date": "2025-09-06 01:01:32",
+                "network": "TON",
+                "amount": 10.0,
+                "status": "Pending"
+            },
+            {
+                "date": "2025-09-06 01:02:38",
+                "network": "TON",
+                "amount": 23.0,
+                "status": "Pending"
+            }
+        ]
+    },
+    "admin": {
+        "password": "12345",
+        "balance": {
+            "trc20": 0,
+            "erc20": 0,
+            "bep20": 0.0,
+            "card": 0
+        },
+        "orders": 0,
+        "expenses": 0,
         "userorders": [],
-        "topups": [],
-        "kyc_status": "not_required",
-        "kyc_verified": false,
-        "is_banned": false,
+        "topups": [
+            {
+                "date": "2025-09-06 19:29:38",
+                "network": "TON",
+                "amount": 11.0,
+                "status": "Pending"
+            },
+            {
+                "date": "2025-09-06 19:31:37",
+                "network": "TON",
+                "amount": 1.0,
+                "status": "Pending"
+            }
+        ],
         "stores": [
-            
+            "cxvxcvxc"
         ]
     }
 }

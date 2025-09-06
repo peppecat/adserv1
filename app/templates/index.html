@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyzPanel – Steam Wallet Top Up | Best Prices & Instant Delivery</title>
+    <title>KeyzPanel – пополнение кошелька Steam | Лучшие цены и мгновенная доставка</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <!-- Для старых клиентов/ботов: положи копию в корень домена /favicon.ico -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+
+     <!-- Google verification -->
+    <meta name="google-site-verification" content="2sYdO0tXXCoDcsTLDL9ghnnTwsaswHwBaOO1Hd2xiiM" />
     <!-- Custom CSS -->
     <style>
         :root {
@@ -21,7 +30,11 @@
             --text-dark: #131921;
             --text-light: #565959;
             --success: #067D62;  /* Amazon green */
+            --info: #0066C0;     /* Amazon blue */
+            --warning: #FFC107;  /* Yellow for highlights */
             --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #FF9900 0%, #FF8F00 100%);
+            --gradient-success: linear-gradient(135deg, #067D62 0%, #056B4F 100%);
         }
         
         body {
@@ -144,19 +157,32 @@
         
         .section-dark {
             background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--card-shadow);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 2rem;
-            padding: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
         }
         
         .section-title {
             font-size: 1.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary);
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+        }
+        
+        .section-title.text-center:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
         }
         
         /* Advantage cards */
@@ -210,44 +236,154 @@
             color: #111;
         }
         
-        /* Pricing table */
+        /* Pricing table - UPDATED STYLES */
         .price-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .price-table th, 
-        .price-table td {
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin: 1.5rem 0;
         }
         
         .price-table th {
-            background: var(--primary);
-            color: #111;
+            background: var(--gradient-primary);
+            color: white;
             font-weight: 600;
+            padding: 1.25rem;
+            text-align: center;
+            font-size: 1.1rem;
+            border: none;
+            position: relative;
+        }
+        
+        .price-table th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .price-table th:last-child {
+            border-top-right-radius: 12px;
+        }
+        
+        .price-table td {
+            padding: 1.25rem;
+            text-align: center;
+            border: none;
+            font-size: 1.05rem;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .price-table tr {
+            transition: all 0.2s ease;
         }
         
         .price-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #fafafa;
         }
         
         .price-table tr:hover {
-            background-color: #f1f1f1;
+            background-color: #fff8e6;
+        }
+        
+        .price-table tr:hover td {
+            transform: translateY(1px);
         }
         
         .discount-badge {
-            background: var(--success);
+            background: var(--gradient-success);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-weight: bold;
+            padding: 0.5rem 1.25rem;
+            border-radius: 25px;
+            font-weight: 700;
             display: inline-block;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(6, 125, 98, 0.3);
+            min-width: 70px;
+        }
+        
+        .balance-amount {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+        
+        .balance-amount:before {
+            content: '$';
+            font-weight: 600;
+            margin-right: 2px;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, #f7f9fc 0%, #edf2f7 100%);
+            border-left: 4px solid var(--info);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box h5 {
+            color: var(--info);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-box h5 i {
+            margin-right: 0.5rem;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .benefits-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.75rem;
+        }
+        
+        .benefits-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* How it works section */
+        .how-to-box {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .step-number-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
         }
         
         /* Buttons */
@@ -295,9 +431,44 @@
             .section {
                 padding: 2rem 0;
             }
+            
+            .section-dark {
+                padding: 1.5rem;
+            }
+            
+            .price-table {
+                font-size: 0.9rem;
+            }
+            
+            .price-table th, 
+            .price-table td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .discount-badge {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
         }
+
+        /* Animation for table rows */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .price-table tr {
+            animation: fadeIn 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .price-table tr:nth-child(1) { animation-delay: 0.1s; }
+        .price-table tr:nth-child(2) { animation-delay: 0.2s; }
+        .price-table tr:nth-child(3) { animation-delay: 0.3s; }
+        .price-table tr:nth-child(4) { animation-delay: 0.4s; }
+        .price-table tr:nth-child(5) { animation-delay: 0.5s; }
     </style>
-    <meta name="google-site-verification" content="2sYdO0tXXCoDcsTLDL9ghnnTwsaswHwBaOO1Hd2xiiM" />
+   
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -312,12 +483,12 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link btn-success me-2" href="/login">
-                            <i class="fas fa-sign-in-alt me-1"></i> Sign in
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn btn-primary" href="/register">
-                            <i class="fas fa-user-plus me-1"></i> Sign up
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
                         </a>
                     </li>
                 </ul>
@@ -327,33 +498,33 @@
 
     <section class="hero">
         <div class="container">
-            <h1>🔥THE LOWEST PRICES FOR STEAM WALLET TOP UP</h1>
-            <p class="lead">Instant credit to your Steam account</p>
-            <a href="/login" class="btn btn-primary btn-lg">Top Up Now</a>
+            <h1>🔥 САМЫЕ НИЗКИЕ ЦЕНЫ НА ПОПОЛНЕНИЕ STEAM КОШЕЛЬКА</h1>
+            <p class="lead">Мгновенное зачисление на ваш Steam аккаунт</p>
+            <a href="/login" class="btn btn-primary btn-lg">Пополнить сейчас</a>
         </div>
     </section>
 
     <div class="container">
         <!-- Advantages -->
         <section class="section" id="advantages">
-            <h2 class="section-title text-center">Our Benefits</h2>
+            <h2 class="section-title text-center">Наши преимущества</h2>
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="advantage-card">
-                        <h3>Best Prices</h3>
-                        <p>Discounts up to 35% on Steam wallet top ups</p>
+                        <h3>Лучшие цены</h3>
+                        <p>Скидки до 10% на пополнение Steam кошелька</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="advantage-card">
-                        <h3>Instant Delivery</h3>
-                        <p>Funds credited to your account immediately after payment</p>
+                        <h3>Мгновенная доставка</h3>
+                        <p>Средства зачисляются на аккаунт сразу после оплаты</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="advantage-card">
-                        <h3>Safe & Legal</h3>
-                        <p>Official top-up methods with no risks</p>
+                        <h3>Безопасно и легально</h3>
+                        <p>Официальные методы пополнения без рисков</p>
                     </div>
                 </div>
             </div>
@@ -361,27 +532,27 @@
 
         <!-- How it works -->
         <section class="section" id="workflow">
-            <h2 class="section-title text-center">How To Top Up</h2>
+            <h2 class="section-title text-center">Как пополнить</h2>
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="step-card">
                         <div class="step-number">1</div>
-                        <h3>Enter Steam Login</h3>
-                        <p>Provide your Steam account login</p>
+                        <h3>Введите логин Steam</h3>
+                        <p>Укажите логин вашего Steam аккаунта</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="step-card">
                         <div class="step-number">2</div>
-                        <h3>Select Amount</h3>
-                        <p>From $0.1 to $800 per transaction</p>
+                        <h3>Выберите сумму</h3>
+                        <p>От $0.1 до $500 за транзакцию</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="step-card">
                         <div class="step-number">3</div>
-                        <h3>Instant Credit</h3>
-                        <p>Funds appear in your account immediately after payment</p>
+                        <h3>Мгновенное зачисление</h3>
+                        <p>Средства появляются на аккаунте сразу после оплаты</p>
                     </div>
                 </div>
             </div>
@@ -389,27 +560,25 @@
 
         <!-- Pricing -->
         <section class="section section-dark" id="pricing">
-            <h2 class="section-title text-center">Our Rates</h2>
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="p-4 bg-white rounded shadow-sm">
-                        <h3>How to get a discount?</h3>
-                        <p>The discount is automatically applied when one of the following conditions is met:</p>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-start mb-3">
-                                    <div class="me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; min-width: 30px;">1</div>
-                                    <div>Spend the specified amount in the table</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-start mb-3">
-                                    <div class="me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; min-width: 30px;">2</div>
-                                    <div>Maintain the specified balance in your KeyzPanel account</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <h2 class="section-title text-center">Наши тарифы</h2>
+            
+            <div class="how-to-box">
+                <h4 class="mb-4"><i class="fas fa-trophy text-warning me-2"></i>Как получить скидку?</h4>
+                <p class="mb-3">Скидка применяется автоматически при поддержании необходимого баланса на вашем KeyzPanel аккаунте:</p>
+                
+                <div class="step-indicator">
+                    <div class="step-number-circle">1</div>
+                    <div>Поддерживайте указанный баланс на вашем KeyzPanel аккаунте</div>
+                </div>
+                
+                <div class="step-indicator">
+                    <div class="step-number-circle">2</div>
+                    <div>Скидка автоматически применяется ко всем вашим пополнениям Steam</div>
+                </div>
+                
+                <div class="step-indicator">
+                    <div class="step-number-circle">3</div>
+                    <div>Более высокий баланс открывает лучшие уровни скидок</div>
                 </div>
             </div>
             
@@ -417,47 +586,37 @@
                 <table class="price-table">
                     <thead>
                         <tr>
-                            <th>Amount spent</th>
-                            <th>Balance maintained</th>
-                            <th>Discount</th>
+                            <th>Поддерживаемый баланс</th>
+                            <th>Уровень скидки</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for level in discount_levels %}
                         <tr>
-                            <td>1,000$</td>
-                            <td>50$</td>
-                            <td><span class="discount-badge">2%</span></td>
+                            <td><span class="balance-amount">{{ "{:,.0f}".format(level[0]) }}+</span></td>
+                            <td><span class="discount-badge">{{ level[1] }}%</span></td>
                         </tr>
-                        <tr>
-                            <td>10,000$</td>
-                            <td>500$</td>
-                            <td><span class="discount-badge">20%</span></td>
-                        </tr>
-                        <tr>
-                            <td>15,000$</td>
-                            <td>1,000$</td>
-                            <td><span class="discount-badge">25%</span></td>
-                        </tr>
-                        <tr>
-                            <td>25,000$</td>
-                            <td>2,000$</td>
-                            <td><span class="discount-badge">30%</span></td>
-                        </tr>
-                        <tr>
-                            <td>30,000$</td>
-                            <td>4,000$</td>
-                            <td><span class="discount-badge">35%</span></td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
+            </div>
+            
+            <div class="info-box">
+                <h5><i class="fas fa-star text-warning"></i> Дополнительные преимущества</h5>
+                <ul class="benefits-list">
+                    <li><strong>Владельцы магазинов</strong> получают уникальную <strong>скидку 3%</strong> на все покупки</li>
+                    <li>Базовая комиссия <strong>{{ steam_base_fee }}%</strong> применяется если не достигнут уровень скидки</li>
+                    <li>Все скидки <strong>применяются автоматически</strong> к вашим покупкам</li>
+                    <li>Ваш уровень скидки рассчитывается на основе <strong>текущего баланса аккаунта</strong></li>
+                </ul>
             </div>
         </section>
 
         <!-- Final CTA -->
         <section class="section text-center">
-            <h2 class="section-title">Ready to Top Up?</h2>
-            <p class="mb-4">Start building up your discount level now</p>
-            <a href="/register" class="btn btn-primary btn-lg">Get Started</a>
+            <h2 class="section-title">Готовы пополнить?</h2>
+            <p class="mb-4">Начните накапливать свой уровень скидки прямо сейчас</p>
+            <a href="/register" class="btn btn-primary btn-lg">Начать</a>
         </section>
     </div>
 
@@ -466,12 +625,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
-                    <p class="copyright mb-3">&copy; 2025 KEYZPANEL.COM. All rights reserved.</p>
+                    <p class="copyright mb-3">&copy; 2025 KEYZPANEL.COM. Все права защищены.</p>
                     <nav>
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="/terms_of_use">Terms of Use</a></li>
-                            <li class="list-inline-item"><a href="/user_agreement">Privacy Policy</a></li>
-                            <li class="list-inline-item"><a href="/support">Support</a></li>
+                            <li class="list-inline-item"><a href="/terms_of_use">Пользовательское соглашение</a></li>
+                            <li class="list-inline-item"><a href="/user_agreement">Политика конфиденциальности</a></li>
+                            <li class="list-inline-item"><a href="/support">Поддержка</a></li>
                         </ul>
                     </nav>
                 </div>

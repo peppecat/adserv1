@@ -10,6 +10,13 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <!-- Для старых клиентов/ботов: положи копию в корень домена /favicon.ico -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     
     <!-- Custom CSS -->
     <style>
@@ -296,7 +303,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
@@ -308,32 +315,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выход
                         </a>
                     </li>
                 </ul>
@@ -346,15 +353,15 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Order History</li>
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                        <li class="breadcrumb-item active">История заказов</li>
                     </ol>
                 </nav>
             </div>
         </div>
         
-        <!-- User Info Card -->
+        <!-- Карточка информации о пользователе -->
         <div class="user-info-card">
             <div class="user-avatar">
                 {{ username[0].upper() }}
@@ -362,9 +369,9 @@
             <div class="user-details">
                 <div class="user-name">{{ username }}</div>
 <div class="user-balance">
-    Balance: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
+    Баланс: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
     {% if kyc_verified %}
-        <span class="badge bg-success ms-2">KYC Verified</span>
+        <span class="badge bg-success ms-2">KYC Подтвержден</span>
     {% endif %}
 </div>
             </div>
@@ -372,26 +379,26 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h1 class="page-header">Order History</h1>
+                <h1 class="page-header">История заказов</h1>
             </div>
         </div>
         
         <div class="card">
             <div class="card-header">
-                <h2 class="h5 mb-0">Your Orders</h2>
+                <h2 class="h5 mb-0">Ваши заказы</h2>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Category</th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Details</th>
+                                <th>Категория</th>
+                                <th>Продукт</th>
+                                <th>Цена</th>
+                                <th>Количество</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Детали</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -404,21 +411,21 @@
                                 <td>{{ userorder.date }}</td>
                                 <td>
                                     {% if userorder.status == 'complete' %}
-                                        <span class="badge bg-success">Complete</span>
+                                        <span class="badge bg-success">Завершен</span>
                                     {% elif userorder.status == 'canceled' %}
-                                        <span class="badge bg-danger">Canceled</span>
+                                        <span class="badge bg-danger">Отменен</span>
                                     {% else %}
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-warning">В обработке</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if userorder.steamLogin %}
                                         <span class="text-muted">{{ userorder.steamLogin }}</span>
                                     {% elif userorder.steamLink %}
-                                        <a href="{{ userorder.steamLink }}" target="_blank" class="text-primary">View Link</a>
+                                        <a href="{{ userorder.steamLink }}" target="_blank" class="text-primary">Посмотреть ссылку</a>
                                     {% else %}
                                         <button class="reveal_key_btn" data-key="{{ userorder.key }}">
-                                            <i class="fas fa-key me-1"></i> Reveal Key
+                                            <i class="fas fa-key me-1"></i> Показать ключ
                                         </button>
                                     {% endif %}
                                 </td>                                               
@@ -430,31 +437,31 @@
             </div>
         </div>
         
-        <!-- Key Reveal Modal -->
+        <!-- Модальное окно показа ключа -->
         <div class="modal fade" id="revealKeyModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle"><i class="fas fa-key me-2"></i>Product Key</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="modalTitle"><i class="fas fa-key me-2"></i>Ключ продукта</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                     </div>
                     <div class="modal-body text-center">
                         <div id="keyContent">
                             <p id="orderKey" class="mb-4"></p>
                             <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard()">
-                                <i class="fas fa-copy me-1"></i> Copy Key
+                                <i class="fas fa-copy me-1"></i> Скопировать ключ
                             </button>
                         </div>
                         <div id="loaderContent" style="display: none;">
                             <div class="spinner-border mb-3" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                                <span class="visually-hidden">Загрузка...</span>
                             </div>
-                            <p class="mb-2">Your key is being generated</p>
-                            <p class="small text-muted">Please wait 1-3 minutes and refresh the page</p>
+                            <p class="mb-2">Ваш ключ генерируется</p>
+                            <p class="small text-muted">Пожалуйста, подождите 1-3 минуты и обновите страницу</p>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
                     </div>
                 </div>
             </div>

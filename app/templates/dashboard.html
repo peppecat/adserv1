@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard | KEYZPANEL</title>
+    <title>Магазин | KEYZPANEL</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary: #FF9900;  /* Amazon orange */
-            --secondary: #232F3E;  /* Amazon dark blue */
+            --primary: #FF9900;
+            --secondary: #232F3E;
             --light-bg: #FFFFFF;
             --border-color: #DDDDDD;
             --text-dark: #131921;
             --text-light: #565959;
-            --success: #067D62;  /* Amazon green */
+            --success: #067D62;
             --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
         
@@ -245,32 +251,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
                         </a>
                     </li>
                 </ul>
@@ -283,8 +289,8 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item active">Магазин</li>
                     </ol>
                 </nav>
             </div>
@@ -298,7 +304,7 @@
             <div class="user-details">
                 <div class="user-name">{{ username }}</div>
                 <div class="user-balance">
-                    Balance: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
+                    Баланс: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
                     {% if kyc_verified %}
                         <span class="badge bg-success ms-2">KYC Verified</span>
                     {% endif %}
@@ -308,19 +314,17 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h1 class="page-header">Dashboard</h1>
+                <h1 class="page-header">Магазин</h1>
             </div>
         </div>
-        
-
         
         <div class="row mb-4">
             <div class="col">
                 <form method="GET" action="/" class="search-box">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search products..." aria-label="Search products">
-                        <button class="btn" type="submit" aria-label="Search">
-                            <i class="fas fa-search me-2"></i> Search
+                        <input type="text" name="q" class="form-control" placeholder="Поиск товаров..." aria-label="Поиск товаров">
+                        <button class="btn" type="submit" aria-label="Поиск">
+                            <i class="fas fa-search me-2"></i> Поиск
                         </button>
                     </div>
                 </form>
@@ -329,7 +333,7 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h2 class="section-header">Steam Products</h2>
+                <h2 class="section-header">Товары Steam</h2>
             </div>
         </div>
         
@@ -338,8 +342,8 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{{ url_for('product31') }}" class="text-decoration-none">
                     <div class="product-card">
-                        <img src="{{ url_for('static', filename='images/steam/steam_cis.png') }}" class="card-img-top" alt="Steam TopUp">
-                        <h5 class="product-title">Steam TopUp</h5>
+                        <img src="{{ url_for('static', filename='images/steam/steam_cis.png') }}" class="card-img-top" alt="Пополнение Steam">
+                        <h5 class="product-title">Пополнение Steam <hr>по логину</td></h5>
                     </div>
                 </a>
             </div>
@@ -348,8 +352,8 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{{ url_for('product33') }}" class="text-decoration-none">
                     <div class="product-card">
-                        <img src="{{ url_for('static', filename='images/steam/steam_gift_usd.png') }}" class="card-img-top" alt="Steam Wallet Code USA">
-                        <h5 class="product-title">Steam Wallet Code | USA</h5>
+                        <img src="{{ url_for('static', filename='images/steam/steam_gift_usd.png') }}" class="card-img-top" alt="Подарочный код Steam | США">
+                        <h5 class="product-title">Подарочный код Steam | USA</h5>
                     </div>
                 </a>
             </div>
@@ -358,8 +362,8 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{{ url_for('product34') }}" class="text-decoration-none">
                     <div class="product-card">
-                        <img src="{{ url_for('static', filename='images/steam/steam_gift_eur.png') }}" class="card-img-top" alt="Steam Wallet Code EU">
-                        <h5 class="product-title">Steam Wallet Code | EU</h5>
+                        <img src="{{ url_for('static', filename='images/steam/steam_gift_eur.png') }}" class="card-img-top" alt="Подарочный код Steam | ЕС">
+                        <h5 class="product-title">Подарочный код Steam | EU</h5>
                     </div>
                 </a>
             </div>
@@ -368,8 +372,8 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{{ url_for('product35') }}" class="text-decoration-none">
                     <div class="product-card">
-                        <img src="{{ url_for('static', filename='images/steam/steam_gift_pln.png') }}" class="card-img-top" alt="Steam Wallet Code PL">
-                        <h5 class="product-title">Steam Wallet Code | PL</h5>
+                        <img src="{{ url_for('static', filename='images/steam/steam_gift_pln.png') }}" class="card-img-top" alt="Подарочный код Steam | Польша">
+                        <h5 class="product-title">Подарочный код Steam | PL</h5>
                     </div>
                 </a>
             </div>

@@ -406,32 +406,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выход
                         </a>
                     </li>
                 </ul>
@@ -444,15 +444,15 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">My Store</li>
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                        <li class="breadcrumb-item active">Мой магазин</li>
                     </ol>
                 </nav>
             </div>
         </div>
         
-        <!-- User Info Card -->
+        <!-- Карточка информации о пользователе -->
         <div class="user-info-card">
             <div class="user-avatar">
                 {{ username[0].upper() }}
@@ -460,9 +460,9 @@
             <div class="user-details">
                 <div class="user-name">{{ username }}</div>
         <div class="user-balance">
-            Balance: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
+            Баланс: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
             {% if kyc_verified %}
-                <span class="badge bg-success ms-2">KYC Verified</span>
+                <span class="badge bg-success ms-2">KYC Подтвержден</span>
             {% endif %}
         </div>
             </div>
@@ -470,12 +470,12 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h1 class="page-header">My Store</h1>
+                <h1 class="page-header">Мой магазин</h1>
             </div>
         </div>
         
         {% if has_store %}
-        <!-- Existing Store Panel -->
+        <!-- Панель существующего магазина -->
         <div class="existing-store">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h4 mb-0">{{ store.name }}</h2>
@@ -486,39 +486,39 @@
             
             <div class="mb-3">
                 {% if store.status == 'active' %}
-                <p>Your store is active and ready to use.</p>
+                <p>Ваш магазин активен и готов к использованию.</p>
                 {% elif store.status == 'processing' %}
-                <p>Your store is being reviewed. Please wait.</p>
+                <p>Ваш магазин находится на рассмотрении. Пожалуйста, подождите.</p>
                 {% else %}
-                <p>Your store was rejected. Contact support.</p>
+                <p>Ваш магазин был отклонен. Свяжитесь с поддержкой.</p>
                 {% endif %}
                 <div class="store-url">https://{{ store.slug }}.com</div>
             </div>
             
             {% if store_status == 'active' %}
-            <!-- Admin Credentials Section -->
+            <!-- Раздел учетных данных администратора -->
             <div class="admin-credentials">
-                <h3 class="h5 mb-3"><i class="fas fa-user-shield me-2"></i>Admin Access</h3>
+                <h3 class="h5 mb-3"><i class="fas fa-user-shield me-2"></i>Доступ администратора</h3>
                 
                 <div class="row">
                     <div class="col-md-6 credential-item">
-                        <div class="credential-label">Admin Login</div>
+                        <div class="credential-label">Логин администратора</div>
                         <div class="credential-value">
                             {% if store.admin_username %}
                                 {{ store.admin_username }}
                             {% else %}
-                                <span class="text-muted">Not set by admin yet</span>
+                                <span class="text-muted">Еще не установлен администратором</span>
                             {% endif %}
                         </div>
                     </div>
                     
                     <div class="col-md-6 credential-item">
-                        <div class="credential-label">Admin Password</div>
+                        <div class="credential-label">Пароль администратора</div>
                         <div class="credential-value">
                             {% if store.admin_password %}
                                 {{ store.admin_password }}
                             {% else %}
-                                <span class="text-muted">Not set by admin yet</span>
+                                <span class="text-muted">Еще не установлен администратором</span>
                             {% endif %}
                         </div>
                     </div>
@@ -526,38 +526,38 @@
                 
                 <div class="alert alert-warning mt-3">
                     <i class="fas fa-exclamation-triangle me-2"></i>
-                    Keep these credentials secure. They provide full access to your store's admin panel.
+                    Сохраняйте эти учетные данные в безопасности. Они предоставляют полный доступ к панели администратора вашего магазина.
                 </div>
             </div>
             
-            <!-- Store Actions -->
+            <!-- Действия с магазином -->
             <div class="text-center delete-store-btn">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    <i class="fas fa-trash-alt me-2"></i>Delete Store
+                    <i class="fas fa-trash-alt me-2"></i>Удалить магазин
                 </button>
             </div>
             {% endif %}
         </div>
         {% else %}
-        <!-- Store Purchase Form -->
+        <!-- Форма покупки магазина -->
         <div class="store-card">
             <div class="text-center">
                 <div class="store-icon">
                     <i class="fas fa-store"></i>
                 </div>
-                <h2 class="store-title">Create Your Own Digital Store</h2>
+                <h2 class="store-title">Создайте свой собственный магазин</h2>
                 <p class="store-description">
-                    Launch your branded digital products store with our franchise program. 
-                    Get access to our product catalog, payment processing, and store management tools.
+                    Запустите свой магазин цифровых товаров по нашей франшизе. <br>
+                    Получите доступ к нашему каталогу продуктов, обработке платежей и инструментам управления магазином.
                 </p>
                 <div class="price-tag">
-                    One-time fee: ${{ "%.2f"|format(franchise_cost) }}
+                    Единоразовый взнос: ${{ "%.2f"|format(franchise_cost) }}
                     <span class="info-icon">
                         <i class="fas fa-info-circle"></i>
                         <span class="info-tooltip">
-                            After the initial payment, $10 will be automatically deducted from your account balance each month. 
-                            If there are insufficient funds on the payment date, your store will be temporarily disabled 
-                            until the payment is made.
+                            После первоначального платежа с вашего баланса будет автоматически списываться $10 каждый месяц.
+                            При недостатке средств на дату платежа ваш магазин будет временно отключен
+                            до внесения платежа.
                         </span>
                     </span>
                 </div>
@@ -565,75 +565,74 @@
             
             <div class="alert alert-warning">
                 <i class="fas fa-exclamation-circle me-2"></i>
-                You don't currently have a store. Complete the form below to create your store.
+                У вас в настоящее время нет магазина. Заполните форму ниже, чтобы создать свой магазин.
             </div>
             
             <form id="storeForm" method="POST" action="{{ url_for('affilate') }}">
                 <div id="formContent" class="show">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="storeName" class="form-label">Store Name</label>
+                            <label for="storeName" class="form-label">Название магазина</label>
                             <input type="text" class="form-control" id="storeName" name="store_name" required>
-                            <div class="form-text">This will be your store's public name</div>
+                            <div class="form-text">Это будет публичное название вашего магазина</div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="storeSlug" class="form-label">Store URL</label>
+                            <label for="storeSlug" class="form-label">URL магазина</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="storeSlug" name="store_slug" required>
                                 <span class="input-group-text">.com</span>
                             </div>
-                            <div class="form-text">This URL will be created only if it's available</div>
+                            <div class="form-text">Этот URL будет создан только если он доступен</div>
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="email" class="form-label">Contact Email</label>
+                        <label for="email" class="form-label">Контактный email</label>
                         <input type="email" class="form-control" id="email" name="email" value="{{ email }}" required>
-                        <div class="form-text">We will contact you at this address</div>
+                        <div class="form-text">Мы свяжемся с вами по этому адресу</div>
                     </div>
                     
                     <div class="mb-4">
-                        <label class="form-label">Payment Method</label>
+                        <label class="form-label">Способ оплаты</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payment_method" id="balance" value="balance" checked>
                             <label class="form-check-label" for="balance">
-                                Pay from Balance (${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }} available)
+                                Оплатить с баланса (${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }} доступно)
                             </label>
                         </div>
                     </div>
                     
                     <div class="mb-4">
-                        <h5 class="mb-3">What You'll Get:</h5>
+                        <h5 class="mb-3">Что вы получите:</h5>
                         <ul class="benefits-list">
-                            <li>Your own branded store with custom URL</li>
-                            <li>Access to our entire product catalog</li>
-                            <li>Telegram notifications</li>
-                            <li>Automatic order processing</li>
-                            <li>Dashboard to manage your store</li>
-                            <li>Loyalty Program (3% discount)</li>
-                            <li>Available reseller status</li>
-                            <li>24/7 customer support</li>
-                            <li>Built-in marketing system that brings up to 100 new clients every month</li>
+                            <li>Ваш собственный магазин с индивидуальным URL</li>
+                            <li>Доступ ко всему нашему каталогу продуктов</li>
+                            <li>Уведомления в Telegram</li>
+                            <li>Панель управления для вашего магазина</li>
+                            <li>Программа лояльности (3% скидка)</li>
+                            <li>Доступный статус реселлера</li>
+                            <li>Круглосуточная поддержка клиентов</li>
+                            <li>Встроенная маркетинговая система, которая привлекает до 100 новых клиентов каждый месяц</li>
                         </ul>
                     </div>
                     
                     <div class="d-grid">
                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                            <i class="fas fa-shopping-cart me-2"></i>Create My Store (${{ "%.2f"|format(franchise_cost) }})
+                            <i class="fas fa-shopping-cart me-2"></i>Создать мой магазин (${{ "%.2f"|format(franchise_cost) }})
                         </button>
                     </div>
                 </div>
             </form>
             
-            <!-- Processing Store Panel (hidden by default) -->
+            <!-- Панель обработки магазина (скрыта по умолчанию) -->
             <div id="processingPanel" class="existing-store" style="display: none;">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="h4 mb-0">Your Store</h2>
-                    <span class="store-status status-processing">Processing</span>
+                    <h2 class="h4 mb-0">Ваш магазин</h2>
+                    <span class="store-status status-processing">Обработка</span>
                 </div>
                 
                 <div class="mb-3">
-                    <p>Your store is being processed. Please wait while we set up your store.</p>
+                    <p>Ваш магазин обрабатывается. Пожалуйста, подождите, пока мы настраиваем ваш магазин.</p>
                     <div class="store-url" id="processingUrl"></div>
                 </div>
             </div>
@@ -641,100 +640,100 @@
         {% endif %}
     </main>
 
-    <!-- Confirmation Modal -->
+    <!-- Модальное окно подтверждения -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirm Store Creation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="confirmModalLabel">Подтверждение создания магазина</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
-                    <p>You are about to create a new store with the following details:</p>
+                    <p>Вы собираетесь создать новый магазин со следующими данными:</p>
                     <ul>
-                        <li><strong>Store Name:</strong> <span id="confirmStoreName"></span></li>
-                        <li><strong>Store URL:</strong> <span id="confirmStoreUrl"></span>.com</li>
-                        <li><strong>Payment Method:</strong> Balance (${{ "%.2f"|format(franchise_cost) }} will be deducted)</li>
+                        <li><strong>Название магазина:</strong> <span id="confirmStoreName"></span></li>
+                        <li><strong>URL магазина:</strong> <span id="confirmStoreUrl"></span>.com</li>
+                        <li><strong>Способ оплаты:</strong> Баланс (будет списано ${{ "%.2f"|format(franchise_cost) }})</li>
                     </ul>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-circle me-2"></i>
-                        After the initial payment, $10 will be automatically deducted from your account balance each month. 
-                        If there are insufficient funds on the payment date, your store will be temporarily disabled.
+                        После первоначального платежа с вашего баланса будет автоматически списываться $10 каждый месяц.
+                        При недостатке средств на дату платежа ваш магазин будет временно отключен.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmCreate">Confirm & Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="confirmCreate">Подтвердить и создать</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Delete Store Modal -->
+    <!-- Модальное окно удаления магазина -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Store Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="deleteModalLabel">Подтверждение удаления магазина</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
-                    <p>You are about to permanently delete your store:</p>
+                    <p>Вы собираетесь навсегда удалить свой магазин:</p>
                     <ul>
-                        <li><strong>Store Name:</strong> {{ store.name }}</li>
-                        <li><strong>Store URL:</strong> {{ store.slug }}.com</li>
+                        <li><strong>Название магазина:</strong> {{ store.name }}</li>
+                        <li><strong>URL магазина:</strong> {{ store.slug }}.com</li>
                     </ul>
                     <div class="alert alert-danger">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        This action cannot be undone! All your store data, products and orders will be permanently deleted.
+                        Это действие нельзя отменить! Все данные вашего магазина, товары и заказы будут удалены навсегда.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                     <form method="POST" action="{{ url_for('affilate') }}" style="display: inline;">
                         <input type="hidden" name="action" value="delete_store">
-                        <button type="submit" class="btn btn-danger">Delete Store Permanently</button>
+                        <button type="submit" class="btn btn-danger">Удалить магазин навсегда</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Insufficient Funds Modal -->
+    <!-- Модальное окно недостатка средств -->
     <div class="modal fade insufficient-funds-modal" id="insufficientFundsModal" tabindex="-1" aria-labelledby="insufficientFundsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="insufficientFundsModalLabel">Insufficient Funds</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="insufficientFundsModalLabel">Недостаточно средств</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     <div class="warning-icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
-                    <h5 class="mb-3">You don't have enough funds to create a store</h5>
+                    <h5 class="mb-3">У вас недостаточно средств для создания магазина</h5>
                     
                     <div class="balance-details">
                         <div class="balance-row">
-                            <span class="balance-label">Required amount:</span>
+                            <span class="balance-label">Необходимая сумма:</span>
                             <span class="balance-value required">${{ "%.2f"|format(franchise_cost) }}</span>
                         </div>
                         <div class="balance-row">
-                            <span class="balance-label">Your current balance:</span>
+                            <span class="balance-label">Ваш текущий баланс:</span>
                             <span class="balance-value current">${{ "%.2f"|format(balances.card + balances.bep20) }}</span>
                         </div>
                         <div class="balance-row">
-                            <span class="balance-label">Difference needed:</span>
+                            <span class="balance-label">Необходимая разница:</span>
                             <span class="balance-value difference">${{ "%.2f"|format(franchise_cost - (balances.card + balances.bep20)) }}</span>
                         </div>
                     </div>
                     
-                    <p class="mt-3">Please add funds to your account to continue.</p>
+                    <p class="mt-3">Пожалуйста, пополните счет, чтобы продолжить.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                     <a href="/profile?tab=balance" class="btn btn-primary">
-                        <i class="fas fa-money-bill-wave me-2"></i>Add Funds
+                        <i class="fas fa-money-bill-wave me-2"></i>Пополнить баланс
                     </a>
                 </div>
             </div>

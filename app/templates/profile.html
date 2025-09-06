@@ -177,7 +177,7 @@
             background-color: var(--primary);
             border-color: var(--primary);
             color: #111;
-            font-weight: 500;
+            font-weight: 600;
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
         }
@@ -362,32 +362,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link " href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выход
                         </a>
                     </li>
                 </ul>
@@ -400,15 +400,15 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Account</li>
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                        <li class="breadcrumb-item active">Аккаунт</li>
                     </ol>
                 </nav>
             </div>
         </div>
         
-        <!-- User Info Card (added from product_31.html) -->
+        <!-- Карточка информации о пользователе (добавлено из product_31.html) -->
         <div class="user-info-card d-flex align-items-center mb-4">
             <div class="user-avatar">
                 {{ username[0].upper() }}
@@ -416,9 +416,9 @@
             <div class="user-details">
                 <div class="user-name">{{ username }}</div>
 <div class="user-balance">
-    Balance: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
+    Баланс: ${{ "{:,.2f}".format(balances.get('card', 0) + balances.get('bep20', 0)) }}
     {% if kyc_verified %}
-        <span class="badge bg-success ms-2">KYC Verified</span>
+        <span class="badge bg-success ms-2">KYC Подтвержден</span>
     {% endif %}
 </div>
             </div>
@@ -426,7 +426,7 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h1 class="page-header">My Profile</h1>
+                <h1 class="page-header">Мой профиль</h1>
             </div>
         </div>
         
@@ -434,18 +434,18 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="h5 mb-0"><i class="fas fa-wallet me-2"></i>Balance</h2>
+                        <h2 class="h5 mb-0"><i class="fas fa-wallet me-2"></i>Баланс</h2>
                     </div>
                     <div class="card-body">
                         <button class="btn btn-primary w-100 mb-4" id="refillBalanceBtn">
-                            <i class="fas fa-plus-circle me-2"></i>Refill Balance
+                            <i class="fas fa-plus-circle me-2"></i>Пополнить баланс
                         </button>
                         
-                        <!-- Bank Card -->
+                        <!-- Банковская карта -->
                         <div class="wallet-card">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Circle_USDC_Logo.svg/2048px-Circle_USDC_Logo.svg.png" class="wallet-icon" alt="Bank Card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Circle_USDC_Logo.svg/2048px-Circle_USDC_Logo.svg.png" class="wallet-icon" alt="Банковская карта">
                             <div class="wallet-info">
-                                <div class="wallet-name">Bank Card</div>
+                                <div class="wallet-name">Банковская карта</div>
                                 <div class="wallet-network">Visa & Mastercard</div>
                             </div>
                             <div class="wallet-balance">
@@ -459,7 +459,7 @@
                             <img src="https://www.svgrepo.com/show/367256/usdt.svg" class="wallet-icon" alt="USDT BEP20">
                             <div class="wallet-info">
                                 <div class="wallet-name">USDT</div>
-                                <div class="wallet-network">TON Network</div>
+                                <div class="wallet-network">TON Network (комиссия 0%)</div>
                             </div>
                             <div class="wallet-balance">
                                 <div class="balance-amount">${{ balances['bep20'] | round(2) }}</div>
@@ -499,19 +499,19 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="h5 mb-0"><i class="fas fa-chart-line me-2"></i>Statistics</h2>
+                        <h2 class="h5 mb-0"><i class="fas fa-chart-line me-2"></i>Статистика</h2>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="stat-card">
-                                    <div class="stat-title">Total Orders</div>
+                                    <div class="stat-title">Всего заказов</div>
                                     <div class="stat-value">{{ orders }}</div>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="stat-card">
-                                    <div class="stat-title">Total Expenses</div>
+                                    <div class="stat-title">Всего расходов</div>
                                     <div class="stat-value">${{ expenses | round(2) }}</div>
                                 </div>
                             </div>
@@ -521,17 +521,17 @@
                 
                 <div class="card mt-4">
                     <div class="card-header">
-                        <h2 class="h5 mb-0"><i class="fas fa-history me-2"></i>Top Up History</h2>
+                        <h2 class="h5 mb-0"><i class="fas fa-history me-2"></i>История пополнений</h2>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Method</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>Дата</th>
+                                        <th>Метод</th>
+                                        <th>Сумма</th>
+                                        <th>Статус</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -560,34 +560,34 @@
         </div>
     </main>
 
-    <!-- Refill Balance Modal -->
+    <!-- Модальное окно пополнения баланса -->
     <div class="modal fade" id="refillBalanceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Refill Balance</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Пополнение баланса</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     <form class="choose-crypto">
                         <div class="mb-3">
-                            <label for="networkSelect" class="form-label">Payment Method</label>
+                            <label for="networkSelect" class="form-label">Способ оплаты</label>
                             <select class="form-select" id="networkSelect">
-                                <option value="bankcard" selected>Bank Card (Visa & Mastercard)</option>
+                                <option value="bankcard" selected>Банковская карта (Visa & Mastercard)</option>
                                 <option value="bep20">USDT (TON)</option>
-                                <option value="erc20" disabled>USDT (ERC20) - Temporarily Unavailable</option>
-                                <option value="trc20" disabled>USDT (TRC20) - Temporarily Unavailable</option>
+                                <option value="erc20" disabled>USDT (ERC20) - Временно недоступно</option>
+                                <option value="trc20" disabled>USDT (TRC20) - Временно недоступно</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="amountInput" class="form-label">Amount (USD)</label>
-                            <input type="number" class="form-control" id="amountInput" min="1" step="1" placeholder="Enter amount" required>
+                            <label for="amountInput" class="form-label">Сумма (USD)</label>
+                            <input type="number" class="form-control" id="amountInput" min="1" step="1" placeholder="Введите сумму" required>
                         </div>
                         <div id="unavailableMessage" class="alert alert-warning" style="display: none;">
-                            <i class="fas fa-exclamation-triangle me-2"></i>This payment method is temporarily unavailable
+                            <i class="fas fa-exclamation-triangle me-2"></i>Этот способ оплаты временно недоступен
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mt-2">
-                            <i class="fas fa-arrow-right me-2"></i>Continue
+                            <i class="fas fa-arrow-right me-2"></i>Продолжить
                         </button>
                     </form>
                 </div>
@@ -639,7 +639,7 @@
             // Crypto processing
             switch(network) {
                 case 'bep20':
-                    url = '/bep20/pay/qN7679-3c7cef-47929b-5de3d5-711wet';
+                    url = '/ton/pay/qN7679-3c7cef-47929b-5de3d5-711wet';
                     break;
                 case 'erc20':
                     url = '/erc20/pay/zQ5678-3g4hij-9123kl-5mnop6-789rst';

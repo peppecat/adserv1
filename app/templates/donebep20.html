@@ -10,6 +10,13 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <!-- Для старых клиентов/ботов: положи копию в корень домена /favicon.ico -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     
     <!-- Custom CSS -->
     <style>
@@ -205,32 +212,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
                         </a>
                     </li>
                 </ul>
@@ -244,35 +251,35 @@
                 <div class="success-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h1 class="payment-title">Payment Submitted</h1>
-                <p class="payment-subtitle">Your USDT (TON) payment is being processed</p>
+                <h1 class="payment-title">Платеж отправлен</h1>
+                <p class="payment-subtitle">Ваш платеж USDT (TON) обрабатывается</p>
             </div>
             
             <div class="payment-method">
                 <img src="https://www.svgrepo.com/show/367256/usdt.svg" alt="USDT">
                 <div class="payment-method-text">
-                    Paid with <span>USDT (TON)</span>
+                    Оплачено через <span>USDT (TON)</span>
                 </div>
             </div>
             
             <div class="payment-status">
                 <i class="fas fa-spinner fa-pulse"></i>
-                Waiting for transaction confirmation...
+                Ожидание подтверждения транзакции...
             </div>
             
             <div class="network-info">
                 <div class="network-box">
-                    Network: TON
+                    Сеть: TON
                 </div>
             </div>
             
             <div class="timer-container">
-                <span class="timer-text">This page will close automatically in</span>
+                <span class="timer-text">Эта страница автоматически закроется через</span>
                 <span class="timer" id="minutes">00</span>:<span class="timer" id="seconds">15</span>
             </div>
             
             <button class="confirm-btn" onclick="window.location.href='/profile'">
-                <i class="fas fa-user me-2"></i> Back to Profile
+                <i class="fas fa-user me-2"></i> Вернуться в профиль
             </button>
         </div>
     </div>

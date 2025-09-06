@@ -295,7 +295,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
@@ -307,32 +307,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link " href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-user me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
                         </a>
                     </li>
                 </ul>
@@ -345,15 +345,15 @@
             <div class="col">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Steam Wallet Codes | USA</li>
+                        <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                        <li class="breadcrumb-item active">Коды Steam Wallet | USA</li>
                     </ol>
                 </nav>
             </div>
         </div>
         
-        <!-- User Info Card -->
+        <!-- Карточка информации о пользователе -->
         <div class="user-info-card d-flex align-items-center mb-4">
             <div class="user-avatar">
                 {{ username[0].upper() }}
@@ -361,9 +361,9 @@
             <div class="user-details">
                 <div class="user-name">{{ username }}</div>
                 <div class="user-balance">
-                    Balance: ${{ "{:,.2f}".format(total_balance) }}
+                    Баланс: ${{ "{:,.2f}".format(total_balance) }}
                     {% if kyc_verified %}
-                        <span class="badge bg-success ms-2">KYC Verified</span>
+                        <span class="badge bg-success ms-2">KYC Подтвержден</span>
                     {% endif %}
                 </div>
             </div>
@@ -377,25 +377,25 @@
         
         {% if kyc_required %}
         <div class="kyc-alert">
-            <h4><i class="fas fa-exclamation-triangle me-2 text-danger"></i>KYC Verification Required</h4>
-            <p class="mb-0">You have reached the limit of 4 purchases. To continue using our service, please complete KYC verification.</p>
+            <h4><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Требуется верификация KYC</h4>
+            <p class="mb-0">Вы достигли лимита в 4 покупки. Чтобы продолжить пользоваться нашим сервисом, завершите верификацию KYC.</p>
             <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                Complete KYC
+                Завершить KYC
             </button>
         </div>
         {% endif %}
         
         {% if purchase_limit and not kyc_verified %}
         <div class="purchase-limit-info">
-            <h4><i class="fas fa-info-circle me-2 text-primary"></i>Purchase Limit</h4>
+            <h4><i class="fas fa-info-circle me-2 text-primary"></i>Лимит покупок</h4>
             <p class="mb-0">
-                Your balance exceeds $400. Current purchase limit: 
-                <strong>{{ purchase_limit }} total purchases</strong>.
-                You have made <strong>{{ purchases_count }}/{{ purchase_limit }}</strong> purchases.
-                Complete KYC verification to remove these limits.
+                Ваш баланс превышает $400. Текущий лимит покупок:
+                <strong>{{ purchase_limit }} всего покупок</strong>.
+                Вы совершили <strong>{{ purchases_count }}/{{ purchase_limit }}</strong> покупок.
+                Завершите верификацию KYC, чтобы снять эти ограничения.
             </p>
             <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                Verify Account
+                Подтвердить аккаунт
             </button>
         </div>
         {% endif %}
@@ -405,34 +405,34 @@
             <div class="disabled-overlay">
                 <div class="disabled-text">
                     <i class="fas fa-lock fa-2x mb-2 text-danger"></i>
-                    <h4>Purchases Disabled</h4>
-                    <p>Complete KYC verification to unlock purchases</p>
+                    <h4>Покупки отключены</h4>
+                    <p>Завершите верификацию KYC, чтобы разблокировать покупки</p>
                 </div>
             </div>
             {% endif %}
             
             <div class="card-header">
-                <h2 class="h5 mb-0">Steam Wallet Codes | USA</h2>
+                <h2 class="h5 mb-0">Коды Steam Wallet | USA</h2>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table align-middle table-hover">
                         <thead class="thead-light">
                             <tr>
-                                <th>No.</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
-                                <th>In Stock</th>
-                                <th>Amount</th>
-                                <th>Final Price</th>
-                                <th>Action</th>
+                                <th>№</th>
+                                <th>Наименование товара</th>
+                                <th>Цена</th>
+                                <th>В наличии</th>
+                                <th>Количество</th>
+                                <th>Итоговая цена</th>
+                                <th>Действие</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Product 1: $5 -->
+                            <!-- Товар 1: $5 -->
                             <tr>
                                 <td>390</td>
-                                <td>Steam Wallet Code | US | 5 USD</td>
+                                <td>Код Steam Wallet | USA | 5 USD</td>
                                 <td>$5.00</td>
                                 <td>✅</td>
                                 <td>
@@ -453,15 +453,15 @@
                                 <td>
                                     <button id="button-366" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-366"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 2: $10 -->
+                            <!-- Товар 2: $10 -->
                             <tr>
                                 <td>391</td>
-                                <td>Steam Wallet Code | US | 10 USD</td>
+                                <td>Код Steam Wallet | USA | 10 USD</td>
                                 <td>$10.00</td>
                                 <td>✅</td>
                                 <td>
@@ -482,15 +482,15 @@
                                 <td>
                                     <button id="button-367" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-367"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 3: $20 -->
+                            <!-- Товар 3: $20 -->
                             <tr>
                                 <td>392</td>
-                                <td>Steam Wallet Code | US | 20 USD</td>
+                                <td>Код Steam Wallet | USA | 20 USD</td>
                                 <td>$20.00</td>
                                 <td>✅</td>
                                 <td>
@@ -511,15 +511,15 @@
                                 <td>
                                     <button id="button-368" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-368"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 4: $25 -->
+                            <!-- Товар 4: $25 -->
                             <tr>
                                 <td>393</td>
-                                <td>Steam Wallet Code | US | 25 USD</td>
+                                <td>Код Steam Wallet | USA | 25 USD</td>
                                 <td>$25.00</td>
                                 <td>✅</td>
                                 <td>
@@ -540,15 +540,15 @@
                                 <td>
                                     <button id="button-369" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-369"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 5: $50 -->
+                            <!-- Товар 5: $50 -->
                             <tr>
                                 <td>394</td>
-                                <td>Steam Wallet Code | US | 50 USD</td>
+                                <td>Код Steam Wallet | USA | 50 USD</td>
                                 <td>$50.00</td>
                                 <td>✅</td>
                                 <td>
@@ -569,15 +569,15 @@
                                 <td>
                                     <button id="button-370" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-370"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 6: $75 -->
+                            <!-- Товар 6: $75 -->
                             <tr>
                                 <td>395</td>
-                                <td>Steam Wallet Code | US | 75 USD</td>
+                                <td>Код Steam Wallet | USA | 75 USD</td>
                                 <td>$75.00</td>
                                 <td>✅</td>
                                 <td>
@@ -598,15 +598,15 @@
                                 <td>
                                     <button id="button-371" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-371"></div>
                                 </td>
                             </tr>
                             
-                            <!-- Product 7: $100 -->
+                            <!-- Товар 7: $100 -->
                             <tr>
                                 <td>396</td>
-                                <td>Steam Wallet Code | US | 100 USD</td>
+                                <td>Код Steam Wallet | USA | 100 USD</td>
                                 <td>$100.00</td>
                                 <td>✅</td>
                                 <td>
@@ -627,7 +627,7 @@
                                 <td>
                                     <button id="button-372" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
+                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
                                     <div class="loader mt-2" id="loader-372"></div>
                                 </td>
                             </tr>
@@ -637,83 +637,83 @@
             </div>
         </div>
         
-        <!-- Error Modal -->
+        <!-- Модальное окно ошибки -->
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Error</h5>
+                        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Ошибка</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <p id="error-message">Insufficient funds on your balance.</p>
+                        <p id="error-message">Недостаточно средств на вашем балансе.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- KYC Required Modal -->
+        <!-- Модальное окно требования KYC -->
         <div class="modal fade" id="kycModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-id-card me-2 text-primary"></i>KYC Verification Required</h5>
+                        <h5 class="modal-title"><i class="fas fa-id-card me-2 text-primary"></i>Требуется верификация KYC</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <p>You have reached the purchase limit for unverified accounts.</p>
-                        <p>To continue using our service, please complete KYC verification.</p>
+                        <p>Вы достигли лимита покупок для неподтвержденных аккаунтов.</p>
+                        <p>Чтобы продолжить пользоваться нашим сервисом, завершите верификацию KYC.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                            Complete KYC
+                            Завершить KYC
                         </button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- KYC Verification Modal -->
+        <!-- Модальное окно верификации KYC -->
         <div class="modal fade" id="kycVerificationModal" tabindex="-1" aria-labelledby="kycVerificationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="kycVerificationModalLabel"><i class="fas fa-id-card me-2"></i>KYC Verification</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="kycVerificationModalLabel"><i class="fas fa-id-card me-2"></i>Верификация KYC</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Step 1: Introduction -->
+                        <!-- Шаг 1: Введение -->
                         <div class="kyc-step active" id="step1">
                             <div class="text-center mb-4">
                                 <i class="fas fa-id-card document-icon"></i>
-                                <h4>Identity Verification Required</h4>
-                                <p class="text-muted">To continue using our services, we need to verify your identity.</p>
+                                <h4>Требуется проверка личности</h4>
+                                <p class="text-muted">Чтобы продолжить пользоваться нашими услугами, нам необходимо подтвердить вашу личность.</p>
                             </div>
                             
                             <div class="alert alert-info">
-                                <h5><i class="fas fa-info-circle me-2"></i>Verification Process</h5>
+                                <h5><i class="fas fa-info-circle me-2"></i>Процесс проверки</h5>
                                 <ol class="mb-0">
-                                    <li>Select the type of document you want to submit</li>
-                                    <li>Prepare a clear photo/scan of your document</li>
-                                    <li>Send the document to our verification email</li>
-                                    <li>Wait for our team to review (usually within 24 hours)</li>
+                                    <li>Выберите тип документа, который хотите предоставить</li>
+                                    <li>Подготовьте четкое фото/скан вашего документа</li>
+                                    <li>Отправьте документ на нашу электронную почту для проверки</li>
+                                    <li>Дождитесь проверки нашей командой (обычно в течение 24 часов)</li>
                                 </ol>
                             </div>
                             
                             <div class="text-center mt-4">
                                 <button class="btn btn-primary" onclick="showStep(2)">
-                                    Start Verification <i class="fas fa-arrow-right ms-2"></i>
+                                    Начать проверку <i class="fas fa-arrow-right ms-2"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Step 2: Document Selection -->
+                        <!-- Шаг 2: Выбор документа -->
                         <div class="kyc-step" id="step2">
-                            <h5 class="mb-4">Select Document Type</h5>
+                            <h5 class="mb-4">Выберите тип документа</h5>
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -721,8 +721,8 @@
                                         <div class="document-icon">
                                             <i class="fas fa-passport"></i>
                                         </div>
-                                        <h6>Passport</h6>
-                                        <p class="small text-muted mb-0">International passport or government-issued ID</p>
+                                        <h6>Паспорт</h6>
+                                        <p class="small text-muted mb-0">Заграничный паспорт или удостоверение личности, выданное государством</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -730,8 +730,8 @@
                                         <div class="document-icon">
                                             <i class="fas fa-id-card"></i>
                                         </div>
-                                        <h6>Driver's License</h6>
-                                        <p class="small text-muted mb-0">Government-issued driver's license</p>
+                                        <h6>Водительские права</h6>
+                                        <p class="small text-muted mb-0">Водительское удостоверение, выданное государством</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -739,8 +739,8 @@
                                         <div class="document-icon">
                                             <i class="fas fa-address-card"></i>
                                         </div>
-                                        <h6>National ID Card</h6>
-                                        <p class="small text-muted mb-0">Government-issued identification card</p>
+                                        <h6>Удостоверение личности</h6>
+                                        <p class="small text-muted mb-0">Удостоверение личности, выданное государством</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -748,39 +748,39 @@
                                         <div class="document-icon">
                                             <i class="fas fa-file-alt"></i>
                                         </div>
-                                        <h6>Other Government ID</h6>
-                                        <p class="small text-muted mb-0">Other official identification document</p>
+                                        <h6>Другое государственное удостоверение</h6>
+                                        <p class="small text-muted mb-0">Другой официальный документ, удостоверяющий личность</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="d-flex justify-content-between mt-4">
                                 <button class="btn btn-secondary" onclick="showStep(1)">
-                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                    <i class="fas fa-arrow-left me-2"></i> Назад
                                 </button>
                                 <button class="btn btn-primary" id="continueBtn" disabled onclick="showStep(3)">
-                                    Continue <i class="fas fa-arrow-right ms-2"></i>
+                                    Продолжить <i class="fas fa-arrow-right ms-2"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Step 3: Instructions -->
+                        <!-- Шаг 3: Инструкции -->
                         <div class="kyc-step" id="step3">
-                            <h5 class="mb-4">Submission Instructions</h5>
+                            <h5 class="mb-4">Инструкции по отправке</h5>
                             
                             <div class="alert alert-warning">
-                                <h6><i class="fas fa-exclamation-triangle me-2"></i>Important Guidelines</h6>
+                                <h6><i class="fas fa-exclamation-triangle me-2"></i>Важные рекомендации</h6>
                                 <ul class="mb-0">
-                                    <li>Ensure all details are clearly visible</li>
-                                    <li>Photos must be in focus and well-lit</li>
-                                    <li>Submit both front and back if applicable</li>
-                                    <li>File formats: JPG, PNG or PDF</li>
-                                    <li>Maximum file size: 5MB per document</li>
+                                    <li>Убедитесь, что все детали четко видны</li>
+                                    <li>Фотографии должны быть в фокусе и хорошо освещены</li>
+                                    <li>Предоставьте обе стороны, если применимо</li>
+                                    <li>Форматы файлов: JPG, PNG или PDF</li>
+                                    <li>Максимальный размер файла: 5 МБ на документ</li>
                                 </ul>
                             </div>
                             
                             <div class="bg-light p-4 rounded mt-3">
-                                <h6><i class="fas fa-paper-plane me-2"></i>Send your documents to:</h6>
+                                <h6><i class="fas fa-paper-plane me-2"></i>Отправьте ваши документы на:</h6>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" value="support@keyzpanel.com" id="emailAddress" readonly>
                                     <button class="btn btn-outline-secondary" type="button" onclick="copyEmail()">
@@ -789,22 +789,22 @@
                                 </div>
                                 
                                 <div class="mt-3">
-                                    <h6>Email requirements:</h6>
+                                    <h6>Требования к email:</h6>
                                     <ul>
-                                        <li>Subject: <code>KYC Verification - {{ username }}</code></li>
-                                        <li>Include your username: <strong>{{ username }}</strong></li>
-                                        <li>Attach clear photos of your selected document</li>
-                                        <li>Optional: Include any additional information</li>
+                                        <li>Тема: <code>KYC Verification - {{ username }}</code></li>
+                                        <li>Укажите ваше имя пользователя: <strong>{{ username }}</strong></li>
+                                        <li>Прикрепите четкие фотографии выбранного документа</li>
+                                        <li>По желанию: укажите любую дополнительную информацию</li>
                                     </ul>
                                 </div>
                             </div>
                             
                             <div class="d-flex justify-content-between mt-4">
                                 <button class="btn btn-secondary" onclick="showStep(2)">
-                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                    <i class="fas fa-arrow-left me-2"></i> Назад
                                 </button>
                                 <button class="btn btn-success" onclick="completeKYC()">
-                                    <i class="fas fa-check me-2"></i> I've Sent the Documents
+                                    <i class="fas fa-check me-2"></i> Я отправил(а) документы
                                 </button>
                             </div>
                         </div>

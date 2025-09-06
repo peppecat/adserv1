@@ -296,436 +296,436 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link " href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
-                        </a>
-                    </li>
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link " href="/dashboard">
+                        <i class="fas fa-home me-1"></i> Магазин
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/orders">
+                        <i class="fas fa-clipboard-list me-1"></i> Заказы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">
+                        <i class="fas fa-user me-1"></i> Аккаунт
+                    </a>
+                </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-user me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reseller">
+                        <i class="fas fa-layer-group me-1"></i> Реселлер
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                    </a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main class="container py-4">
-        <div class="row mb-3">
-            <div class="col">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Steam Wallet Codes | PL</li>
-                    </ol>
-                </nav>
+<main class="container py-4">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                    <li class="breadcrumb-item active">Коды Steam Wallet | PL</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Карточка информации о пользователе -->
+    <div class="user-info-card d-flex align-items-center mb-4">
+        <div class="user-avatar">
+            {{ username[0].upper() }}
+        </div>
+        <div class="user-details">
+            <div class="user-name">{{ username }}</div>
+            <div class="user-balance">
+                Баланс: ${{ "{:,.2f}".format(total_balance) }}
+                {% if kyc_verified %}
+                    <span class="badge bg-success ms-2">KYC Подтвержден</span>
+                {% endif %}
             </div>
         </div>
-        
-        <!-- User Info Card -->
-        <div class="user-info-card d-flex align-items-center mb-4">
-            <div class="user-avatar">
-                {{ username[0].upper() }}
-            </div>
-            <div class="user-details">
-                <div class="user-name">{{ username }}</div>
-                <div class="user-balance">
-                    Balance: ${{ "{:,.2f}".format(total_balance) }}
-                    {% if kyc_verified %}
-                        <span class="badge bg-success ms-2">KYC Verified</span>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        
-        {% if error %}
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
-        </div>
-        {% endif %}
-        
+    </div>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+    {% endif %}
+    
+    {% if kyc_required %}
+    <div class="kyc-alert">
+        <h4><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Требуется верификация KYC</h4>
+        <p class="mb-0">Вы достигли лимита в 4 покупки. Чтобы продолжить пользоваться нашим сервисом, завершите верификацию KYC.</p>
+        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
+            Завершить KYC
+        </button>
+    </div>
+    {% endif %}
+    
+    {% if purchase_limit and not kyc_verified %}
+    <div class="purchase-limit-info">
+        <h4><i class="fas fa-info-circle me-2 text-primary"></i>Лимит покупок</h4>
+        <p class="mb-0">
+            Ваш баланс превышает $400. Текущий лимит покупок: 
+            <strong>{{ purchase_limit }} всего покупок</strong>.
+            Вы совершили <strong>{{ purchases_count }}/{{ purchase_limit }}</strong> покупок.
+            Завершите верификацию KYC, чтобы снять эти ограничения.
+        </p>
+        <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
+            Подтвердить аккаунт
+        </button>
+    </div>
+    {% endif %}
+    
+    <div class="card mb-4 position-relative">
         {% if kyc_required %}
-        <div class="kyc-alert">
-            <h4><i class="fas fa-exclamation-triangle me-2 text-danger"></i>KYC Verification Required</h4>
-            <p class="mb-0">You have reached the limit of 4 purchases. To continue using our service, please complete KYC verification.</p>
-            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                Complete KYC
-            </button>
+        <div class="disabled-overlay">
+            <div class="disabled-text">
+                <i class="fas fa-lock fa-2x mb-2 text-danger"></i>
+                <h4>Покупки отключены</h4>
+                <p>Завершите верификацию KYC, чтобы разблокировать покупки</p>
+            </div>
         </div>
         {% endif %}
         
-        {% if purchase_limit and not kyc_verified %}
-        <div class="purchase-limit-info">
-            <h4><i class="fas fa-info-circle me-2 text-primary"></i>Purchase Limit</h4>
-            <p class="mb-0">
-                Your balance exceeds $400. Current purchase limit: 
-                <strong>{{ purchase_limit }} total purchases</strong>.
-                You have made <strong>{{ purchases_count }}/{{ purchase_limit }}</strong> purchases.
-                Complete KYC verification to remove these limits.
-            </p>
-            <button type="button" class="btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                Verify Account
-            </button>
+        <div class="card-header">
+            <h2 class="h5 mb-0">Коды Steam Wallet | PL</h2>
         </div>
-        {% endif %}
-        
-        <div class="card mb-4 position-relative">
-            {% if kyc_required %}
-            <div class="disabled-overlay">
-                <div class="disabled-text">
-                    <i class="fas fa-lock fa-2x mb-2 text-danger"></i>
-                    <h4>Purchases Disabled</h4>
-                    <p>Complete KYC verification to unlock purchases</p>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table align-middle table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>№</th>
+                            <th>Название товара</th>
+                            <th>Цена</th>
+                            <th>В наличии</th>
+                            <th>Количество</th>
+                            <th>Итоговая цена</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Товар 1: 25 PLN -->
+                        <tr>
+                            <td>403</td>
+                            <td>Код Steam Wallet | PL | 25 PLN</td>
+                            <td>$6.65</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="decrease('counter-value-379', 379)"
+                                            {% if kyc_required %}disabled{% endif %}>-</button>
+                                    <input type="text" id="counter-value-379" value="0" 
+                                           class="form-control counter-input" 
+                                           oninput="validateInput(this, 379)"
+                                           {% if kyc_required %}disabled{% endif %}>
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="increase('counter-value-379', 379)"
+                                            {% if kyc_required %}disabled{% endif %}>+</button>
+                                </div>
+                            </td>
+                            <td id="final-price-379">$0.00</td>
+                            <td>
+                                <button id="button-379" class="btn btn-sm btn-outline-success" 
+                                        disabled
+                                        {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
+                                <div class="loader mt-2" id="loader-379"></div>
+                            </td>
+                        </tr>
+                        
+                        <!-- Товар 2: 40 PLN -->
+                        <tr>
+                            <td>404</td>
+                            <td>Код Steam Wallet | PL | 40 PLN</td>
+                            <td>$10.60</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="decrease('counter-value-380', 380)"
+                                            {% if kyc_required %}disabled{% endif %}>-</button>
+                                    <input type="text" id="counter-value-380" value="0" 
+                                           class="form-control counter-input" 
+                                           oninput="validateInput(this, 380)"
+                                           {% if kyc_required %}disabled{% endif %}>
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="increase('counter-value-380', 380)"
+                                            {% if kyc_required %}disabled{% endif %}>+</button>
+                                </div>
+                            </td>
+                            <td id="final-price-380">$0.00</td>
+                            <td>
+                                <button id="button-380" class="btn btn-sm btn-outline-success" 
+                                        disabled
+                                        {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
+                                <div class="loader mt-2" id="loader-380"></div>
+                            </td>
+                        </tr>
+                        
+                        <!-- Товар 3: 70 PLN -->
+                        <tr>
+                            <td>405</td>
+                            <td>Код Steam Wallet | PL | 70 PLN</td>
+                            <td>$19.00</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="decrease('counter-value-381', 381)"
+                                            {% if kyc_required %}disabled{% endif %}>-</button>
+                                    <input type="text" id="counter-value-381" value="0" 
+                                           class="form-control counter-input" 
+                                           oninput="validateInput(this, 381)"
+                                           {% if kyc_required %}disabled{% endif %}>
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="increase('counter-value-381', 381)"
+                                            {% if kyc_required %}disabled{% endif %}>+</button>
+                                </div>
+                            </td>
+                            <td id="final-price-381">$0.00</td>
+                            <td>
+                                <button id="button-381" class="btn btn-sm btn-outline-success" 
+                                        disabled
+                                        {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
+                                <div class="loader mt-2" id="loader-381"></div>
+                            </td>
+                        </tr>
+                        
+                        <!-- Товар 4: 110 PLN -->
+                        <tr>
+                            <td>406</td>
+                            <td>Код Steam Wallet | PL | 110 PLN</td>
+                            <td>$30.59</td>
+                            <td>✅</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="decrease('counter-value-382', 382)"
+                                            {% if kyc_required %}disabled{% endif %}>-</button>
+                                    <input type="text" id="counter-value-382" value="0" 
+                                           class="form-control counter-input" 
+                                           oninput="validateInput(this, 382)"
+                                           {% if kyc_required %}disabled{% endif %}>
+                                    <button class="btn btn-sm btn-outline-primary counter-btn" 
+                                            onclick="increase('counter-value-382', 382)"
+                                            {% if kyc_required %}disabled{% endif %}>+</button>
+                                </div>
+                            </td>
+                            <td id="final-price-382">$0.00</td>
+                            <td>
+                                <button id="button-382" class="btn btn-sm btn-outline-success" 
+                                        disabled
+                                        {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
+                                <div class="loader mt-2" id="loader-382"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно ошибки -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Ошибка</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-            {% endif %}
-            
-            <div class="card-header">
-                <h2 class="h5 mb-0">Steam Wallet Codes | PL</h2>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table align-middle table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>No.</th>
-                                <th>Product Name</th>
-                                <th>Price</th>
-                                <th>In Stock</th>
-                                <th>Amount</th>
-                                <th>Final Price</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Product 1: 25 PLN -->
-                            <tr>
-                                <td>403</td>
-                                <td>Steam Wallet Code | PL | 25 PLN</td>
-                                <td>$6.65</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-379', 379)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-379" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 379)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-379', 379)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-379">$0.00</td>
-                                <td>
-                                    <button id="button-379" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
-                                    <div class="loader mt-2" id="loader-379"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 2: 40 PLN -->
-                            <tr>
-                                <td>404</td>
-                                <td>Steam Wallet Code | PL | 40 PLN</td>
-                                <td>$10.60</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-380', 380)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-380" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 380)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-380', 380)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-380">$0.00</td>
-                                <td>
-                                    <button id="button-380" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
-                                    <div class="loader mt-2" id="loader-380"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 3: 70 PLN -->
-                            <tr>
-                                <td>405</td>
-                                <td>Steam Wallet Code | PL | 70 PLN</td>
-                                <td>$19.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-381', 381)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-381" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 381)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-381', 381)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-381">$0.00</td>
-                                <td>
-                                    <button id="button-381" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
-                                    <div class="loader mt-2" id="loader-381"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Product 4: 110 PLN -->
-                            <tr>
-                                <td>406</td>
-                                <td>Steam Wallet Code | PL | 110 PLN</td>
-                                <td>$30.59</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-382', 382)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-382" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 382)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-382', 382)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-382">$0.00</td>
-                                <td>
-                                    <button id="button-382" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>BUY</button>
-                                    <div class="loader mt-2" id="loader-382"></div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="modal-body">
+                    <p id="error-message">Недостаточно средств на вашем балансе.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
         </div>
-        
-        <!-- Error Modal -->
-        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Error</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p id="error-message">Insufficient funds on your balance.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+    </div>
+    
+    <!-- Модальное окно требования KYC -->
+    <div class="modal fade" id="kycModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-id-card me-2 text-primary"></i>Требуется верификация KYC</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Вы достигли лимита покупок для неподтвержденных аккаунтов.</p>
+                    <p>Чтобы продолжить пользоваться нашим сервисом, завершите верификацию KYC.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
+                        Завершить KYC
+                    </button>
                 </div>
             </div>
         </div>
-        
-        <!-- KYC Required Modal -->
-        <div class="modal fade" id="kycModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-id-card me-2 text-primary"></i>KYC Verification Required</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>You have reached the purchase limit for unverified accounts.</p>
-                        <p>To continue using our service, please complete KYC verification.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kycVerificationModal">
-                            Complete KYC
-                        </button>
-                    </div>
+    </div>
+    
+    <!-- Модальное окно верификации KYC -->
+    <div class="modal fade" id="kycVerificationModal" tabindex="-1" aria-labelledby="kycVerificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="kycVerificationModalLabel"><i class="fas fa-id-card me-2"></i>Верификация KYC</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
-            </div>
-        </div>
-        
-        <!-- KYC Verification Modal -->
-        <div class="modal fade" id="kycVerificationModal" tabindex="-1" aria-labelledby="kycVerificationModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="kycVerificationModalLabel"><i class="fas fa-id-card me-2"></i>KYC Verification</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <!-- Шаг 1: Введение -->
+                    <div class="kyc-step active" id="step1">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-id-card document-icon"></i>
+                            <h4>Требуется подтверждение личности</h4>
+                            <p class="text-muted">Чтобы продолжить пользоваться нашими услугами, нам необходимо подтвердить вашу личность.</p>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-info-circle me-2"></i>Процесс верификации</h5>
+                            <ol class="mb-0">
+                                <li>Выберите тип документа, который хотите предоставить</li>
+                                <li>Подготовьте четкое фото/скан вашего документа</li>
+                                <li>Отправьте документ на нашу почту для верификации</li>
+                                <li>Дождитесь проверки нашей командой (обычно в течение 24 часов)</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary" onclick="showStep(2)">
+                                Начать верификацию <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <!-- Step 1: Introduction -->
-                        <div class="kyc-step active" id="step1">
-                            <div class="text-center mb-4">
-                                <i class="fas fa-id-card document-icon"></i>
-                                <h4>Identity Verification Required</h4>
-                                <p class="text-muted">To continue using our services, we need to verify your identity.</p>
+                    
+                    <!-- Шаг 2: Выбор документа -->
+                    <div class="kyc-step" id="step2">
+                        <h5 class="mb-4">Выберите тип документа</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="document-option" onclick="selectDocument('passport')">
+                                    <div class="document-icon">
+                                        <i class="fas fa-passport"></i>
+                                    </div>
+                                    <h6>Паспорт</h6>
+                                    <p class="small text-muted mb-0">Заграничный паспорт или удостоверение личности государственного образца</p>
+                                </div>
                             </div>
-                            
-                            <div class="alert alert-info">
-                                <h5><i class="fas fa-info-circle me-2"></i>Verification Process</h5>
-                                <ol class="mb-0">
-                                    <li>Select the type of document you want to submit</li>
-                                    <li>Prepare a clear photo/scan of your document</li>
-                                    <li>Send the document to our verification email</li>
-                                    <li>Wait for our team to review (usually within 24 hours)</li>
-                                </ol>
+                            <div class="col-md-6 mb-3">
+                                <div class="document-option" onclick="selectDocument('drivers_license')">
+                                    <div class="document-icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <h6>Водительские права</h6>
+                                    <p class="small text-muted mb-0">Водительское удостоверение государственного образца</p>
+                                </div>
                             </div>
-                            
-                            <div class="text-center mt-4">
-                                <button class="btn btn-primary" onclick="showStep(2)">
-                                    Start Verification <i class="fas fa-arrow-right ms-2"></i>
-                                </button>
+                            <div class="col-md-6 mb-3">
+                                <div class="document-option" onclick="selectDocument('national_id')">
+                                    <div class="document-icon">
+                                        <i class="fas fa-address-card"></i>
+                                    </div>
+                                    <h6>Удостоверение личности</h6>
+                                    <p class="small text-muted mb-0">Удостоверение личности государственного образца</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="document-option" onclick="selectDocument('other')">
+                                    <div class="document-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <h6>Другое государственное удостоверение</h6>
+                                    <p class="small text-muted mb-0">Другой официальный идентификационный документ</p>
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Step 2: Document Selection -->
-                        <div class="kyc-step" id="step2">
-                            <h5 class="mb-4">Select Document Type</h5>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="document-option" onclick="selectDocument('passport')">
-                                        <div class="document-icon">
-                                            <i class="fas fa-passport"></i>
-                                        </div>
-                                        <h6>Passport</h6>
-                                        <p class="small text-muted mb-0">International passport or government-issued ID</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="document-option" onclick="selectDocument('drivers_license')">
-                                        <div class="document-icon">
-                                            <i class="fas fa-id-card"></i>
-                                        </div>
-                                        <h6>Driver's License</h6>
-                                        <p class="small text-muted mb-0">Government-issued driver's license</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="document-option" onclick="selectDocument('national_id')">
-                                        <div class="document-icon">
-                                            <i class="fas fa-address-card"></i>
-                                        </div>
-                                        <h6>National ID Card</h6>
-                                        <p class="small text-muted mb-0">Government-issued identification card</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="document-option" onclick="selectDocument('other')">
-                                        <div class="document-icon">
-                                            <i class="fas fa-file-alt"></i>
-                                        </div>
-                                        <h6>Other Government ID</h6>
-                                        <p class="small text-muted mb-0">Other official identification document</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-secondary" onclick="showStep(1)">
-                                    <i class="fas fa-arrow-left me-2"></i> Back
-                                </button>
-                                <button class="btn btn-primary" id="continueBtn" disabled onclick="showStep(3)">
-                                    Continue <i class="fas fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button class="btn btn-secondary" onclick="showStep(1)">
+                                <i class="fas fa-arrow-left me-2"></i> Назад
+                            </button>
+                            <button class="btn btn-primary" id="continueBtn" disabled onclick="showStep(3)">
+                                Продолжить <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Шаг 3: Инструкции -->
+                    <div class="kyc-step" id="step3">
+                        <h5 class="mb-4">Инструкции по отправке</h5>
+                        
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Важные рекомендации</h6>
+                            <ul class="mb-0">
+                                <li>Убедитесь, что все детали четко видны</li>
+                                <li>Фотографии должны быть в фокусе и хорошо освещены</li>
+                                <li>Предоставьте обе стороны, если применимо</li>
+                                <li>Форматы файлов: JPG, PNG или PDF</li>
+                                <li>Максимальный размер файла: 5MB на документ</li>
+                            </ul>
                         </div>
                         
-                        <!-- Step 3: Instructions -->
-                        <div class="kyc-step" id="step3">
-                            <h5 class="mb-4">Submission Instructions</h5>
+                        <div class="bg-light p-4 rounded mt-3">
+                            <h6><i class="fas fa-paper-plane me-2"></i>Отправьте ваши документы на:</h6>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" value="support@keyzpanel.com" id="emailAddress" readonly>
+                                <button class="btn btn-outline-secondary" type="button" onclick="copyEmail()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
                             
-                            <div class="alert alert-warning">
-                                <h6><i class="fas fa-exclamation-triangle me-2"></i>Important Guidelines</h6>
-                                <ul class="mb-0">
-                                    <li>Ensure all details are clearly visible</li>
-                                    <li>Photos must be in focus and well-lit</li>
-                                    <li>Submit both front and back if applicable</li>
-                                    <li>File formats: JPG, PNG or PDF</li>
-                                    <li>Maximum file size: 5MB per document</li>
+                            <div class="mt-3">
+                                <h6>Требования к email:</h6>
+                                <ul>
+                                    <li>Тема: <code>KYC Verification - {{ username }}</code></li>
+                                    <li>Укажите ваше имя пользователя: <strong>{{ username }}</strong></li>
+                                    <li>Прикрепите четкие фотографии выбранного документа</li>
+                                    <li>По желанию: укажите дополнительную информацию</li>
                                 </ul>
                             </div>
-                            
-                            <div class="bg-light p-4 rounded mt-3">
-                                <h6><i class="fas fa-paper-plane me-2"></i>Send your documents to:</h6>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" value="support@keyzpanel.com" id="emailAddress" readonly>
-                                    <button class="btn btn-outline-secondary" type="button" onclick="copyEmail()">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="mt-3">
-                                    <h6>Email requirements:</h6>
-                                    <ul>
-                                        <li>Subject: <code>KYC Verification - {{ username }}</code></li>
-                                        <li>Include your username: <strong>{{ username }}</strong></li>
-                                        <li>Attach clear photos of your selected document</li>
-                                        <li>Optional: Include any additional information</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-secondary" onclick="showStep(2)">
-                                    <i class="fas fa-arrow-left me-2"></i> Back
-                                </button>
-                                <button class="btn btn-success" onclick="completeKYC()">
-                                    <i class="fas fa-check me-2"></i> I've Sent the Documents
-                                </button>
-                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <button class="btn btn-secondary" onclick="showStep(2)">
+                                <i class="fas fa-arrow-left me-2"></i> Назад
+                            </button>
+                            <button class="btn btn-success" onclick="completeKYC()">
+                                <i class="fas fa-check me-2"></i> Я отправил(а) документы
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

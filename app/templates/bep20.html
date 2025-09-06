@@ -10,6 +10,13 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <!-- Для старых клиентов/ботов: положи копию в корень домена /favicon.ico -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     
     <!-- Custom CSS -->
     <style>
@@ -222,7 +229,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
@@ -234,32 +241,32 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                            <i class="fas fa-home me-1"></i> Магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">
-                            <i class="fas fa-clipboard-list me-1"></i> Orders
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-1"></i> Аккаунт
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/affilate">
-                            <i class="fas fa-store me-1"></i> My Store
+                            <i class="fas fa-store me-1"></i> Мой магазин
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/reseller">
-                            <i class="fas fa-layer-group me-1"></i> Reseller
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">
-                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
                         </a>
                     </li>
                 </ul>
@@ -270,42 +277,42 @@
     <div class="container py-4">
         <div class="payment-container">
             <div class="payment-header">
-                <h1 class="payment-title">Payment Details</h1>
-                <p class="payment-subtitle">Complete your payment using USDT (TON)</p>
+                <h1 class="payment-title">Детали оплаты</h1>
+                <p class="payment-subtitle">Завершите оплату с помощью USDT (TON)</p>
             </div>
             
             <div class="payment-method">
                 <img src="https://www.svgrepo.com/show/367256/usdt.svg" alt="USDT">
                 <div class="payment-method-text">
-                    Pay with <span>USDT (TON)</span>
+                    Оплатить через <span>USDT (TON)</span>
                 </div>
             </div>
             
             <div class="payment-details">
                 <div class="payment-field">
-                    <label class="payment-label">Amount to Pay:</label>
+                    <label class="payment-label">Сумма к оплате:</label>
                     <div class="payment-value">
                         <img src="https://www.svgrepo.com/show/367256/usdt.svg" alt="USDT">
                         <span class="to-copy">{{ amount }}</span> USD
                         <button class="copy-btn" onclick="copyToClipboard('amount')">
-                            <i class="far fa-copy"></i> Copy
+                            <i class="far fa-copy"></i> Копировать
                         </button>
                     </div>
                 </div>
                 
                 <div class="payment-field">
-                    <label class="payment-label">Recipient Address:</label>
+                    <label class="payment-label">Адрес получателя:</label>
                     <div class="payment-value">
                         <img src="https://www.svgrepo.com/show/367256/usdt.svg" alt="USDT">
                         <span class="to-copy adress-to-copy">{{ bep20_address }}</span>
                         <button class="copy-btn" onclick="copyToClipboard('address')">
-                            <i class="far fa-copy"></i> Copy
+                            <i class="far fa-copy"></i> Копировать
                         </button>
                     </div>
                 </div>
                 
                 <div class="payment-field">
-                    <label class="payment-label">Network:</label>
+                    <label class="payment-label">Сеть:</label>
                     <div class="payment-value">
                         <span>TON</span>
                     </div>
@@ -313,17 +320,17 @@
             </div>
             
             <div class="timer-container">
-                <span class="timer-text">Payment page expires in:</span>
+                <span class="timer-text">Страница оплаты истекает через:</span>
                 <span class="timer" id="minutes">10</span>:<span class="timer" id="seconds">00</span>
             </div>
             
             <button class="confirm-btn" id="confirmPayment">
-                <i class="fas fa-check-circle me-2"></i> Confirm Payment
+                <i class="fas fa-check-circle me-2"></i> Подтвердить оплату
             </button>
             
             <div class="alert-note">
                 <i class="fas fa-exclamation-circle"></i>
-                Please send the exact amount to the address above. Once sent, click "Confirm Payment" to verify your transaction.
+                Пожалуйста, отправьте точную сумму на указанный выше адрес. После отправки нажмите «Подтвердить оплату», чтобы проверить вашу транзакцию.
             </div>
         </div>
     </div>

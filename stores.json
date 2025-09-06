@@ -1,3 +1,18 @@
 {
-
+    "admin": {
+        "name": "cxvxcvxc",
+        "slug": "cxvxcvxc",
+        "status": "active",
+        "owner": "admin",
+        "email": "dxuy2ysbghx148@rambler.ru",
+        "admin_username": "",
+        "admin_password": "",
+        "created_at": "2025-09-06 19:08:36",
+        "total_sales": 0,
+        "products": [],
+        "orders": [],
+        "payment_method": "balance",
+        "initial_payment": 50.0,
+        "kyc_verified": false
+    }
 }
