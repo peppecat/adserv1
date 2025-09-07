@@ -2164,6 +2164,8 @@ def get_real_ip():
     if request.headers.get('X-Forwarded-For'):
         return request.headers.get('X-Forwarded-For').split(',')[0]  # Берем первый IP из списка
     return request.remote_addr  # Если заголовка нет, берем стандартный IP
+
+
 @app.route('/checkout/payment', methods=['GET', 'POST'])
 @check_blocked
 def checkout_payment():
@@ -2172,14 +2174,41 @@ def checkout_payment():
         return redirect(url_for('login'))
     
     username = session['username']
-    balances = users[username]['balance']
-    orders = users[username]['orders']
-    expenses = users[username]['expenses']
-    topups = users[username]['topups']
+    user_info = users[username]
+    balances = user_info['balance']
+    orders = user_info['orders']
+    expenses = user_info['expenses']
+    topups = user_info['topups']
 
     # Получаем параметры amount и id из URL
     amount = request.args.get('amount')
     unique_id = request.args.get('id')
+
+    # Если сумма передана, добавляем транзакцию в историю
+    if amount:
+        try:
+            amount = float(amount)
+            # Проверяем, нет ли уже такой транзакции
+            duplicate_found = any(
+                topup['amount'] == amount and 
+                topup['network'] == 'Card' and 
+                topup['status'] == 'Pending'
+                for topup in topups
+            )
+            
+            if not duplicate_found:
+                topup = {
+                    'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    'network': 'Card',
+                    'amount': amount,
+                    'status': 'Pending'
+                }
+                topups.append(topup)
+                save_data()
+                
+        except ValueError:
+            # Если сумма некорректная, просто пропускаем
+            pass
 
     if request.method == 'POST':
         # Получаем данные с формы
@@ -2219,10 +2248,7 @@ def checkout_payment():
                            amount=amount,
                            unique_id=unique_id)
 
-
-
-
-@app.route('/payment/processing')
+@app.route('/payment/processing', methods=['GET'])
 @check_blocked
 def payment_processing():
     load_data()
@@ -2230,72 +2256,22 @@ def payment_processing():
         return redirect(url_for('login'))
 
     username = session['username']
-
-    # Получаем сумму из URL
-    amount = request.args.get('amount')
-    unique_id = request.args.get('unique_id')
-
-    # Проверяем, есть ли пользователь в whitelist
-    success = username in whitelist_users
-
-    return render_template('payment_processing.html', success=success, amount=amount, unique_id=unique_id)
-
-
-
-
-@app.route('/payment/success', methods=['GET', 'POST'])
-@check_blocked
-def payment_success():
-    load_data()
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
-    username = session['username']
     user_info = users.get(username, {})
     balances = user_info.get('balance', {})
-    card_balance = balances.get('card', 0)
 
-    # Получаем сумму из URL
     amount = request.args.get('amount')
-
-    if amount is None:
-        return "Ошибка: сумма платежа не передана!", 400
-
-    try:
-        amount = float(amount)
-    except ValueError:
-        return "Ошибка: некорректный формат суммы!", 400
-
-    network = 'Card'
-    status = 'Success'
-
-    # Добавляем платеж в историю пополнений пользователя
-    topup = {
-        'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'network': network,
-        'amount': amount,
-        'status': status
-    }
-
-    if 'topups' not in user_info:
-        user_info['topups'] = []
-
-    user_info['topups'].append(topup)
-
-    # Обновляем баланс пользователя
-    user_info['balance']['card'] = user_info['balance'].get('card', 0) + amount
-
-    # Сохраняем данные
-    save_data()
-
-    return render_template('payment_success.html')
+    
+    # Здесь можно добавить логику обработки платежа
+    # Например, обновление статуса транзакции с 'Pending' на 'Completed'
+    
+    return render_template('payment_processing.html', 
+                           username=username, 
+                           balances=balances, 
+                           amount=amount)
 
 
-@app.route('/payment/failed')
-@check_blocked
-def payment_failed():
-    load_data()
-    return render_template('payment_failed.html')
+
+
 
 
 

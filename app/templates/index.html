@@ -4,22 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KeyzPanel – пополнение кошелька Steam | Лучшие цены и мгновенная доставка</title>
-    
+
+    <!-- Meta Description (главное для SEO и сниппета в Google) -->
+    <meta name="description" content="KeyzPanel – быстрый и надежный сервис пополнения кошелька Steam. Выгодные цены, мгновенная доставка ключей и бонусы для постоянных покупателей.">
+
+    <!-- Keywords (не сильно влияет на SEO, но можно оставить) -->
+    <meta name="keywords" content="KeyzPanel, Steam, пополнение Steam, ключи Steam, пополнение кошелька Steam, купить ключ Steam, цифровые игры, пополнение аккаунта">
+
+    <!-- Robots (разрешаем индексацию) -->
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="KeyzPanel – Пополнение кошелька Steam | Выгодные цены и мгновенная доставка">
+    <meta property="og:description" content="Пополняй кошелек Steam выгодно! KeyzPanel – лучшие цены, моментальная доставка и бонусы.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://keyzpanel.com/">
+    <meta property="og:image" content="https://keyzpanel.com/static/favicon-32x32.png">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Favicon & Logo -->
+    <!-- Favicon -->
+    <!-- Браузеры и Google сначала проверяют /favicon.ico -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- Дополнительные размеры -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
-    <!-- Для старых клиентов/ботов: положи копию в корень домена /favicon.ico -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
 
-     <!-- Google verification -->
+    <!-- Google verification -->
     <meta name="google-site-verification" content="2sYdO0tXXCoDcsTLDL9ghnnTwsaswHwBaOO1Hd2xiiM" />
+
     <!-- Custom CSS -->
     <style>
         :root {

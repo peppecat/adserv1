@@ -3,277 +3,456 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Для иконок карт -->
-    <!-- Favicon -->
-    <link rel="icon" href="/static/images/ns.png" sizes="any">
+    <title>Card Payment | KEYZPANEL</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
     <style>
         :root {
-            --bs-dropdown-color: #f6f7f8;
-            --bs-dropdown-bg: #323232;
-            --bs-btn-disabled-border-color: #00bac7;
-            --main-color: #a8f72e;
-            --background-color: #2c2c2c; /* Тёмный фон */
-            --form-bg: #141414; /* Фон формы */
-            --input-bg: #424242;
-            --input-border: #00bac7;
-            --input-focus-bg: #f6f7f8; /* Светлый фон при фокусе */
-            --text-color: #f6f7f8;
-            --text-focus-color: #000; /* Тёмный текст при фокусе */
-            --label-color: #a8f72e;
-            --btn-bg: #00bac7;
-            --btn-hover-bg: #009eac;
+            --primary: #FF9900;  /* Amazon orange */
+            --secondary: #232F3E;  /* Amazon dark blue */
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;  /* Amazon green */
+            --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --info: #1890ff;
         }
-
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: var(--background-color);
-            margin: 0;
-            padding: 0;
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .payment-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .payment-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .payment-method img {
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+        }
+        
+        .payment-method-text {
+            font-weight: 500;
+        }
+        
+        .payment-method-text span {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .payment-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-field {
+            margin-bottom: 1.25rem;
+        }
+        
+        .payment-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .payment-value {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            font-family: monospace;
+            position: relative;
+        }
+        
+        .payment-value img {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.75rem;
+        }
+        
+        .copy-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .copy-btn:hover {
+            color: #e68a00;
+        }
+        
+        .copy-btn i {
+            margin-right: 0.25rem;
+        }
+        
+        .timer-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            background-color: var(--form-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin: 0;
-            color: var(--text-color);
-        }
-
-        .header p {
-            font-size: 14px;
-            color: var(--text-color);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            color: var(--label-color);
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            border: 1px solid var(--input-border);
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
             border-radius: 8px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
         }
-
-        .form-group input:focus {
-            background-color: var(--input-focus-bg);
-            color: var(--text-focus-color);
-            border-color: var(--main-color);
-            outline: none;
+        
+        .timer-text {
+            font-weight: 500;
+            margin-right: 0.5rem;
         }
-
-        .form-group input[type="submit"] {
-            background-color: var(--btn-bg);
-            color: white;
+        
+        .timer {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
             border: none;
+            border-radius: 6px;
+            color: #111;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            font-size: 16px;
-            padding: 14px;
-            border-radius: 8px;
+            transition: background-color 0.2s;
+            margin-bottom: 1rem;
+        }
+        
+        .confirm-btn:hover {
+            background-color: #e68a00;
+        }
+        
+        .paid-btn {
             width: 100%;
+            padding: 0.75rem;
+            background-color: var(--success);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
-
-        .form-group input[type="submit"]:hover {
-            background-color: var(--btn-hover-bg);
+        
+        .paid-btn:hover {
+            background-color: #056c54;
         }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
+        
+        .alert-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #fff3cd;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 0.9rem;
         }
-
-        .footer p {
-            font-size: 12px;
-            color: var(--text-color);
+        
+        .alert-note i {
+            margin-right: 0.5rem;
+            color: #ffc107;
         }
-
-        .input-wrapper {
+        
+        .info-box {
+            background-color: #e6f7ff;
+            border-left: 4px solid var(--info);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .instruction-box {
+            background-color: #f0f9eb;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .instruction-box h5 {
+            color: var(--success);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .instruction-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        
+        .instruction-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
             position: relative;
         }
-
-        .card-icon {
+        
+        .instruction-list li:before {
+            content: "•";
+            color: var(--success);
+            font-weight: bold;
             position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--input-border);
+            left: 0;
         }
-
-        /* Стиль для Amount и Unique ID */
-        .amount-info {
-            background-color: #3a3a3a;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-color);
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
-
-        .amount-info p {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        .amount-info .amount {
-            color: #a8f72e; /* Зеленый цвет для суммы */
-            font-weight: bold;
-        }
-
-        .amount-info .unique-id {
-            color: #00bac7; /* Голубой цвет для уникального ID */
-            font-weight: bold;
-        }
-        select {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-        border: 1px solid var(--input-border);
-        border-radius: 8px;
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        cursor: pointer;
-        }
-
-        select:focus {
-            background-color: var(--input-focus-bg);
-            color: var(--text-focus-color);
-            border-color: var(--main-color);
-            outline: none;
-        }
-
-        option {
-            background-color: var(--form-bg);
-            color: var(--text-color);
+        
+        @media (max-width: 768px) {
+            .payment-container {
+                padding: 1.5rem;
+            }
+            
+            .payment-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
-     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}"> <!-- FAVICON -->
 </head>
 <body>
-
-    <div class="container">
-        <div class="header">
-            <h1>Card Processing</h1>
-            <p>Enter your card details to proceed</p>
-        </div>
-    
-        <!-- Отображаем сумму, переданную через URL -->
-        <div class="amount-info">
-            <p><strong>Amount to pay:</strong> <span class="amount">${{ amount }}</span></p>
-            <p><strong>Unique ID:</strong> <span class="unique-id">{{ unique_id }}</span></p>
-        </div>
-    
-        <form action="" method="POST">
-            <div class="form-group">
-                <label for="country">Country</label>
-                <select id="country" name="country" required>
-                    <option value="">Select your country</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Canada">Canada</option>
-                    <option value="China">China</option>
-                    <option value="France">France</option>
-                    <option value="Germany">Germany</option>
-                    <option value="India">India</option>
-                    <option value="Italy">Italy</option>
-                    <option value="Japan">Japan</option>
-                    <option value="Kazakhstan">Kazakhstan</option>
-                    <option value="Spain">Spain</option>
-                    <option value="Ukraine">Ukraine</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="USA">United States</option>                    
-                </select>
+<nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            <i class="fas fa-user me-1"></i> Аккаунт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/affilate">
+                            <i class="fas fa-store me-1"></i> Мой магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reseller">
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
 
-            <div class="form-group">
-                <label for="card_number">Card Number</label>
-                <div class="input-wrapper">
-                    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9876 5432" required maxlength="19">
-                    <i class="fas fa-credit-card card-icon"></i>
+    <div class="container py-4">
+        <div class="payment-container">
+            <div class="payment-header">
+                <h1 class="payment-title">Оплата картой</h1>
+                <p class="payment-subtitle">Временный процесс оплаты</p>
+            </div>
+            
+            <div class="payment-method">
+                <img src="https://cdn-icons-png.flaticon.com/512/179/179431.png" alt="Credit Card">
+                <div class="payment-method-text">
+                    Оплата <span>банковской картой</span>
                 </div>
             </div>
-    
-            <div class="form-group">
-                <label for="expiry_date">Expiry Date</label>
-                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" required maxlength="5">
+            
+            <div class="info-box">
+                <p><strong>Оплата по карте ВРЕМЕННО происходит через менеджера</strong></p>
+                <p>Свяжитесь с менеджером - он сформирует для вас ссылку на оплату и после оплаты средства будут зачислены на ваш аккаунт</p>
             </div>
-    
-            <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="password" id="cvv" name="cvv" placeholder="123" required maxlength="3">
+            
+            <!-- НОВЫЙ БЛОК С ИНСТРУКЦИЕЙ -->
+            <div class="instruction-box">
+                <h5><i class="fas fa-info-circle me-2"></i>Инструкция для оплаты</h5>
+                <ul class="instruction-list">
+                    <li>Свяжитесь с менеджером через Telegram</li>
+                    <li>Укажите ваш логин: <strong>{{ username }}</strong></li>
+                    <li>Сообщите ID транзакции: <strong>{{ unique_id }}</strong></li>
+                    <li>Менеджер предоставит вам ссылку для оплаты</li>
+                    <li>После оплаты нажмите кнопку "Оплатил"</li>
+                </ul>
             </div>
-    
-            <div class="form-group">
-                <label for="card_name">Cardholder's Name</label>
-                <input type="text" id="card_name" name="card_name" placeholder="John Doe" required>
+            
+            <div class="payment-details">
+                <div class="payment-field">
+                    <label class="payment-label">Сумма к оплате:</label>
+                    <div class="payment-value">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span class="to-copy">{{ amount }}</span> USD
+                        <button class="copy-btn" onclick="copyToClipboard('amount')">
+                            <i class="far fa-copy"></i> Копировать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="payment-field">
+                    <label class="payment-label">ID транзакции:</label>
+                    <div class="payment-value">
+                        <i class="fas fa-hashtag"></i>
+                        <span class="to-copy adress-to-copy">{{ unique_id }}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('id')">
+                            <i class="far fa-copy"></i> Копировать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="payment-field">
+                    <label class="payment-label">Логин аккаунта:</label>
+                    <div class="payment-value">
+                        <i class="fas fa-user"></i>
+                        <span class="to-copy username-to-copy">{{ username }}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('username')">
+                            <i class="far fa-copy"></i> Копировать
+                        </button>
+                    </div>
+                </div>
             </div>
-    
-            <div class="form-group">
-                <input type="submit" value="Submit">
+            
+            <div class="btn-container">
+                <a href="https://t.me/marpisneymneet" target="_blank" class="confirm-btn" style="text-decoration: none; display: inline-block; text-align: center;">
+                    <i class="fab fa-telegram me-2"></i> Связаться с менеджером
+                </a>
+                
+                <button class="paid-btn" onclick="returnToProfile()">
+                    <i class="fas fa-check-circle me-2"></i> Оплатил
+                </button>
             </div>
-        </form>
-    
-        <div class="footer">
-            <p>By submitting, you agree to our <a href="#" style="color: var(--main-color);">terms and conditions</a>.</p>
+            
+            <div class="alert-note">
+                <i class="fas fa-exclamation-circle"></i>
+                После оплаты через менеджера, средства будут зачислены на ваш аккаунт в течении пары минут.
+            </div>
         </div>
-    </div>    
+    </div>
 
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        // Форматирование номера карты
-        document.getElementById('card_number').addEventListener('input', function(e) {
-            let cardNumber = e.target.value.replace(/\D/g, '').slice(0, 16);
-            let formattedCardNumber = '';
-            
-            for (let i = 0; i < cardNumber.length; i += 4) {
-                formattedCardNumber += cardNumber.slice(i, i + 4) + ' ';
+        // Copy to clipboard function
+        window.copyToClipboard = function(type) {
+            let textToCopy;
+            if (type === 'amount') {
+                textToCopy = document.querySelector('.to-copy').textContent;
+            } else if (type === 'id') {
+                textToCopy = document.querySelector('.adress-to-copy').textContent;
+            } else if (type === 'username') {
+                textToCopy = document.querySelector('.username-to-copy').textContent;
             }
             
-            // Убираем лишний пробел в конце
-            e.target.value = formattedCardNumber.trim();
-        });
-
-        // Форматирование Expiry Date
-        document.getElementById('expiry_date').addEventListener('input', function(e) {
-            let expiryDate = e.target.value.replace(/\D/g, '').slice(0, 4);  // Оставляем только цифры
-            let formattedExpiryDate = '';
-            
-            // Разделяем на MM/YY
-            if (expiryDate.length > 2) {
-                formattedExpiryDate = expiryDate.slice(0, 2) + '/' + expiryDate.slice(2, 4);
-            } else {
-                formattedExpiryDate = expiryDate;
-            }
-
-            e.target.value = formattedExpiryDate;
-        });
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                alert('Скопировано в буфер обмена!');
+            }, function(err) {
+                console.error('Не удалось скопировать текст: ', err);
+            });
+        };
+        
+        // Return to profile function
+        function returnToProfile() {
+            window.location.href = '/profile';
+        }
     </script>
-
 </body>
 </html>
