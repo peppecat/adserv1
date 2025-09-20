@@ -397,6 +397,34 @@
                 transform: translateX(-50%);
             }
         }
+        /* Стили для секции наград */
+.achievements-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.achievement-item {
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.achievement-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.achievement-item.completed {
+    border-left: 4px solid var(--success);
+}
+
+.achievement-item.in-progress {
+    border-left: 4px solid var(--primary);
+}
+
+.achievement-item.paid {
+    border-left: 4px solid #17a2b8;
+}
     </style>
 </head>
 <body>
@@ -644,6 +672,222 @@
             </div>
         </div>
         {% endif %}
+
+        <!-- Добавьте эту секцию после существующего контента -->
+{% if has_store and store_status == 'active' %}
+<div class="row mt-4">
+    <div class="col">
+        <div class="store-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 mb-0">
+                    <i class="fas fa-trophy me-2 text-warning"></i>
+                    Награды пользователя
+                </h3>
+                <span class="badge bg-primary">
+                    {{ achievement_stats.completed }}/{{ achievement_stats.total }} выполнено
+                </span>
+            </div>
+            
+            
+            <!-- Статистика наград -->
+            <div class="row mb-4">
+                <div class="col-md-2 col-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <div class="h5 mb-1">{{ achievement_stats.completed }}</div>
+                            <div class="small text-muted">Завершено</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <div class="h5 mb-1">{{ achievement_stats.in_progress }}</div>
+                            <div class="small text-muted">В процессе</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <div class="h5 mb-1">{{ achievement_stats.available }}</div>
+                            <div class="small text-muted">Доступно</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <div class="h5 mb-1">${{ "%.2f"|format(achievement_stats.total_reward) }}</div>
+                            <div class="small text-muted">Общая награда</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <div class="h5 mb-1">${{ "%.2f"|format(achievement_stats.paid_reward) }}</div>
+                            <div class="small text-muted">Выплачено</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+          <!-- Список наград -->
+<div class="achievements-list">
+    {% for achievement_info in available_achievements %}
+        {% set achievement = achievement_info.achievement %}
+        {% set status = achievement_info.status %}
+        
+        <div class="achievement-item mb-3 p-3 border rounded {% if status == 'completed' or status == 'paid' %}completed{% elif status == 'in_progress' or status == 'pending_review' %}in-progress{% endif %}">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                    <h5 class="mb-1">
+                        {{ achievement.title }}
+                        {% if achievement_info.index > 0 %}
+                        <span class="badge bg-secondary ms-2">#{{ achievement_info.index + 1 }}</span>
+                        {% endif %}
+                    </h5>
+                    <p class="mb-2 text-muted">{{ achievement.description }}</p>
+                    <div class="d-flex align-items-center">
+                        <span class="badge 
+                            {% if status == 'completed' or status == 'paid' %}bg-success
+                            {% elif status == 'in_progress' or status == 'pending_review' %}bg-warning
+                            {% else %}bg-secondary{% endif %} me-2">
+                            {% if status == 'completed' %}Завершено
+                            {% elif status == 'paid' %}Выплачено
+                            {% elif status == 'in_progress' %}В процессе
+                            {% elif status == 'pending_review' %}На проверке
+                            {% else %}Не начато
+                            {% endif %}
+                        </span>
+                        <span class="text-success fw-bold">
+                            <i class="fas fa-coins me-1"></i>${{ "%.2f"|format(achievement.reward) }}
+                        </span>
+                    </div>
+                    {% if status == 'paid' %}
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Выплачено: ${{ "%.2f"|format(store_achievements[achievement.id].get('reward_amount', achievement.reward)) }}
+                        </small>
+                    </div>
+                    {% endif %}
+                    
+                    {% if status == 'in_progress' and store_achievements[achievement.id].get('started_at') %}
+                    <div class="mt-1">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Начато: {{ store_achievements[achievement.id].started_at }}
+                        </small>
+                    </div>
+                    {% endif %}
+                    
+                    {% if status == 'pending_review' and store_achievements[achievement.id].get('submitted_at') %}
+                    <div class="mt-1">
+                        <small class="text-warning">
+                            <i class="fas fa-hourglass-half me-1"></i>
+                            Отправлено на проверку: {{ store_achievements[achievement.id].submitted_at }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="text-end">
+                    <small class="text-muted d-block">
+                        {% if status == 'paid' and store_achievements[achievement.id].get('completed_at') %}
+                            Завершено: {{ store_achievements[achievement.id].completed_at }}
+                        {% elif status == 'paid' and store_achievements[achievement.id].get('paid_at') %}
+                            Выплачено: {{ store_achievements[achievement.id].paid_at }}
+                        {% elif status == 'completed' and store_achievements[achievement.id].get('completed_at') %}
+                            Завершено: {{ store_achievements[achievement.id].completed_at }}
+                        {% elif status == 'in_progress' and store_achievements[achievement.id].get('started_at') %}
+                            Начато: {{ store_achievements[achievement.id].started_at }}
+                        {% elif status == 'pending_review' and store_achievements[achievement.id].get('submitted_at') %}
+                            Отправлено: {{ store_achievements[achievement.id].submitted_at }}
+                        {% endif %}
+                    </small>
+                    
+                    {# Кнопки действий #}
+                    {% if status == 'not_started' and achievement_info.can_start %}
+                        <form method="POST" action="{{ url_for('affilate') }}" class="mt-2">
+                            <input type="hidden" name="achievement_id" value="{{ achievement.id }}">
+                            <input type="hidden" name="achievement_action" value="start">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-play me-1"></i>Приступить к выполнению
+                            </button>
+                        </form>
+                    {% elif status == 'in_progress' %}
+                        <form method="POST" action="{{ url_for('affilate') }}" class="mt-2">
+                            <input type="hidden" name="achievement_id" value="{{ achievement.id }}">
+                            <input type="hidden" name="achievement_action" value="submit">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-paper-plane me-1"></i>Отправить на проверку
+                            </button>
+                        </form>
+                    {% elif status == 'pending_review' %}
+                        <div class="mt-2">
+                            <small class="text-warning">Ожидает проверки администратором</small>
+                        </div>
+                    {% elif status == 'not_started' and not achievement_info.can_start %}
+                        <div class="mt-2">
+                            <small class="text-muted">Завершите предыдущие награды</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+            <p class="text-muted">На данный момент нет доступных наград</p>
+        </div>
+    {% endfor %}
+    
+    {# Показать заблокированные награды (если есть) #}
+    {% if available_achievements|length < global_achievements|length %}
+        <div class="locked-achievements mt-4">
+            <h6 class="text-muted mb-3">
+                <i class="fas fa-lock me-1"></i>
+                Следующие награды будут доступны после завершения текущих:
+            </h6>
+            {% for achievement in global_achievements[available_achievements|length:] %}
+                <div class="achievement-item mb-3 p-3 border rounded bg-light opacity-75">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 text-muted">
+                                {{ achievement.title }}
+                                <span class="badge bg-secondary ms-2">#{{ loop.index + available_achievements|length }}</span>
+                            </h6>
+                            <p class="mb-2 text-muted small">{{ achievement.description }}</p>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-2">
+                                    <i class="fas fa-lock me-1"></i>Заблокировано
+                                </span>
+                                <span class="text-success fw-bold">
+                                    <i class="fas fa-coins me-1"></i>${{ "%.2f"|format(achievement.reward) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <!-- Убрана дата создания -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+            
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle me-2"></i>
+                Награды автоматически обновляются при достижении определенных показателей вашего аккаунта.
+                Выплаты производятся администратором после проверки выполнения условий.
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
     </main>
 
     <!-- Модальное окно подтверждения -->

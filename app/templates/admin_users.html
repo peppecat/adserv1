@@ -545,6 +545,59 @@
                 flex-direction: column;
             }
         }
+                .balance-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .balance-action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-add {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-add:hover {
+            background-color: #218838;
+        }
+
+        .btn-subtract {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-subtract:hover {
+            background-color: #c82333;
+        }
+
+        .btn-set {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-set:hover {
+            background-color: #3a5bef;
+        }
+
+        .action-active {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .balance-action-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -626,52 +679,73 @@
             {% endif %}
         {% endwith %}
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Управление балансами</h2>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Управление балансами</h2>
+    </div>
+    <form method="post">
+        <input type="hidden" name="action" value="edit_balance">
+        <input type="hidden" name="balance_action" id="balanceAction" value="add">
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="target_user">Пользователь</label>
+                    <select name="target_user" id="target_user" required>
+                        {% for user in users.keys() %}
+                        <option value="{{ user }}">{{ user }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <form method="post">
-                <input type="hidden" name="action" value="edit_balance">
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="target_user">Пользователь</label>
-                            <select name="target_user" id="target_user" required>
-                                {% for user in users.keys() %}
-                                <option value="{{ user }}">{{ user }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="balance_type">Тип баланса</label>
-                            <select name="balance_type" id="balance_type" required>
-                                <option value="trc20">TRC20</option>
-                                <option value="erc20">ERC20</option>
-                                <option value="bep20">TON</option>
-                                <option value="card">Card</option>
-                                <option value="orders">Orders</option>
-                                <option value="expenses">Expenses</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="new_balance">Сумма</label>
-                            <input type="number" name="new_balance" id="new_balance" step="0.01" placeholder="Введите сумму" required>
-                        </div>
-                    </div>
-                    <div class="form-col" style="align-self: flex-end;">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Сохранить
-                            </button>
-                        </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="balance_type">Тип баланса</label>
+                    <select name="balance_type" id="balance_type" required>
+                        <option value="trc20">TRC20</option>
+                        <option value="erc20">ERC20</option>
+                        <option value="bep20">TON</option>
+                        <option value="card">Card</option>
+                        <option value="orders">Заказы</option>
+                        <option value="expenses">Расходы</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="new_balance">Сумма</label>
+                    <input type="number" name="new_balance" id="new_balance" step="0.01" min="0" placeholder="Введите сумму" required>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label>Действие</label>
+                    <div class="balance-action-buttons">
+                        <button type="button" class="balance-action-btn btn-add" 
+                                data-action="add">
+                            <i class="fas fa-plus"></i> Добавить
+                        </button>
+                        <button type="button" class="balance-action-btn btn-subtract" 
+                                data-action="subtract">
+                            <i class="fas fa-minus"></i> Списать
+                        </button>
+                        <button type="button" class="balance-action-btn btn-set" 
+                                data-action="set">
+                            <i class="fas fa-equals"></i> Установить
+                        </button>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="form-col" style="align-self: flex-end;">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Применить
+                    </button>
+                </div>
+            </div>
         </div>
+    </form>
+</div>
 
         <div class="card">
             <div class="card-header">
@@ -757,7 +831,7 @@
                             <th>KYC Статус</th>
                             <th class="sortable" data-sort="trc20">Баланс TRC20</th>
                             <th class="sortable" data-sort="erc20">Баланс ERC20</th>
-                            <th class="sortable" data-sort="bep20">Баланс BEP20</th>
+                            <th class="sortable" data-sort="bep20">Баланс TON</th>
                             <th class="sortable" data-sort="card">Баланс Card</th>
                             <th class="sortable" data-sort="orders">Заказы</th>
                             <th class="sortable" data-sort="expenses">Расходы</th>
@@ -1038,6 +1112,39 @@
         $(function () {
             $('[data-bs-toggle="tooltip"]').tooltip();
         });
+
+
+// Функция для установки типа действия с балансом
+function setBalanceAction(action, button) {
+    document.getElementById('balanceAction').value = action;
+    
+    // Убираем активный класс со всех кнопок
+    document.querySelectorAll('.balance-action-btn').forEach(btn => {
+        btn.classList.remove('action-active');
+    });
+    
+    // Добавляем активный класс к выбранной кнопке
+    button.classList.add('action-active');
+    
+    console.log('Выбрано действие:', action);
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    // Устанавливаем действие "добавить" по умолчанию
+    const addButton = document.querySelector('[data-action="add"]');
+    if (addButton) {
+        setBalanceAction('add', addButton);
+    }
+    
+    // Добавляем обработчики событий для всех кнопок действий
+    document.querySelectorAll('.balance-action-btn').forEach(button => {
+        const action = button.getAttribute('data-action');
+        button.addEventListener('click', function() {
+            setBalanceAction(action, this);
+        });
+    });
+});
 
         // Sorting functionality
         function initSorting() {

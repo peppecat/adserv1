@@ -389,6 +389,9 @@
                     {% if kyc_verified %}
                         <span class="badge bg-success ms-2">KYC Verified</span>
                     {% endif %}
+                    {% if individual_discount is not none %}
+                        <span class="badge bg-warning ms-2">Individual Discount: {{ individual_discount }}%</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -472,6 +475,16 @@
                         <h3 class="h5 mb-0">Программа лояльности</h3>
                     </div>
                     <div class="card-body">
+                        {% if individual_discount is not none %}
+                        <div class="alert alert-info mb-4">
+                            <h5><i class="fas fa-star me-2"></i>Индивидуальная скидка</h5>
+                            <p class="mb-0">
+                                Вам предоставлена индивидуальная скидка <strong>{{ individual_discount }}%</strong> 
+                                вне зависимости от вашего баланса.
+                            </p>
+                        </div>
+                        {% endif %}
+                        
                         <div class="table-responsive">
                             <table class="table mb-4">
                                 <thead>
@@ -735,7 +748,6 @@
                 const rawAmount = parseFloat(amountInput.value) || 0;
                 const discount = parseFloat(document.getElementById('currentDiscount').value) || 0;
                 
-                // Check if amount exceeds max allowed
                 if (rawAmount > maxAmount) {
                     buyButton.disabled = true;
                     buyButton.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>Максимальная сумма: $${maxAmount}`;
@@ -744,11 +756,9 @@
                 
                 let paidAmount, description;
                 if (discount > 0) {
-                    // Применяем только скидку
                     paidAmount = rawAmount * (1 - discount / 100);
                     description = `Оплатить $${formatCurrency(paidAmount)} (Получить $${formatCurrency(rawAmount)} со скидкой ${discount}%)`;
                 } else {
-                    // Применяем базовую комиссию
                     const baseFee = parseFloat("{{ base_fee }}") || 0;
                     paidAmount = rawAmount * (1 + baseFee / 100);
                     description = `Оплатить $${formatCurrency(paidAmount)} (применена комиссия ${baseFee}%)`;
@@ -766,7 +776,6 @@
             loginInput.addEventListener('input', updateButtonState);
             amountInput.addEventListener('input', updateButtonState);
             
-            // Restrict decimal places to 2
             amountInput.addEventListener('change', function() {
                 let value = parseFloat(this.value);
                 if (!isNaN(value)) {
@@ -797,27 +806,22 @@
         let selectedDocument = '';
         
         function showStep(stepNumber) {
-            // Hide all steps
             document.querySelectorAll('.kyc-step').forEach(step => {
                 step.classList.remove('active');
             });
             
-            // Show the selected step
             document.getElementById('step' + stepNumber).classList.add('active');
         }
         
         function selectDocument(type) {
             selectedDocument = type;
             
-            // Remove selected class from all options
             document.querySelectorAll('.document-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            // Add selected class to clicked option
             event.currentTarget.classList.add('selected');
             
-            // Enable continue button
             document.getElementById('continueBtn').disabled = false;
         }
         
@@ -826,7 +830,6 @@
             emailInput.select();
             document.execCommand('copy');
             
-            // Show feedback
             const originalText = event.currentTarget.innerHTML;
             event.currentTarget.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
             
@@ -838,7 +841,6 @@
         function completeKYC() {
             alert('Спасибо! Мы получили ваш запрос на верификацию KYC. Наша команда проверит ваши документы в течение 24 часов. Вы получите уведомление, как только ваша верификация будет завершена.');
             
-            // Close the modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('kycVerificationModal'));
             modal.hide();
         }

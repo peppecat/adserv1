@@ -11,7 +11,7 @@
         "balance": {
             "trc20": 0,
             "erc20": 0,
-            "bep20": 5.0,
+            "bep20": 0.0,
             "card": 0
         },
         "orders": 0,
@@ -84,7 +84,14 @@
                 "amount": 5.0,
                 "status": "Pending"
             }
-        ]
+        ],
+        "stores": [
+            "cxvxcvxc1",
+            "cxvxcvxc1"
+        ],
+        "is_banned": false,
+        "kyc_status": "not_required",
+        "kyc_verified": false
     },
     "admin": {
         "password": "12345",

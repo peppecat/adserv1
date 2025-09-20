@@ -385,10 +385,10 @@
             </div>
             <form method="POST" action="{{ url_for('steam_settings') }}">
                 <div class="form-group">
-                        <label for="base_fee">Base Fee (%)</label>
-                        <input type="number" name="base_fee" id="base_fee" 
-                            class="form-control" value="{{ base_fee }}" 
-                            min="0" max="100" required>
+                    <label for="base_fee">Base Fee (%)</label>
+                    <input type="number" name="base_fee" id="base_fee" 
+                        class="form-control" value="{{ base_fee }}" 
+                        min="0" max="100" required>
                 </div>
                 <div id="discount-levels-container">
                     {% for level in discount_levels %}
@@ -417,6 +417,67 @@
                     </button>
                 </div>
             </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Individual Discounts</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('steam_settings') }}">
+                    <div class="form-group">
+                        <label for="individual_username">Select User</label>
+                        <select name="individual_username" id="individual_username" class="form-control" required>
+                            <option value="">-- Select User --</option>
+                            {% for username in all_usernames %}
+                            <option value="{{ username }}">{{ username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="individual_discount">Discount (%)</label>
+                        <input type="number" name="individual_discount" id="individual_discount" 
+                            class="form-control" placeholder="Enter discount percentage" 
+                            min="0" max="100" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Set Individual Discount
+                    </button>
+                </form>
+
+                {% if individual_discounts %}
+                <div class="mt-4">
+                    <h4>Current Individual Discounts</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Discount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for username, discount in individual_discounts.items() %}
+                                <tr>
+                                    <td>{{ username }}</td>
+                                    <td>{{ discount }}%</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('steam_settings') }}" style="display: inline;">
+                                            <input type="hidden" name="remove_discount" value="{{ username }}">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </div>
 
         <div class="card">
@@ -502,7 +563,54 @@
                     e.preventDefault();
                 }
             });
+
+            // Добавляем поиск по пользователям в выпадающем списке
+            const userSelect = document.getElementById('individual_username');
+            if (userSelect) {
+                // Создаем поисковое поле
+                const searchInput = document.createElement('input');
+                searchInput.type = 'text';
+                searchInput.placeholder = 'Search users...';
+                searchInput.className = 'form-control mb-2';
+                searchInput.id = 'userSearch';
+                
+                // Вставляем поисковое поле перед выпадающим списком
+                userSelect.parentNode.insertBefore(searchInput, userSelect);
+                
+                // Функция для фильтрации пользователей
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const options = userSelect.options;
+                    
+                    for (let i = 1; i < options.length; i++) { // Пропускаем первый option (placeholder)
+                        const option = options[i];
+                        if (option.text.toLowerCase().includes(searchTerm)) {
+                            option.style.display = '';
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    }
+                });
+            }
         });
     </script>
+
+    <style>
+        .discount-level {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        
+        .discount-level input[type="number"] {
+            width: 120px;
+        }
+        
+        /* Стили для поиска пользователей */
+        #userSearch {
+            margin-bottom: 10px;
+        }
+    </style>
 </body>
 </html>

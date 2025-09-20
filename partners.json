@@ -318,5 +318,31 @@
         "admin_username": "",
         "admin_password": "",
         "kyc_verified": false
+    },
+    {
+        "username": "Dim4ikgoo$e101$",
+        "email": "peppecatwork@gmail.com",
+        "store_name": "cxvxcvxc1",
+        "store_slug": "cxvxcvxc1",
+        "payment_method": "balance",
+        "initial_payment": 50.0,
+        "timestamp": "2025-09-09 08:24:39",
+        "status": "pending",
+        "admin_username": "",
+        "admin_password": "",
+        "kyc_verified": false
+    },
+    {
+        "username": "Dim4ikgoo$e101$",
+        "email": "peppecatwork@gmail.com",
+        "store_name": "cxvxcvxc1",
+        "store_slug": "cxvxcvxc1",
+        "payment_method": "balance",
+        "initial_payment": 50.0,
+        "timestamp": "2025-09-19 13:55:42",
+        "status": "pending",
+        "admin_username": "",
+        "admin_password": "",
+        "kyc_verified": false
     }
 ]

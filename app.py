@@ -1,25 +1,22 @@
 import json
 import os
-import uuid  # импортируем отдельно
+import uuid
 import sys
 import requests
 sys.stdout.reconfigure(encoding='utf-8')
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, abort,send_file
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, abort, send_file
 from datetime import datetime
 from functools import wraps
 from werkzeug.utils import secure_filename
 
-
 app = Flask(__name__, template_folder='app/templates', static_folder='app/static')
 app.secret_key = 'supersecretkey'
-
 
 # ====================== Telegram BOT ======================
 TELEGRAM_BOT_TOKEN = '7726856877:AAFIslzTXmB5FCw2zDHuPswiybUaCGxiNSw'
 TELEGRAM_CHAT_ID = '2045150846'
 
 def send_telegram_notification(username, message_type, amount=None, payment_method=None, order_data=None):
-    # Проверяем, что настройки Telegram существуют
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Telegram notifications are not configured")
         return None
@@ -38,7 +35,7 @@ def send_telegram_notification(username, message_type, amount=None, payment_meth
                     f"💵 Сумма: {order_data.get('amount', 0) if order_data else 0} USD\n"
                     f"📅 Дата: {order_data.get('date', datetime.now().strftime('%Y-%m-%d %H:%M:%S')) if order_data else datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
                     f"🆔 ID заказа: {order_data.get('id', 'N/A') if order_data else 'N/A'}\n"
-                    f"🚩 Логин: {order_data.get('steamLogin', 'N/A') if order_data else 'N/A'}"  # Добавлено новое поле
+                    f"🚩 Логин: {order_data.get('steamLogin', 'N/A') if order_data else 'N/A'}"
     }
     
     message = messages.get(message_type)
@@ -57,33 +54,30 @@ def send_telegram_notification(username, message_type, amount=None, payment_meth
         print(f"Ошибка при отправке сообщения в Telegram: {e}")
         return None
 
-
-
 DEFAULT_STEAM_SETTINGS = {
-    'base_fee': 10,  # 10% базовая комиссия
+    'base_fee': 10,
     'discount_levels': [
-        (0, 0),     # 0% - базовый уровень
-        (50, 2),    # 2% - 50 на балансе
-        (500, 20),  # 20% - 500 на балансе
-        (1000, 25), # 25% - 1k на балансе
-        (2000, 30), # 30% - 2k на балансе
-        (4000, 35)  # 35% - 4k на балансе
-    ]
+        (0, 0),
+        (50, 2),
+        (500, 20),
+        (1000, 25),
+        (2000, 30),
+        (4000, 35)
+    ],
+    'individual_discounts': {}  # Новое поле для индивидуальных скидок
 }
 
-
-
-global steam_discount_levels, steam_base_fee
+global steam_discount_levels, steam_base_fee, individual_discounts
 steam_discount_levels = DEFAULT_STEAM_SETTINGS['discount_levels']
 steam_base_fee = DEFAULT_STEAM_SETTINGS['base_fee']
-
+individual_discounts = DEFAULT_STEAM_SETTINGS['individual_discounts']
 
 # Пути к файлам для хранения данных
 USERS_FILE = 'users.json'
 REFERRALS_FILE = 'referrals.json'
 PROMOCODES_FILE = 'promocodes.json'
 REWARDS_FILE = 'rewards.json'
-USER_REWARDS_FILE = 'user_rewards.json'  # Новый файл для хранения наград пользователей
+USER_REWARDS_FILE = 'user_rewards.json'
 AFFILIATES_FILE = 'affiliates.json'
 PARTNERS_FILE = 'partners.json'
 PAYMENTS_FILE = 'payments.json'
@@ -93,14 +87,15 @@ WHITELIST_FILE = 'whitelist_users.json'
 STEAM_DISCOUNTS_FILE = 'steam_discounts.json'
 STORES_FILE = 'stores.json'
 RESELLER_FILE = 'reseller_stores.json'
-
+ACHIEVEMENTS_FILE = 'achievements.json'
 
 # Загрузка данных из файлов
 def load_data():
     global users, referrals, promocodes, rewards, user_rewards
     global affiliate_users, partners_data, affiliate_payments, products, cards, whitelist_users
-    global active_bonuses, steam_discount_levels, steam_base_fee, stores, reseller_stores
-    global TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID  # Добавляем глобальные переменные для Telegra
+    global active_bonuses, steam_discount_levels, steam_base_fee, individual_discounts, stores, reseller_stores
+    global achievements
+    global TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
     try:
         with open(USERS_FILE, 'r') as f:
@@ -117,18 +112,20 @@ def load_data():
     try:
         with open(STEAM_DISCOUNTS_FILE, 'r') as f:
             steam_settings = json.load(f)
-            # Проверяем тип данных - если это список, преобразуем в новый формат
             if isinstance(steam_settings, list):
                 steam_settings = {
                     'base_fee': 10,
-                    'discount_levels': steam_settings
+                    'discount_levels': steam_settings,
+                    'individual_discounts': {}
                 }
             steam_discount_levels = steam_settings.get('discount_levels', [])
-            steam_base_fee = steam_settings.get('base_fee', 10)  # 10% по умолчанию
+            steam_base_fee = steam_settings.get('base_fee', 10)
+            individual_discounts = steam_settings.get('individual_discounts', {})
     except FileNotFoundError:
         steam_settings = DEFAULT_STEAM_SETTINGS
         steam_discount_levels = steam_settings['discount_levels']
         steam_base_fee = steam_settings['base_fee']
+        individual_discounts = steam_settings['individual_discounts']
 
     try:
         with open(REFERRALS_FILE, 'r') as f:
@@ -152,15 +149,13 @@ def load_data():
         with open(REWARDS_FILE, 'r') as f:
             rewards = json.load(f)
     except FileNotFoundError:
-        rewards = []  # Список доступных наград (названия)
+        rewards = []
 
     try:
         with open(USER_REWARDS_FILE, 'r') as f:
             user_rewards = json.load(f)
     except FileNotFoundError:
-        user_rewards = {}  # Словарь с наградами пользователей
-        
-        # Инициализация user_rewards на основе существующих пользователей
+        user_rewards = {}
         for username in users.keys():
             user_rewards[username] = {
                 'purchases': users[username].get('orders', 0),
@@ -199,20 +194,30 @@ def load_data():
         cards = []
 
     try:
+        with open(ACHIEVEMENTS_FILE, 'r', encoding='utf-8') as f:
+            achievements = json.load(f)
+    except FileNotFoundError:
+        achievements = {
+            'global_achievements': [],
+            'store_achievements': {}
+        }
+
+    try:
         with open(WHITELIST_FILE, 'r') as f:
             whitelist_users = json.load(f)
     except FileNotFoundError:
         whitelist_users = []
+
     try:
         with open('telegram_settings.json', 'r') as f:
             telegram_settings = json.load(f)
         TELEGRAM_BOT_TOKEN = telegram_settings.get('bot_token', '')
         TELEGRAM_CHAT_ID = telegram_settings.get('chat_id', '')
     except FileNotFoundError:
-        TELEGRAM_BOT_TOKEN = '7726856877:AAFIslzTXmB5FCw2zDHuPswiybUaCGxiNSw'  # дефолтные значения
+        TELEGRAM_BOT_TOKEN = '7726856877:AAFIslzTXmB5FCw2zDHuPswiybUaCGxiNSw'
         TELEGRAM_CHAT_ID = '2045150846'
 
-    active_bonuses = []  # Список активных бонусов
+    active_bonuses = []
 
 # Сохранение данных в файлы
 def save_data():
@@ -224,7 +229,7 @@ def save_data():
         json.dump(promocodes, f, indent=4)
     with open(REWARDS_FILE, 'w') as f:
         json.dump(rewards, f, indent=4)
-    with open(USER_REWARDS_FILE, 'w') as f:  # Сохраняем награды пользователей
+    with open(USER_REWARDS_FILE, 'w') as f:
         json.dump(user_rewards, f, indent=4)
     with open(AFFILIATES_FILE, 'w') as f:
         json.dump(affiliate_users, f, indent=4)
@@ -241,13 +246,15 @@ def save_data():
     with open(STEAM_DISCOUNTS_FILE, 'w') as f:
         json.dump({
             'base_fee': steam_base_fee,
-            'discount_levels': steam_discount_levels
+            'discount_levels': steam_discount_levels,
+            'individual_discounts': individual_discounts  # Сохраняем индивидуальные скидки
         }, f, indent=4)
     with open(STORES_FILE, 'w') as f:
         json.dump(stores, f, indent=4)
     with open(RESELLER_FILE, 'w') as f:
         json.dump(reseller_stores, f, indent=4)
-
+    with open(ACHIEVEMENTS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(achievements, f, indent=4, ensure_ascii=False)
 
 def check_blocked(f):
     @wraps(f)
@@ -633,14 +640,51 @@ def admin_users():
                 return redirect(url_for('admin_users'))
 
             elif action == 'edit_balance':
-                # Обработка изменения баланса
+                # Обработка изменения баланса с разными действиями
                 balance_type = request.form.get('balance_type')
+                balance_action = request.form.get('balance_action', 'set')  # add, subtract, set
                 new_value = float(request.form.get('new_balance'))
-                if balance_type in users[target_user]['balance']:
-                    users[target_user]['balance'][balance_type] = new_value
+                
+                if balance_type in users[target_user].get('balance', {}):
+                    current_balance = users[target_user]['balance'][balance_type]
+                    
+                    if balance_action == 'add':
+                        # Добавляем к текущему балансу
+                        users[target_user]['balance'][balance_type] = current_balance + new_value
+                        flash(f'К балансу  для {target_user} добавлено {new_value}$, новый баланс: {current_balance + new_value}$', 'success')
+                    
+                    elif balance_action == 'subtract':
+                        # Вычитаем из текущего баланса (но не ниже 0)
+                        new_balance = max(0, current_balance - new_value)
+                        users[target_user]['balance'][balance_type] = new_balance
+                        if new_balance == 0:
+                            flash(f'С баланса  для {target_user} списано {new_value}$, баланс обнулён', 'warning')
+                        else:
+                            flash(f'С баланса  для {target_user} списано {new_value}$, новый баланс: {new_balance}$', 'success')
+                    
+                    elif balance_action == 'set':
+                        # Устанавливаем точное значение
+                        users[target_user]['balance'][balance_type] = new_value
+                        flash(f'Баланс  для {target_user} установлен на {new_value}$', 'success')
+                
                 elif balance_type in ['orders', 'expenses']:
-                    users[target_user][balance_type] = new_value
-                flash(f'Баланс {balance_type} для {target_user} обновлен', 'success')
+                    current_value = users[target_user].get(balance_type, 0)
+                    
+                    if balance_action == 'add':
+                        users[target_user][balance_type] = current_value + new_value
+                        flash(f'К  для {target_user} добавлено {new_value}, новое значение: {current_value + new_value}', 'success')
+                    
+                    elif balance_action == 'subtract':
+                        new_value_calc = max(0, current_value - new_value)
+                        users[target_user][balance_type] = new_value_calc
+                        flash(f'С  для {target_user} списано {new_value}, новое значение: {new_value_calc}', 'success')
+                    
+                    elif balance_action == 'set':
+                        users[target_user][balance_type] = new_value
+                        flash(f' для {target_user} установлено на {new_value}', 'success')
+                
+                else:
+                    flash(f'Тип баланса  не найден для пользователя {target_user}', 'error')
 
             elif action == 'edit_topup':
                 # Обработка пополнения
@@ -682,7 +726,9 @@ def admin_users():
 
                     if status == 'Success':
                         balance_key = network.lower() if network != 'Card' else 'card'
-                        users[target_user]['balance'][balance_key] = users[target_user]['balance'].get(balance_key, 0) + amount
+                        if balance_key not in users[target_user]['balance']:
+                            users[target_user]['balance'][balance_key] = 0
+                        users[target_user]['balance'][balance_key] += amount
                 
                 flash('Пополнение успешно добавлено/обновлено', 'success')
 
@@ -710,10 +756,13 @@ def admin_users():
 
                         if new_status == 'Success' and old_status != 'Success':
                             balance_key = network.lower() if network != 'Card' else 'card'
-                            users[target_user]['balance'][balance_key] = users[target_user]['balance'].get(balance_key, 0) + topup['amount']
+                            if balance_key not in users[target_user]['balance']:
+                                users[target_user]['balance'][balance_key] = 0
+                            users[target_user]['balance'][balance_key] += topup['amount']
                         elif old_status == 'Success' and new_status != 'Success':
                             balance_key = network.lower() if network != 'Card' else 'card'
-                            users[target_user]['balance'][balance_key] = users[target_user]['balance'].get(balance_key, 0) - topup['amount']
+                            if balance_key in users[target_user]['balance']:
+                                users[target_user]['balance'][balance_key] = max(0, users[target_user]['balance'][balance_key] - topup['amount'])
                         break
                 
                 flash('Статус пополнения обновлен', 'success')
@@ -737,6 +786,7 @@ def admin_users():
                     print(f"Ошибка обработки даты: {e}")
                     formatted_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 
+                # Удаляем запись о пополнении
                 users[target_user]['topups'] = [
                     topup for topup in users[target_user].get('topups', [])
                     if not (topup['date'] == formatted_date and topup['network'] == network)
@@ -745,6 +795,8 @@ def admin_users():
                 flash('Запись о пополнении удалена', 'success')
 
             save_data()
+        else:
+            flash(f'Пользователь {target_user} не найден', 'error')
 
     # Сортировка пополнений по дате (новые сверху)
     for user, info in users.items():
@@ -1362,6 +1414,57 @@ def reseller():
         kyc_verified=kyc_verified
     )
 
+
+
+
+def update_store_achievements(username, stores, achievements):
+    """Обновление статусов наград магазина на основе его статистики"""
+    store_data = stores.get(username, {})
+    if not store_data:
+        return
+    
+    store_achievements = achievements.get('store_achievements', {}).get(username, {})
+    
+    # Пример условий для наград (можно настроить под свои нужды)
+    total_sales = store_data.get('total_sales', 0)
+    products_count = len(store_data.get('products', []))
+    orders_count = len(store_data.get('orders', []))
+    
+    for achievement in achievements.get('global_achievements', []):
+        achievement_id = achievement['id']
+        current_status = store_achievements.get(achievement_id, {}).get('status', 'not_started')
+        
+        # Если награда уже выплачена, пропускаем обновление
+        if current_status == 'paid':
+            continue
+            
+        # Проверяем условия для каждой награды
+        if achievement['title'] == 'Первые 10 продаж' and total_sales >= 10:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+        
+        elif achievement['title'] == '50 товаров в магазине' and products_count >= 50:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+        
+        elif achievement['title'] == '100 заказов' and orders_count >= 100:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+    
+    # Сохраняем обновленные достижения
+    if 'store_achievements' not in achievements:
+        achievements['store_achievements'] = {}
+    achievements['store_achievements'][username] = store_achievements
+    
 @app.route('/affilate', methods=['GET', 'POST'])
 @check_blocked
 def affilate():
@@ -1407,10 +1510,86 @@ def affilate():
         store_status = None
         store_stats = None
 
+    # Загрузка данных о наградах
+    try:
+        with open(ACHIEVEMENTS_FILE, 'r', encoding='utf-8') as f:
+            achievements = json.load(f)
+    except FileNotFoundError:
+        achievements = {
+            'global_achievements': [],
+            'store_achievements': {}
+        }
+
+    # Обновление статуса наград магазина
+    if has_store and store_status == 'active':
+        update_store_achievements(username, stores, achievements)
+
+    # Загрузка наград магазина
+    store_achievements = {}
+    if has_store and username in achievements.get('store_achievements', {}):
+        store_achievements = achievements['store_achievements'][username]
+    
+    # Загрузка глобальных наград для отображения
+    global_achievements = achievements.get('global_achievements', [])
+    
+    # Сортируем награды по дате создания (последовательность выполнения)
+    global_achievements = sorted(global_achievements, key=lambda x: x.get('created_at', ''))
+    
+    # Определяем, какие награды доступны для выполнения
+    available_achievements = []
+    next_available_index = -1
+    
+    for i, achievement in enumerate(global_achievements):
+        achievement_id = achievement.get('id')
+        status = store_achievements.get(achievement_id, {}).get('status', 'not_started')
+        
+        # Если это первая награда или предыдущая завершена
+        if i == 0 or (i > 0 and 
+                     store_achievements.get(global_achievements[i-1]['id'], {}).get('status', 'not_started') in ['completed', 'paid']):
+            available_achievements.append({
+                'achievement': achievement,
+                'status': status,
+                'can_start': status == 'not_started',
+                'index': i
+            })
+            if status == 'not_started' and next_available_index == -1:
+                next_available_index = i
+        else:
+            # Прерываем цепочку, если предыдущая не завершена
+            break
+    
+    # Подсчет статистики наград
+    achievement_stats = {
+        'total': len(global_achievements),
+        'completed': 0,
+        'in_progress': 0,
+        'not_started': 0,
+        'paid': 0,
+        'total_reward': 0,
+        'paid_reward': 0,
+        'available': len(available_achievements)
+    }
+    
+    for achievement in global_achievements:
+        achievement_id = achievement.get('id')
+        status = store_achievements.get(achievement_id, {}).get('status', 'not_started')
+        reward = achievement.get('reward', 0)
+        
+        # Статус "paid" считается как завершенный для статистики
+        if status in ['completed', 'paid']:
+            achievement_stats['completed'] += 1
+            achievement_stats['total_reward'] += reward
+            
+            if status == 'paid':
+                achievement_stats['paid'] += 1
+                achievement_stats['paid_reward'] += reward
+        elif status == 'in_progress':
+            achievement_stats['in_progress'] += 1
+        elif status == 'not_started':
+            achievement_stats['not_started'] += 1
+
     # Обработка POST-запросов
     if request.method == 'POST':
-        # ⚡ Убрана проверка KYC — теперь магазин можно создать без верификации ⚡
-
         # Обработка удаления магазина
         if 'action' in request.form and request.form['action'] == 'delete_store':
             if username in stores:
@@ -1418,6 +1597,51 @@ def affilate():
                 with open(STORES_FILE, 'w') as stores_file:
                     json.dump(stores, stores_file, indent=4)
                 flash('Your store has been successfully deleted', 'success')
+                return redirect(url_for('affilate'))
+        
+        # Обработка действий с наградами
+        elif 'achievement_action' in request.form:
+            achievement_id = request.form.get('achievement_id')
+            action = request.form.get('achievement_action')
+            
+            if achievement_id and has_store and store_status == 'active':
+                # Проверяем, существует ли награда и доступна ли она
+                achievement_info = next((a for a in available_achievements if a['achievement']['id'] == achievement_id), None)
+                
+                if achievement_info:
+                    current_status = achievement_info['status']
+                    
+                    # Действие "Приступить к выполнению"
+                    if action == 'start' and current_status == 'not_started' and achievement_info['can_start']:
+                        # Обновляем статус на "в процессе"
+                        if username not in achievements['store_achievements']:
+                            achievements['store_achievements'][username] = {}
+                        
+                        achievements['store_achievements'][username][achievement_id] = {
+                            'status': 'in_progress',
+                            'started_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        }
+                        
+                        # Сохраняем изменения
+                        with open(ACHIEVEMENTS_FILE, 'w', encoding='utf-8') as f:
+                            json.dump(achievements, f, indent=4, ensure_ascii=False)
+                        
+                        flash(f'Награда "{achievement_info["achievement"]["title"]}" начата!', 'success')
+                    
+                    # Действие "Отправить на проверку"
+                    elif action == 'submit' and current_status == 'in_progress':
+                        # Обновляем статус на "ожидает проверки"
+                        achievements['store_achievements'][username][achievement_id]['status'] = 'pending_review'
+                        achievements['store_achievements'][username][achievement_id]['submitted_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        
+                        # Сохраняем изменения
+                        with open(ACHIEVEMENTS_FILE, 'w', encoding='utf-8') as f:
+                            json.dump(achievements, f, indent=4, ensure_ascii=False)
+                        
+                        flash(f'Награда "{achievement_info["achievement"]["title"]}" отправлена на проверку!', 'success')
+                    else:
+                        flash('Невозможно выполнить это действие для данной награды', 'error')
+                
                 return redirect(url_for('affilate'))
 
         # Обработка создания нового магазина
@@ -1475,7 +1699,7 @@ def affilate():
             'orders': [],
             'payment_method': payment_method,
             'initial_payment': franchise_cost,
-            'kyc_verified': kyc_verified  # всё ещё сохраняем поле, но оно не требуется
+            'kyc_verified': kyc_verified
         }
 
         # Добавление в список заявок (partners.json)
@@ -1533,9 +1757,61 @@ def affilate():
         store_stats=store_stats,
         store_status=store_status,
         franchise_cost=franchise_cost,
-        kyc_verified=kyc_verified
+        kyc_verified=kyc_verified,
+        store_achievements=store_achievements,
+        global_achievements=global_achievements,
+        available_achievements=available_achievements,
+        achievement_stats=achievement_stats
     )
 
+
+def update_store_achievements(username, stores, achievements):
+    """Обновление статусов наград магазина на основе его статистики"""
+    store_data = stores.get(username, {})
+    if not store_data:
+        return
+    
+    store_achievements = achievements.get('store_achievements', {}).get(username, {})
+    
+    # Пример условий для наград (можно настроить под свои нужды)
+    total_sales = store_data.get('total_sales', 0)
+    products_count = len(store_data.get('products', []))
+    orders_count = len(store_data.get('orders', []))
+    
+    for achievement in achievements.get('global_achievements', []):
+        achievement_id = achievement['id']
+        current_status = store_achievements.get(achievement_id, {}).get('status', 'not_started')
+        
+        # Если награда уже выплачена, пропускаем обновление
+        if current_status == 'paid':
+            continue
+            
+        # Проверяем условия для каждой награды
+        if achievement['title'] == 'Первые 10 продаж' and total_sales >= 10:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+        
+        elif achievement['title'] == '50 товаров в магазине' and products_count >= 50:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+        
+        elif achievement['title'] == '100 заказов' and orders_count >= 100:
+            if current_status != 'completed':
+                store_achievements[achievement_id] = {
+                    'status': 'completed',
+                    'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+    
+    # Сохраняем обновленные достижения
+    if 'store_achievements' not in achievements:
+        achievements['store_achievements'] = {}
+    achievements['store_achievements'][username] = store_achievements
 
 @app.route('/aff/newpartners', methods=['GET', 'POST'])
 def aff_partners():
@@ -1814,6 +2090,224 @@ def aff_approved():
     )
     
     return render_template('aff_approved.html', partners=partners)
+
+@app.route('/aff/achievements', methods=['GET', 'POST'])
+def aff_achievements():
+    # Проверка авторизации администратора
+    if 'username' not in session or session['username'] != 'Dim4ikgoo$e101$':
+        abort(403)
+    
+    # Загрузка всех необходимых данных
+    load_data()
+    
+    # Обработка POST-запросов
+    if request.method == 'POST':
+        action = request.form.get('action')
+        
+        # Добавление новой глобальной награды
+        if action == 'add_global_achievement':
+            title = request.form.get('title')
+            description = request.form.get('description')
+            reward = request.form.get('reward')
+            
+            if title and reward:
+                new_achievement = {
+                    'id': str(uuid.uuid4()),
+                    'title': title,
+                    'description': description,
+                    'reward': float(reward),
+                    'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+                
+                if 'global_achievements' not in achievements:
+                    achievements['global_achievements'] = []
+                
+                achievements['global_achievements'].append(new_achievement)
+                save_data()
+                flash('Глобальная награда добавлена', 'success')
+        
+        # Удаление глобальной награды
+        elif action == 'delete_global_achievement':
+            achievement_id = request.form.get('achievement_id')
+            if achievement_id:
+                achievements['global_achievements'] = [
+                    a for a in achievements.get('global_achievements', []) 
+                    if a.get('id') != achievement_id
+                ]
+                save_data()
+                flash('Глобальная награда удалена', 'success')
+        
+        # Обновление статуса награды магазина
+        elif action == 'update_store_achievement':
+            store_username = request.form.get('store_username')
+            achievement_id = request.form.get('achievement_id')
+            status = request.form.get('status')
+            
+            if store_username and achievement_id and status:
+                # Инициализируем структуру, если её нет
+                if 'store_achievements' not in achievements:
+                    achievements['store_achievements'] = {}
+                if store_username not in achievements['store_achievements']:
+                    achievements['store_achievements'][store_username] = {}
+                
+                if achievement_id not in achievements['store_achievements'][store_username]:
+                    achievements['store_achievements'][store_username][achievement_id] = {
+                        'status': status,
+                        'updated_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                else:
+                    achievements['store_achievements'][store_username][achievement_id]['status'] = status
+                    achievements['store_achievements'][store_username][achievement_id]['updated_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                save_data()
+                flash('Статус награды обновлен', 'success')
+        
+        # Выплата награды
+        elif action == 'pay_reward':
+            store_username = request.form.get('store_username')
+            achievement_id = request.form.get('achievement_id')
+            
+            if store_username and achievement_id:
+                # Находим награду
+                global_achievement = next(
+                    (a for a in achievements.get('global_achievements', []) 
+                     if a.get('id') == achievement_id), None
+                )
+                
+                if global_achievement:
+                    reward_amount = global_achievement.get('reward', 0)
+                    
+                    # Здесь должна быть логика выплаты награды магазину
+                    # Например, добавление средств к балансу магазина
+                    if store_username in stores:
+                        if 'balance' not in stores[store_username]:
+                            stores[store_username]['balance'] = {'card': 0, 'bep20': 0}
+                        stores[store_username]['balance']['card'] = stores[store_username]['balance'].get('card', 0) + reward_amount
+                    
+                    # Обновляем статус на "выплачено" но сохраняем информацию о завершении
+                    if 'store_achievements' not in achievements:
+                        achievements['store_achievements'] = {}
+                    if store_username not in achievements['store_achievements']:
+                        achievements['store_achievements'][store_username] = {}
+                    
+                    achievements['store_achievements'][store_username][achievement_id] = {
+                        'status': 'paid',  # Статус выплачено
+                        'completed_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Время завершения
+                        'paid_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),  # Время выплаты
+                        'reward_amount': reward_amount
+                    }
+                    
+                    save_data()
+                    flash(f'Награда выплачена магазину: {reward_amount}', 'success')
+        
+        # Одобрение награды (перевод из "на проверке" в "завершено")
+        elif action == 'approve_achievement':
+            store_username = request.form.get('store_username')
+            achievement_id = request.form.get('achievement_id')
+            
+            if store_username and achievement_id:
+                if 'store_achievements' in achievements and store_username in achievements['store_achievements'] and achievement_id in achievements['store_achievements'][store_username]:
+                    achievements['store_achievements'][store_username][achievement_id]['status'] = 'completed'
+                    achievements['store_achievements'][store_username][achievement_id]['approved_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    achievements['store_achievements'][store_username][achievement_id]['approved_by'] = session['username']
+                    
+                    save_data()
+                    flash('Награда одобрена', 'success')
+        
+        # Отклонение награды (перевод из "на проверке" обратно в "в процессе")
+        elif action == 'reject_achievement':
+            store_username = request.form.get('store_username')
+            achievement_id = request.form.get('achievement_id')
+            reason = request.form.get('reason', '')
+            
+            if store_username and achievement_id:
+                if 'store_achievements' in achievements and store_username in achievements['store_achievements'] and achievement_id in achievements['store_achievements'][store_username]:
+                    achievements['store_achievements'][store_username][achievement_id]['status'] = 'in_progress'
+                    achievements['store_achievements'][store_username][achievement_id]['rejected_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    achievements['store_achievements'][store_username][achievement_id]['rejected_by'] = session['username']
+                    achievements['store_achievements'][store_username][achievement_id]['rejection_reason'] = reason
+                    
+                    save_data()
+                    flash('Награда отклонена', 'success')
+        
+        # Установка уникальной скидки для пользователя
+        elif action == 'set_custom_discount':
+            store_username = request.form.get('store_username')
+            custom_discount = request.form.get('custom_discount')
+            discount_type = request.form.get('discount_type', 'fixed')
+            
+            if store_username and custom_discount is not None:
+                try:
+                    discount_value = int(custom_discount)
+                    if discount_value < 0 or discount_value > 100:
+                        flash('Скидка должна быть от 0 до 100%', 'error')
+                    else:
+                        # Инициализируем структуру для пользовательских скидок
+                        if 'custom_discounts' not in achievements:
+                            achievements['custom_discounts'] = {}
+                        
+                        if discount_value == 0:
+                            # Удаляем скидку, если установлено 0
+                            if store_username in achievements['custom_discounts']:
+                                del achievements['custom_discounts'][store_username]
+                                flash(f'Уникальная скидка для {store_username} удалена', 'success')
+                            else:
+                                flash('У пользователя нет уникальной скидки', 'info')
+                        else:
+                            achievements['custom_discounts'][store_username] = {
+                                'discount': discount_value,
+                                'type': discount_type,
+                                'set_by': session['username'],
+                                'set_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                'note': request.form.get('discount_note', '')
+                            }
+                            flash(f'Уникальная скидка {discount_value}% установлена для {store_username}', 'success')
+                        
+                        save_data()
+                except ValueError:
+                    flash('Неверное значение скидки', 'error')
+    
+    # Подготовка данных для отображения
+    partners = []
+    for username, store_data in stores.items():
+        if store_data.get('status', '') == 'active':
+            # Рассчитываем общий баланс магазина
+            store_balance = store_data.get('balance', {})
+            total_balance = store_balance.get('card', 0) + store_balance.get('bep20', 0)
+            
+            partner = {
+                'username': username,
+                'email': store_data.get('email', ''),
+                'store_name': store_data.get('name', ''),
+                'store_slug': store_data.get('slug', ''),
+                'status': store_data.get('status', 'active'),
+                'created_at': store_data.get('created_at', ''),
+                'total_sales': store_data.get('total_sales', 0),
+                'current_balance': total_balance
+            }
+            
+            # Добавляем информацию о текущей скидке пользователя
+            custom_discount_info = achievements.get('custom_discounts', {}).get(username, {})
+            partner['custom_discount'] = custom_discount_info.get('discount', 0)
+            partner['discount_type'] = custom_discount_info.get('type', 'fixed')
+            partner['discount_note'] = custom_discount_info.get('note', '')
+            
+            partners.append(partner)
+    
+    # Сортируем партнеров по дате создания (новые сверху)
+    partners = sorted(
+        partners,
+        key=lambda x: x.get('created_at', ''),
+        reverse=True
+    )
+    
+    return render_template(
+        'aff_achievements.html', 
+        partners=partners,
+        achievements=achievements.get('global_achievements', []),
+        store_achievements=achievements.get('store_achievements', {}),
+        custom_discounts=achievements.get('custom_discounts', {})
+    )
 
 
 @app.route('/admin/financial-analytics', methods=['GET', 'POST'])
@@ -2432,44 +2926,79 @@ def steam_settings():
         return redirect(url_for('login'))
 
     load_data()
-    global steam_discount_levels, steam_base_fee
+    global steam_discount_levels, steam_base_fee, individual_discounts
 
     if request.method == 'POST':
-        base_fee = int(request.form.get('base_fee', 10))
-        balance_thresholds = request.form.getlist('balance_threshold')
-        discounts = request.form.getlist('discount')
-        
-        new_levels = []
-        for bal, disc in zip(balance_thresholds, discounts):
-            try:
-                bal_int = int(bal)
-                disc_int = int(disc)
-                if bal_int < 0:
-                    flash('Balance threshold cannot be negative', 'error')
+        # Обработка основных настроек
+        if 'base_fee' in request.form:
+            base_fee = int(request.form.get('base_fee', 10))
+            balance_thresholds = request.form.getlist('balance_threshold')
+            discounts = request.form.getlist('discount')
+            
+            new_levels = []
+            for bal, disc in zip(balance_thresholds, discounts):
+                try:
+                    bal_int = int(bal)
+                    disc_int = int(disc)
+                    if bal_int < 0:
+                        flash('Balance threshold cannot be negative', 'error')
+                        return redirect(url_for('steam_settings'))
+                    if disc_int < 0 or disc_int > 100:
+                        flash('Discount must be between 0 and 100%', 'error')
+                        return redirect(url_for('steam_settings'))
+                    new_levels.append((bal_int, disc_int))
+                except ValueError:
+                    flash('Invalid numeric values', 'error')
                     return redirect(url_for('steam_settings'))
-                if disc_int < 0 or disc_int > 100:
-                    flash('Discount must be between 0 and 100%', 'error')
-                    return redirect(url_for('steam_settings'))
-                new_levels.append((bal_int, disc_int))
-            except ValueError:
-                flash('Invalid numeric values', 'error')
-                return redirect(url_for('steam_settings'))
 
-        new_levels.sort(key=lambda x: x[0])
+            new_levels.sort(key=lambda x: x[0])
+            
+            if not any(level[0] == 0 for level in new_levels):
+                flash('Must have at least one level with $0 threshold', 'error')
+            else:
+                steam_discount_levels = new_levels
+                steam_base_fee = base_fee
+                save_data()
+                flash('Settings updated successfully', 'success')
         
-        if not any(level[0] == 0 for level in new_levels):
-            flash('Must have at least one level with $0 threshold', 'error')
-        else:
-            steam_discount_levels = new_levels
-            steam_base_fee = base_fee
-            save_data()
-            flash('Settings updated successfully', 'success')
+        # Обработка индивидуальных скидок
+        elif 'individual_username' in request.form:
+            username = request.form.get('individual_username')
+            discount = request.form.get('individual_discount')
+            
+            if not username or username == '' or not discount:
+                flash('Username and discount are required', 'error')
+            else:
+                try:
+                    discount_int = int(discount)
+                    if discount_int < 0 or discount_int > 100:
+                        flash('Discount must be between 0 and 100%', 'error')
+                    else:
+                        individual_discounts[username] = discount_int
+                        save_data()
+                        flash(f'Individual discount for {username} set to {discount_int}%', 'success')
+                except ValueError:
+                    flash('Discount must be a valid number', 'error')
+        
+        # Удаление индивидуальной скидки
+        elif 'remove_discount' in request.form:
+            username = request.form.get('remove_discount')
+            if username in individual_discounts:
+                del individual_discounts[username]
+                save_data()
+                flash(f'Individual discount for {username} removed', 'success')
         
         return redirect(url_for('steam_settings'))
     
+    # Получаем список всех пользователей для выпадающего списка
+    all_usernames = list(users.keys())
+    all_usernames.sort()  # Сортируем по алфавиту
+    
     return render_template('admin_steam_settings.html',
                          base_fee=steam_base_fee,
-                         discount_levels=steam_discount_levels)
+                         discount_levels=steam_discount_levels,
+                         individual_discounts=individual_discounts,
+                         all_usernames=all_usernames)  # Передаем список пользователей
 
 @app.route('/product/31', methods=['GET', 'POST'])
 @check_blocked
@@ -2484,9 +3013,9 @@ def product31():
     total_balance = balances.get('card', 0) + balances.get('bep20', 0)
     error = None
     kyc_required = False
-    max_amount = 500  # стандартный лимит
-    purchase_limit = None  # лимит покупок
-    purchases_count = 0  # количество совершенных покупок
+    max_amount = 500
+    purchase_limit = None
+    purchases_count = 0
 
     # Проверяем наличие активного магазина у пользователя
     has_active_store = False
@@ -2505,7 +3034,7 @@ def product31():
 
     # Проверяем, нужно ли применять ограничения
     if (user_info.get('had_high_balance', False) or total_balance >= 400) and not kyc_verified:
-        max_amount = 5  # Лимит $5 для непроверенных пользователей
+        max_amount = 5
         purchase_limit = 4
         
         if total_balance >= 400:
@@ -2518,17 +3047,30 @@ def product31():
     # Сортируем уровни скидок по возрастанию порога
     sorted_levels = sorted(steam_discount_levels, key=lambda x: x[0])
 
-    # Определяем текущую скидку
-    current_discount = 0
+    # Определяем текущую скидку на основе баланса
+    current_discount_from_balance = 0
     for bal_threshold, discount in sorted_levels:
         if total_balance >= bal_threshold:
-            current_discount = discount
+            current_discount_from_balance = discount
+
+    # Проверяем индивидуальную скидку для пользователя
+    individual_discount = individual_discounts.get(username)
+    
+    # Выбираем максимальную скидку: индивидуальную или на основе баланса
+    if individual_discount is not None:
+        current_discount = individual_discount
+        discount_source = 'individual'
+    else:
+        current_discount = current_discount_from_balance
+        discount_source = 'balance'
 
     # Если у пользователя есть активный магазин, применяем фиксированную скидку 3%
+    store_discount = 0
     if has_active_store:
         store_discount = 3
         if store_discount > current_discount:
             current_discount = store_discount
+            discount_source = 'store'
 
     if request.method == 'POST':
         if kyc_required:
@@ -2540,6 +3082,7 @@ def product31():
             if requested_amount > max_amount:
                 error = f"Maximum allowed amount is ${max_amount} (KYC verification required for larger amounts)"
             else:
+                # Применяем скидку или комиссию
                 if current_discount > 0:
                     amount_to_pay = requested_amount * (1 - current_discount / 100)
                     fee_applied = False
@@ -2573,10 +3116,12 @@ def product31():
                         'base_fee_applied': fee_applied,
                         'base_fee_percent': steam_base_fee if fee_applied else 0,
                         'discount': current_discount,
+                        'discount_source': discount_source,  # Сохраняем источник скидки
                         'date': formatted_date,
                         'timestamp': timestamp,
                         'steamLogin': steam_login,
-                        'store_discount_applied': has_active_store
+                        'store_discount_applied': has_active_store,
+                        'individual_discount_applied': individual_discount is not None
                     }
                     users[username].setdefault('userorders', []).append(new_order)
                     save_data()
@@ -2600,7 +3145,8 @@ def product31():
                          max_amount=max_amount,
                          purchases_count=purchases_count,
                          purchase_limit=purchase_limit,
-                         kyc_verified=kyc_verified)
+                         kyc_verified=kyc_verified,
+                         individual_discount=individual_discount)  # Передаем информацию об индивидуальной скидке
 
 
 @app.route('/product/33', methods=['GET', 'POST'])
