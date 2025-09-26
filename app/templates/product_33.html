@@ -435,208 +435,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Товар 1: $5 -->
+                            {% for product_id, product in products.items() %}
                             <tr>
-                                <td>390</td>
-                                <td>Код Steam Wallet | USA | 5 USD</td>
-                                <td>$5.00</td>
-                                <td>✅</td>
+                                <td>{{ product.display_id }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>${{ "%.2f"|format(product.price) }}</td>
+                                <td>{% if product.in_stock %}✅{% else %}❌{% endif %}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-366', 366)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-366" value="0" 
+                                                onclick="decrease('counter-value-{{ product_id }}', '{{ product_id }}')"
+                                                {% if kyc_required or not product.in_stock %}disabled{% endif %}>-</button>
+                                        <input type="text" id="counter-value-{{ product_id }}" value="0" 
                                                class="form-control counter-input" 
-                                               oninput="validateInput(this, 366)"
-                                               {% if kyc_required %}disabled{% endif %}>
+                                               oninput="validateInput(this, '{{ product_id }}', {{ product.price }})"
+                                               {% if kyc_required or not product.in_stock %}disabled{% endif %}>
                                         <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-366', 366)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
+                                                onclick="increase('counter-value-{{ product_id }}', '{{ product_id }}', {{ product.price }})"
+                                                {% if kyc_required or not product.in_stock %}disabled{% endif %}>+</button>
                                     </div>
                                 </td>
-                                <td id="final-price-366">$0.00</td>
+                                <td id="final-price-{{ product_id }}">$0.00</td>
                                 <td>
-                                    <button id="button-366" class="btn btn-sm btn-outline-success" 
+                                    <button id="button-{{ product_id }}" class="btn btn-sm btn-outline-success" 
                                             disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-366"></div>
+                                            {% if kyc_required or not product.in_stock %}disabled{% endif %}>
+                                        {% if product.in_stock %}КУПИТЬ{% else %}НЕТ В НАЛИЧИИ{% endif %}
+                                    </button>
+                                    <div class="loader mt-2" id="loader-{{ product_id }}"></div>
                                 </td>
                             </tr>
-                            
-                            <!-- Товар 2: $10 -->
-                            <tr>
-                                <td>391</td>
-                                <td>Код Steam Wallet | USA | 10 USD</td>
-                                <td>$10.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-367', 367)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-367" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 367)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-367', 367)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-367">$0.00</td>
-                                <td>
-                                    <button id="button-367" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-367"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Товар 3: $20 -->
-                            <tr>
-                                <td>392</td>
-                                <td>Код Steam Wallet | USA | 20 USD</td>
-                                <td>$20.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-368', 368)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-368" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 368)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-368', 368)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-368">$0.00</td>
-                                <td>
-                                    <button id="button-368" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-368"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Товар 4: $25 -->
-                            <tr>
-                                <td>393</td>
-                                <td>Код Steam Wallet | USA | 25 USD</td>
-                                <td>$25.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-369', 369)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-369" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 369)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-369', 369)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-369">$0.00</td>
-                                <td>
-                                    <button id="button-369" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-369"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Товар 5: $50 -->
-                            <tr>
-                                <td>394</td>
-                                <td>Код Steam Wallet | USA | 50 USD</td>
-                                <td>$50.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-370', 370)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-370" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 370)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-370', 370)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-370">$0.00</td>
-                                <td>
-                                    <button id="button-370" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-370"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Товар 6: $75 -->
-                            <tr>
-                                <td>395</td>
-                                <td>Код Steam Wallet | USA | 75 USD</td>
-                                <td>$75.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-371', 371)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-371" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 371)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-371', 371)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-371">$0.00</td>
-                                <td>
-                                    <button id="button-371" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-371"></div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Товар 7: $100 -->
-                            <tr>
-                                <td>396</td>
-                                <td>Код Steam Wallet | USA | 100 USD</td>
-                                <td>$100.00</td>
-                                <td>✅</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="decrease('counter-value-372', 372)"
-                                                {% if kyc_required %}disabled{% endif %}>-</button>
-                                        <input type="text" id="counter-value-372" value="0" 
-                                               class="form-control counter-input" 
-                                               oninput="validateInput(this, 372)"
-                                               {% if kyc_required %}disabled{% endif %}>
-                                        <button class="btn btn-sm btn-outline-primary counter-btn" 
-                                                onclick="increase('counter-value-372', 372)"
-                                                {% if kyc_required %}disabled{% endif %}>+</button>
-                                    </div>
-                                </td>
-                                <td id="final-price-372">$0.00</td>
-                                <td>
-                                    <button id="button-372" class="btn btn-sm btn-outline-success" 
-                                            disabled
-                                            {% if kyc_required %}disabled{% endif %}>КУПИТЬ</button>
-                                    <div class="loader mt-2" id="loader-372"></div>
-                                </td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -828,33 +657,28 @@
     
     <script>
     // Counter functionality
-    function increase(inputId, productId) {
+    function increase(inputId, productId, price) {
         const input = document.getElementById(inputId);
         let value = parseInt(input.value) || 0;
         input.value = value + 1;
-        validateInput(input, productId);
+        validateInput(input, productId, price);
     }
     
-    function decrease(inputId, productId) {
+    function decrease(inputId, productId, price) {
         const input = document.getElementById(inputId);
         let value = parseInt(input.value) || 0;
         if (value > 0) {
             input.value = value - 1;
-            validateInput(input, productId);
+            validateInput(input, productId, price);
         }
     }
     
-    function validateInput(input, productId) {
+    function validateInput(input, productId, price) {
         let value = parseInt(input.value) || 0;
         if (value < 0) {
             input.value = 0;
             value = 0;
         }
-        
-        // Исправление: получаем цену из строки текущего продукта
-        const row = input.closest('tr');
-        const priceCell = row.querySelector('td:nth-child(3)');
-        const price = parseFloat(priceCell.textContent.replace('$', ''));
         
         // Calculate final price
         const finalPrice = value * price;
@@ -872,10 +696,8 @@
                 const productId = this.id.split("-")[1];
                 const amount = document.getElementById(`counter-value-${productId}`).value;
                 
-                // Исправление: получаем цену из строки текущего продукта
-                const row = this.closest('tr');
-                const priceCell = row.querySelector('td:nth-child(3)');
-                const price = parseFloat(priceCell.textContent.replace('$', ''));
+                // Get price from data attribute
+                const price = parseFloat(this.closest('tr').querySelector('td:nth-child(3)').textContent.replace('$', ''));
                 
                 // Show loader
                 const loader = document.getElementById(`loader-${productId}`);
@@ -906,11 +728,6 @@
                 });
             });
         });
-        
-        // Initialize all inputs
-        for (let i = 366; i <= 372; i++) {
-            validateInput(document.getElementById(`counter-value-${i}`), i);
-        }
     });
     
     {% if error %}

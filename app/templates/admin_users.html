@@ -914,7 +914,7 @@
                     <div class="topup-controls">
                         <!-- Кнопка удаления всех пополнений всех пользователей -->
                         <form action="{{ url_for('delete_all_topups') }}" method="POST" 
-                              onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения ВСЕХ пользователей? Это действие нельзя отменить!');">
+                            onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения ВСЕХ пользователей? Это действие нельзя отменить!');">
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="fas fa-trash"></i> Удалить все пополнения
                             </button>
@@ -922,7 +922,7 @@
                         
                         <!-- Кнопка удаления пополнений выбранного пользователя -->
                         <form id="deleteUserTopupsForm" method="POST" 
-                              onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения этого пользователя? Это действие нельзя отменить!');">
+                            onsubmit="return confirm('Вы уверены, что хотите удалить ВСЕ пополнения этого пользователя? Это действие нельзя отменить!');">
                             <button type="submit" class="btn btn-warning btn-sm" id="deleteUserTopupsBtn" disabled>
                                 <i class="fas fa-trash"></i> Удалить пополнения пользователя
                             </button>
@@ -955,7 +955,13 @@
                         <tr data-user="{{ user }}">
                             <td>{{ user }}</td>
                             <td>{{ topup['date'] | replace('T', ' ') }}</td>
-                            <td>{{ topup['network'] }}</td>
+                            <td>
+                                {% if topup['network'] == 'BEP20' %}
+                                    TON
+                                {% else %}
+                                    {{ topup['network'] }}
+                                {% endif %}
+                            </td>
                             <td>{{ topup['amount'] }}$</td>
                             <td>
                                 <form method="post" class="status-form">

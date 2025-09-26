@@ -1,0 +1,73 @@
+{
+    "366": {
+        "name": "Код Steam Wallet | USA | 5 USD",
+        "price": 5.0,
+        "available": true
+    },
+    "367": {
+        "name": "Код Steam Wallet | USA | 10 USD",
+        "price": 9.0,
+        "available": true
+    },
+    "368": {
+        "name": "Код Steam Wallet | USA | 20 USD",
+        "price": 20.0,
+        "available": true
+    },
+    "369": {
+        "name": "Код Steam Wallet | USA | 25 USD",
+        "price": 25.0,
+        "available": true
+    },
+    "370": {
+        "name": "Код Steam Wallet | USA | 50 USD",
+        "price": 50.0,
+        "available": true
+    },
+    "371": {
+        "name": "Код Steam Wallet | USA | 75 USD",
+        "price": 75.0,
+        "available": true
+    },
+    "372": {
+        "name": "Код Steam Wallet | USA | 100 USD",
+        "price": 100.0,
+        "available": true
+    },
+    "373": {
+        "name": "Код Steam Wallet | EU | 5 EUR",
+        "price": 5.55,
+        "available": true,
+        "region": "EU"
+    },
+    "374": {
+        "name": "Код Steam Wallet | EU | 10 EUR",
+        "price": 11.3,
+        "available": true,
+        "region": "EU"
+    },
+    "375": {
+        "name": "Код Steam Wallet | EU | 20 EUR",
+        "price": 22.65,
+        "available": true,
+        "region": "EU"
+    },
+    "376": {
+        "name": "Код Steam Wallet | EU | 25 EUR",
+        "price": 28.5,
+        "available": true,
+        "region": "EU"
+    },
+    "377": {
+        "name": "Код Steam Wallet | EU | 30 EUR",
+        "price": 34.0,
+        "available": true,
+        "region": "EU"
+    },
+    "378": {
+        "name": "Код Steam Wallet | EU | 35 EUR",
+        "price": 39.65,
+        "available": true,
+        "region": "EU"
+    }
+}

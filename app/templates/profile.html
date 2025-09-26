@@ -544,7 +544,13 @@
                                     {% for topup in topups %}
                                     <tr>
                                         <td>{{ topup['date'] | replace('T', ' ') }}</td>
-                                        <td>{{ topup['network'] }}</td>
+                                        <td>
+                                            {% if topup['network'] == 'BEP20' %}
+                                                TON
+                                            {% else %}
+                                                {{ topup['network'] }}
+                                            {% endif %}
+                                        </td>
                                         <td>${{ topup['amount'] }}</td>
                                         <td>
                                             {% if topup['status'] == 'Completed' %}

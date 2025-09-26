@@ -3,19 +3,11 @@
     "discount_levels": [
         [
             0,
-            0
-        ],
-        [
-            10,
-            1
-        ],
-        [
-            20,
             2
         ],
         [
             250,
-            5
+            3
         ]
     ],
     "individual_discounts": {}

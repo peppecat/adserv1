@@ -14,21 +14,5 @@
         "payment_method": "balance",
         "initial_payment": 50.0,
         "kyc_verified": false
-    },
-    "Dim4ikgoo$e101$": {
-        "name": "cxvxcvxc1",
-        "slug": "cxvxcvxc1",
-        "status": "active",
-        "owner": "Dim4ikgoo$e101$",
-        "email": "peppecatwork@gmail.com",
-        "admin_username": "",
-        "admin_password": "",
-        "created_at": "2025-09-19 13:55:42",
-        "total_sales": 0,
-        "products": [],
-        "orders": [],
-        "payment_method": "balance",
-        "initial_payment": 50.0,
-        "kyc_verified": false
     }
 }

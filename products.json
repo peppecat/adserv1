@@ -1,382 +1,59 @@
 {
-    "products_2": {
-        "1": {
-            "description": "Apple Gift Card | USA | 2 USD",
-            "codes": []
-        },
-        "2": {
-            "description": "Apple Gift Card | USA | 3 USD",
-            "codes": []
-        },
-        "3": {
-            "description": "Apple Gift Card | USA | 4 USD",
-            "codes": []
-        },
-        "4": {
-            "description": "Apple Gift Card | USA | 5 USD",
-            "codes": []
-        },
-        "5": {
-            "description": "Apple Gift Card | USA | 6 USD",
-            "codes": []
-        },
-        "6": {
-            "description": "Apple Gift Card | USA | 7 USD",
-            "codes": []
-        },
-        "7": {
-            "description": "Apple Gift Card | USA | 8 USD",
-            "codes": []
-        },
-        "8": {
-            "description": "Apple Gift Card | USA | 9 USD",
-            "codes": []
-        },
-        "9": {
-            "description": "Apple Gift Card | USA | 10 USD",
-            "codes": []
-        },
-        "10": {
-            "description": "Apple Gift Card | USA | 20 USD",
-            "codes": []
-        },
-        "11": {
-            "description": "Apple Gift Card | USA | 25 USD",
-            "codes": []
-        },
-        "12": {
-            "description": "Apple Gift Card | USA | 50 USD",
-            "codes": []
-        },
-        "13": {
-            "description": "Apple Gift Card | USA | 100 USD",
-            "codes": []
+    "categories": {
+        "steam_wallet_us": {
+            "id": "steam_wallet_us",
+            "name": "\u041a\u043e\u0434\u044b Steam Wallet | USA",
+            "products": {
+                "366": {
+                    "id": "366",
+                    "name": "Steam Wallet Code | US | 5 USD",
+                    "price": 6.0,
+                    "in_stock": true,
+                    "display_id": "390"
+                },
+                "367": {
+                    "id": "367",
+                    "name": "Steam Wallet Code | US | 10 USD",
+                    "price": 10.0,
+                    "in_stock": true,
+                    "display_id": "391"
+                },
+                "368": {
+                    "id": "368",
+                    "name": "Steam Wallet Code | US | 20 USD",
+                    "price": 20.0,
+                    "in_stock": true,
+                    "display_id": "392"
+                },
+                "369": {
+                    "id": "369",
+                    "name": "Steam Wallet Code | US | 25 USD",
+                    "price": 25.0,
+                    "in_stock": true,
+                    "display_id": "393"
+                },
+                "370": {
+                    "id": "370",
+                    "name": "Steam Wallet Code | US | 50 USD",
+                    "price": 50.0,
+                    "in_stock": true,
+                    "display_id": "394"
+                },
+                "371": {
+                    "id": "371",
+                    "name": "Steam Wallet Code | US | 75 USD",
+                    "price": 75.0,
+                    "in_stock": true,
+                    "display_id": "395"
+                },
+                "372": {
+                    "id": "372",
+                    "name": "Steam Wallet Code | US | 100 USD",
+                    "price": 100.0,
+                    "in_stock": true,
+                    "display_id": "396"
+                }
+            }
         }
-    },
-    "products_3": {
-        "14": {
-            "description": "Apple Gift Card | TR | 10 TRY",
-            "codes": []
-        },
-        "15": {
-            "description": "Apple Gift Card | TR | 25 TRY",
-            "codes": []
-        },
-        "16": {
-            "description": "Apple Gift Card | TR | 50 TRY",
-            "codes": []
-        },
-        "17": {
-            "description": "Apple Gift Card | TR | 100 TRY",
-            "codes": []
-        },
-        "18": {
-            "description": "Apple Gift Card | TR | 250 TRY",
-            "codes": []
-        },
-        "19": {
-            "description": "Apple Gift Card | TR | 500 TRY",
-            "codes": []
-        },
-        "20": {
-            "description": "Apple Gift Card | TR | 1000 TRY",
-            "codes": []
-        }
-    },
-    "products_4": {
-        "21": {
-            "description": "Apple Gift Card | RU | 500 RUB",
-            "codes": []
-        },
-        "22": {
-            "description": "Apple Gift Card | RU | 600 RUB",
-            "codes": []
-        },
-        "23": {
-            "description": "Apple Gift Card | RU | 700 RUB",
-            "codes": []
-        },
-        "24": {
-            "description": "Apple Gift Card | RU | 1000 RUB",
-            "codes": []
-        },
-        "25": {
-            "description": "Apple Gift Card | RU | 1500 RUB",
-            "codes": []
-        },
-        "26": {
-            "description": "Apple Gift Card | RU | 2000 RUB",
-            "codes": []
-        },
-        "27": {
-            "description": "Apple Gift Card | RU | 2500 RUB",
-            "codes": []
-        },
-        "28": {
-            "description": "Apple Gift Card | RU | 5000 RUB",
-            "codes": []
-        }
-    },
-    "products_5": {
-        "29": {
-            "description": "Apple Gift Card | PL | 20 PLN",
-            "codes": []
-        },
-        "30": {
-            "description": "Apple Gift Card | PL | 25 PLN",
-            "codes": []
-        },
-        "31": {
-            "description": "Apple Gift Card | PL | 50 PLN",
-            "codes": []
-        },
-        "32": {
-            "description": "Apple Gift Card | PL | 100 PLN",
-            "codes": []
-        },
-        "33": {
-            "description": "Apple Gift Card | PL | 150 PLN",
-            "codes": []
-        },
-        "34": {
-            "description": "Apple Gift Card | PL | 200 PLN",
-            "codes": []
-        }
-    },
-    "products_28": {
-        "155": "Roblox | Global | 100 Robux",
-        "156": "Roblox | Global | 200 Robux",
-        "157": "Roblox | Global | 400 Robux",
-        "158": "Roblox | Global | 800 Robux",
-        "159": "Roblox | Global | 2200 Robux",
-        "160": "Roblox | Global | 2700 Robux",
-        "161": "Roblox | Global | 3200 Robux",
-        "344": "Roblox | Global | 3600 Robux",
-        "345": "Roblox | Global | 4000 Robux",
-        "346": "Roblox | Global | 4500 Robux",
-        "347": "Roblox | Global | 5000 Robux",
-        "348": "Roblox | Global | 6000 Robux",
-        "349": "Roblox | Global | 7000 Robux",
-        "350": "Roblox | Global | 10000 Robux",
-        "351": "Roblox | Global | 13000 Robux",
-        "352": "Roblox | Global | 22500 Robux"
-    },
-    "products_32": {
-        "175": "Steam CD-Key | Age of Mythology: Retold",
-        "176": "Steam CD-Key | Age of Mythology: Retold Premium Edition",
-        "177": "Steam CD-Key | Age of Wonders 4",
-        "178": "Steam CD-Key | Arma 3",
-        "179": "Steam CD-Key | Assetto Corsa",
-        "180": "Steam CD-Key | Assetto Corsa Competizione",
-        "181": "Steam CD-Key | Atomic Heart",
-        "182": "Steam CD-Key | Atomic Heart Premium Edition",
-        "183": "Steam CD-Key | Back 4 Blood",
-        "184": "Steam CD-Key | Back 4 Blood Deluxe Edition",
-        "185": "Steam CD-Key | Back 4 Blood Ultimate Edition",
-        "186": "Steam CD-Key | Black Myth: Wukong",
-        "187": "Steam CD-Key | Borderlands 3",
-        "188": "Steam CD-Key | Borderlands 3 Deluxe",
-        "189": "Steam CD-Key | Borderlands 3 Ultimate",
-        "190": "Steam CD-Key | Company of Heroes 3",
-        "191": "Steam CD-Key | Cities: Skylines II",
-        "192": "Steam CD-Key | Dead Cells",
-        "193": "Steam CD-Key | Dead Island 2",
-        "194": "Steam CD-Key | Dead Island 2 Ultimate Edition",
-        "195": "Steam CD-Key | Dead by Daylight",
-        "196": "Steam CD-Key | Dead by Daylight Ultimate Edition",
-        "197": "Steam CD-Key | Destiny 2 Final Shape",
-        "198": "Steam CD-Key | Destiny 2 Final Shape + Annual Pass",
-        "199": "Steam CD-Key | Destiny 2 Lightfall",
-        "201": "Steam CD-Key | Destiny 2 Witch Queen",
-        "202": "Steam CD-Key | Destiny 2 Legacy Collection",
-        "203": "Steam CD-Key | Dragon Age: The Veilguard",
-        "204": "Steam CD-Key | DRAGON BALL: Sparking! ZERO",
-        "205": "Steam CD-Key | Dragon's Dogma 2",
-        "206": "Steam CD-Key | Dragon's Dogma 2 Deluxe Edition",
-        "207": "Steam CD-Key | Dying Light",
-        "208": "Steam CD-Key | Dying Light Enhanced Edition",
-        "209": "Steam CD-Key | Dying Light Definitive Edition",
-        "210": "Steam CD-Key | Dying Light 2 Reloaded Edition",
-        "211": "Steam CD-Key | Dying Light 2 Deluxe Edition<",
-        "212": "Steam CD-Key | Dying Light 2 Ultimate Edition",
-        "213": "Steam CD-Key | Elden Ring",
-        "214": "Steam CD-Key | Elden Ring Deluxe Edition",
-        "215": "Steam CD-Key | Elden Rng Shadow of the Erdtree Edition",
-        "216": "Steam CD-Key | Elite Dangerous",
-        "217": "Steam CD-Key | Elite Dangerous Deluxe Edition",
-        "218": "Steam CD-Key | Elite Dangerous Odysseyn",
-        "219": "Steam CD-Key | Enshrouded",
-        "220": "Steam CD-Key | Euro Truck Simulator 2",
-        "221": "Steam CD-Key | Euro Truck Simulator 2 Gold Edition",
-        "222": "Steam CD-Key | Europa Universalis IV",
-        "223": "Steam CD-Key | Europa Universalis IV Conquest Collection",
-        "224": "Steam CD-Key | Exoprimal",
-        "225": "Steam CD-Key | Expeditions: A MudRunner Game",
-        "226": "Steam CD-Key | F1 Manager 2024",
-        "227": "Steam CD-Key | Fallout 76",
-        "228": "Steam CD-Key | Football Manager 2024",
-        "229": "Steam CD-Key | Foxhole",
-        "230": "Steam CD-Key | Frostpunk 2",
-        "231": "Steam CD-Key | Generation Zero",
-        "232": "Steam CD-Key | Ghost of Tsushima DIRECTOR'S CUT",
-        "233": "Steam CD-Key | Gloomhaven",
-        "234": "Steam CD-Key | God of War",
-        "235": "Steam CD-Key | God of War Ragnarok",
-        "236": "Steam CD-Key | Going Medieval",
-        "237": "Steam CD-Key | Hearts of Iron IV",
-        "238": "Steam CD-Key | Hearts of Iron IV Cadet Edition",
-        "239": "Steam CD-Key | Hell Let Loose",
-        "240": "Steam CD-Key | HELLDIVERS 2",
-        "241": "Steam CD-Key | HELLDIVERS 2 Super Citizen",
-        "242": "Steam CD-Key | HITMAN World of Assassination",
-        "243": "Steam CD-Key | Hogwarts Legacy",
-        "244": "Steam CD-Key | Hogwarts Legacy Deluxe Edition",
-        "245": "Steam CD-Key | Hollow Knight",
-        "246": "Steam CD-Key | HomeWorld 3",
-        "247": "Steam CD-Key | Horizon Forbidden West Complete Edition",
-        "248": "Steam CD-Key | Indiana Jones and the Great Circle",
-        "249": "Steam CD-Key | Insurgency: Sandstorm",
-        "250": "Steam CD-Key | Jurassic World Evolution 2",
-        "251": "Steam CD-Key | Kingdom Come: Deliverance II",
-        "252": "Steam CD-Key | Kingdom Come: Deliverance II Gold Edition",
-        "253": "Steam CD-Key | Last Epoch",
-        "254": "Steam CD-Key | Lies of P",
-        "255": "Steam CD-Key | Lies of P Deluxe Edition",
-        "256": "Steam CD-Key | Like a Dragon: Infinite Wealth",
-        "257": "Steam CD-Key | Like a Dragon: Infinite Wealth Ultimate Edition",
-        "258": "Steam CD-Key | Lords of the Fallen (2023)",
-        "259": "Steam CD-Key | Lords of the Fallen Deluxe Edition (2023)",
-        "260": "Steam CD-Key | Mafia: Definitive Edition",
-        "261": "Steam CD-Key | Magicraft",
-        "262": "Steam CD-Key | Manor Lords",
-        "263": "Steam CD-Key | Marvel's Spider-Man Remastered",
-        "264": "Steam CD-Key | Metro Exodus",
-        "265": "Steam CD-Key | MONSTER HUNTER RISE",
-        "266": "Steam CD-Key | MONSTER HUNTER RISE Deluxe Edition",
-        "267": "Steam CD-Key | Monster Hunter: World",
-        "268": "Steam CD-Key | Monster Hunter: World Iceborne Master Edition",
-        "269": "Steam CD-Key | Mortal Kombat 1",
-        "270": "Steam CD-Key | Mortal Kombat 1 Premium Edition",
-        "271": "Steam CD-Key | Mortal Kombat 11",
-        "272": "Steam CD-Key | Mortal Kombat 11 Ultimate Edition",
-        "273": "Steam CD-Key | Mount & Blade II: Bannerlord",
-        "274": "Steam CD-Key | Mount & Blade: Warband",
-        "275": "Steam CD-Key | Myth of Empires",
-        "276": "Steam CD-Key | NBA 2K24 Kobe Bryant Edition",
-        "277": "Steam CD-Key | NBA 2K24 Black Mamba Edition",
-        "278": "Steam CD-Key | NBA 2K25",
-        "279": "Steam CD-Key | NBA 2K25 All-Star Edition",
-        "280": "Steam CD-Key | New World: Aeternum",
-        "281": "Steam CD-Key | New World: Aeternum Deluxe Edition",
-        "282": "Steam CD-Key | New World: Aeternum Azoth Edition",
-        "283": "Steam CD-Key | NieR:Automata",
-        "284": "Steam CD-Key | No Man's Sky",
-        "285": "Steam CD-Key | No Rest for the Wicked",
-        "286": "Steam CD-Key | Northgard",
-        "287": "Steam CD-Key | Payday 3",
-        "288": "Steam CD-Key | Persona 3 Reloaded",
-        "289": "Steam CD-Key | Persona 3 Reload Digital Deluxe Edition",
-        "290": "Steam CD-Key | Persona 4 Golden",
-        "291": "Steam CD-Key | Persona 4 Golden Deluxe Edition",
-        "292": "Steam CD-Key | Persona 5 Royal",
-        "293": "Steam CD-Key | Ready or Not",
-        "294": "Steam CD-Key | REMNANT II",
-        "295": "Steam CD-Key | REMNANT II Deluxe Edition",
-        "296": "Steam CD-Key | REMNANT II Ultimate Edition",
-        "297": "Steam CD-Key | Resident Evil 4",
-        "298": "Steam CD-Key | Resident Evil 4 Gold Edition",
-        "299": "Steam CD-Key | Resident Evil Village",
-        "300": "Steam CD-Key | Resident Evil Village Deluxe Edition",
-        "301": "Steam CD-Key | Resident Evil Village Gold Edition",
-        "302": "Steam CD-Key | RimWorld",
-        "303": "Steam CD-Key | Risk of Rain 2",
-        "304": "Steam CD-Key | S.T.A.L.K.E.R. 2: Heart of Chornobyl",
-        "305": "Steam CD-Key | S.T.A.L.K.E.R. 2: Heart of Chornobyl Ultimate Edition",
-        "306": "Steam CD-Key | Scum",
-        "307": "Steam CD-Key | Shadow of the Tomb Raider Definitive Edition",
-        "308": "Steam CD-Key | Shin Megami Tensei V: Vengeance",
-        "309": "Steam CD-Key | Shin Megami Tensei V: Vengeance Deluxe Edition",
-        "310": "Steam CD-Key | Sid Meier's Civilization VI",
-        "311": "Steam CD-Key | Sifu",
-        "312": "Steam CD-Key | SILENT HILL 2",
-        "313": "Steam CD-Key | SILENT HILL 2 Deluxe Edition",
-        "314": "Steam CD-Key | Sker Ritual",
-        "315": "Steam CD-Key | Sniper Elite 5",
-        "316": "Steam CD-Key | Spider-Man Remastered",
-        "317": "Steam CD-Key | Spider-Man: Miles Morales",
-        "318": "Steam CD-Key | Squad",
-        "319": "Steam CD-Key | Squad 44",
-        "320": "Steam CD-Key | Street Fighter 6",
-        "321": "Steam CD-Key | Street Fighter 6 Deluxe Edition",
-        "322": "Steam CD-Key | Street Fighter 6 Ultimate Edition",
-        "323": "Steam CD-Key | Subnautica",
-        "324": "Steam CD-Key | Subnautica: Below Zero",
-        "325": "Steam CD-Key | Teardown",
-        "326": "Steam CD-Key | Tekken 8",
-        "327": "Steam CD-Key | Tekken 8 Deluxe Edition",
-        "328": "Steam CD-Key | Tekken 8 Ultimate Edition",
-        "329": "Steam CD-Key | The Last of Us Part I",
-        "330": "Steam CD-Key | The Long Dark",
-        "331": "Steam CD-Key | Timberborn",
-        "332": "Steam CD-Key | Total War: WARHAMMER",
-        "333": "Steam CD-Key | Total War: WARHAMMER II",
-        "334": "Steam CD-Key | Total War: WARHAMMER III",
-        "335": "Steam CD-Key | V Rising",
-        "336": "Steam CD-Key | Valheim",
-        "337": "Steam CD-Key | Wallpaper Engine",
-        "338": "Steam CD-Key | Warhammer 40,000: Darktide",
-        "339": "Steam CD-Key | Warhammer 40,000: Rogue Trader",
-        "340": "Steam CD-Key | Warhammer 40,000: Space Marine 2",
-        "341": "Steam CD-Key | Warhammer 40,000: Space Marine 2 Gold Edition",
-        "342": "Steam CD-Key | Wartales"
-    },
-    "products_33": {
-        "366": "Steam Wallet Code | US | 5 USD",
-        "367": "Steam Wallet Code | US | 10 USD",
-        "368": "Steam Wallet Code | US | 20 USD",
-        "369": "Steam Wallet Code | US | 25 USD",
-        "370": "Steam Wallet Code | US | 50 USD",
-        "371": "Steam Wallet Code | US | 75 USD",
-        "372": "Steam Wallet Code | US | 100 USD"
-    },
-    "products_49": {
-        "1001": "Assassin\u0412\u0491s Creed Odyssey XBOX ONE/SERIES X|S",
-        "1002": "Assassin\u0412\u0491s Creed Odyssey Gold XBOX ONE/SERIES X|S",
-        "1003": "Assassin\u0412\u0491s Creed Odyssey Ultimate XBOX ONE/SERIES X|S",
-        "1004": "Assassins Creed Origins XBOX ONE/SERIES X|S",
-        "1005": "Assassins Creed Origins Gold XBOX ONE/SERIES X|S",
-        "1006": "Assassins Creed Valhalla XBOX ONE/SERIES X|S",
-        "1007": "Assassins Creed Valhalla Ragnarok XBOX ONE/SERIES X|S",
-        "1008": "Assassins Creed Valhalla Ultimate XBOX ONE/SERIES X|S",
-        "1009": "Assassins Creed Mirage XBOX ONE/SERIES X|S",
-        "1010": "Assassins Creed Mirage Deluxe XBOX ONE/SERIES X|S",
-        "1011": "Assassins Creed Miarge Master XBOX ONE/SERIES X|S",
-        "1012": "Baldur's Gate 3 XBOX SERIES X|S",
-        "1013": "Baldur's Gate 3 Deluxe XBOX SERIES X|S",
-        "1014": "Dead by Daylight XBOX ONE/SERIES X|S",
-        "1015": "Dead by Daylight Gold XBOX ONE/SERIES X|S",
-        "1016": "Dead by Daylight Ultimate XBOX ONE/SERIES X|S",
-        "1017": "Destiny 2 The Final Shape XBOX ONE/SERIES X|S",
-        "1018": "Destiny 2 Lightfall XBOX ONE/SERIES X|S",
-        "1019": "Destiny 2 The Witch Queen XBOX ONE/SERIES X|S",
-        "1020": "Destiny 2 Beyond XBOX ONE/SERIES X|S",
-        "1021": "Diablo 4 XBOX ONE/SERIES X|S",
-        "1022": "Diablo 4 Deluxe XBOX ONE/SERIES X|S",
-        "1023": "Diablo 4 Ultimate XBOX ONE/SERIES X|S",
-        "1024": "Diablo 4 Expansion Bundle XBOX ONE/SERIES X|S",
-        "1025": "Diablo 4 Vessel of Hatred XBOX ONE/SERIES X|S",
-        "1026": "Diablo 4 Vessel of Hatred Deluxe XBOX ONE/SERIES X|S",
-        "1027": "Diablo 4 Vessel of Hatred Ultimate XBOX ONE/SERIES X|S",
-        "1028": "Forza Horizon 5 XBOX ONE/SERIES X|S",
-        "1029": "Forza Horizon 5 Deluxe XBOX ONE/SERIES X|S",
-        "1030": "Forza Horizon 5 Ultimate XBOX ONE/SERIES X|S",
-        "1031": "Kingdom Come: Deliverance II XBOX SERIES X|S",
-        "1032": "Kingdom Come: Deliverance II Gold XBOX SERIES X|S",
-        "1033": "Minecraft PC",
-        "1034": "Minecraft XBOX ONE/SERIES X|S",
-        "1035": "Mortal Kombat 11 XBOX ONE/SERIES X|S",
-        "1036": "Mortal Kombat 11 Ultimate XBOX ONE/SERIES X|S",
-        "1037": "Mortal Kombat 1 XBOX SERIES X|S",
-        "1038": "Mortal Kombat 1 Premium XBOX SERIES X|S"
     }
 }

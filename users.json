@@ -11,12 +11,79 @@
         "balance": {
             "trc20": 0,
             "erc20": 0,
-            "bep20": 0.0,
-            "card": 0
+            "card": 0,
+            "bep20": 27.06,
+            "ton": 2.0
         },
         "orders": 0,
-        "expenses": 5.0,
+        "expenses": 35.0,
         "userorders": [
+            {
+                "id": "c2d72d5f-5a7d-44c4-8ae0-be3e85aef1c9",
+                "category": "Steam",
+                "product": "Steam TopUp",
+                "price": 2.94,
+                "amount": 3.0,
+                "requested_amount": 3.0,
+                "paid_amount": 2.94,
+                "base_fee_applied": false,
+                "base_fee_percent": 0,
+                "discount": 2,
+                "discount_source": "balance",
+                "date": "2025-09-26 19:50:50",
+                "timestamp": 1758905450.91771,
+                "steamLogin": "vidrea",
+                "store_discount_applied": false,
+                "individual_discount_applied": false
+            },
+            {
+                "id": "bae54a97-13ec-42fd-8784-282ace3cc123",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 6.0,
+                "amount": 1,
+                "date": "2025-09-26 04:26:25",
+                "timestamp": 1758849985.733238,
+                "notification_sent": true
+            },
+            {
+                "id": "bc73b1fc-c8ff-4b66-9db9-012308952b3f",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 6.0,
+                "amount": 1,
+                "date": "2025-09-26 04:26:04",
+                "timestamp": 1758849964.172422
+            },
+            {
+                "id": "7f24862d-5a79-49b6-8848-e5a9c3452728",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 6.0,
+                "amount": 1,
+                "date": "2025-09-26 04:25:51",
+                "timestamp": 1758849951.822126,
+                "notification_sent": true
+            },
+            {
+                "id": "f8093355-0940-46a5-9e1c-4645e2c3f503",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 6.0,
+                "amount": 1,
+                "date": "2025-09-26 04:25:39",
+                "timestamp": 1758849939.088111
+            },
+            {
+                "id": "c207a261-2e85-4271-bba3-77f49008218a",
+                "category": "Steam Wallet Code | USA",
+                "product": "Steam Wallet Code | US | 5 USD",
+                "price": 6.0,
+                "amount": 1,
+                "date": "2025-09-26 04:24:57",
+                "timestamp": 1758849897.762447,
+                "notification_sent": true
+            },
             {
                 "id": "845656d5-41c0-4435-9045-c718dbd16b57",
                 "category": "Steam Wallet Code | USA",
@@ -31,58 +98,22 @@
         ],
         "topups": [
             {
-                "date": "2025-09-06 01:00:36",
-                "network": "TON",
-                "amount": 22.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 01:01:00",
-                "network": "TON",
-                "amount": 12.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 01:01:09",
-                "network": "TON",
-                "amount": 55.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 01:01:32",
-                "network": "TON",
-                "amount": 10.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 01:02:38",
-                "network": "TON",
-                "amount": 23.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 21:24:39",
-                "network": "Card",
-                "amount": 1.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 21:24:48",
-                "network": "TON",
-                "amount": 21.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 21:25:06",
-                "network": "Card",
+                "date": "2025-09-26 01:20:10",
+                "network": "BEP20",
                 "amount": 3.0,
-                "status": "Pending"
+                "status": "Success"
             },
             {
-                "date": "2025-09-06 21:25:15",
-                "network": "Card",
+                "date": "2025-09-26 01:37:23",
+                "network": "BEP20",
+                "amount": 55.0,
+                "status": "Success"
+            },
+            {
+                "date": "2025-09-26 19:55:37",
+                "network": "BEP20",
                 "amount": 5.0,
-                "status": "Pending"
+                "status": "Success"
             }
         ],
         "stores": [
@@ -104,20 +135,7 @@
         "orders": 0,
         "expenses": 0,
         "userorders": [],
-        "topups": [
-            {
-                "date": "2025-09-06 19:29:38",
-                "network": "TON",
-                "amount": 11.0,
-                "status": "Pending"
-            },
-            {
-                "date": "2025-09-06 19:31:37",
-                "network": "TON",
-                "amount": 1.0,
-                "status": "Pending"
-            }
-        ],
+        "topups": [],
         "stores": [
             "cxvxcvxc"
         ]

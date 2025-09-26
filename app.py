@@ -88,6 +88,7 @@ STEAM_DISCOUNTS_FILE = 'steam_discounts.json'
 STORES_FILE = 'stores.json'
 RESELLER_FILE = 'reseller_stores.json'
 ACHIEVEMENTS_FILE = 'achievements.json'
+STEAM_WALLET_PRODUCTS_FILE = 'steam_wallet_products.json'
 
 # Загрузка данных из файлов
 def load_data():
@@ -256,6 +257,8 @@ def save_data():
     with open(ACHIEVEMENTS_FILE, 'w', encoding='utf-8') as f:
         json.dump(achievements, f, indent=4, ensure_ascii=False)
 
+        
+
 def check_blocked(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -266,6 +269,14 @@ def check_blocked(f):
                 return render_template('blocked_account.html', username=username)  
         return f(*args, **kwargs)
     return decorated_function
+
+
+
+
+
+
+
+
 
 
 
@@ -754,18 +765,30 @@ def admin_users():
                         old_status = topup['status']
                         topup['status'] = new_status
 
+                        # Определяем ключ баланса в зависимости от сети
+                        balance_key = network.lower() if network != 'Card' else 'card'
+                        
+                        # Инициализируем баланс, если его нет
+                        if 'balance' not in users[target_user]:
+                            users[target_user]['balance'] = {}
+                        if balance_key not in users[target_user]['balance']:
+                            users[target_user]['balance'][balance_key] = 0
+
+                        # Логика изменения баланса
                         if new_status == 'Success' and old_status != 'Success':
-                            balance_key = network.lower() if network != 'Card' else 'card'
-                            if balance_key not in users[target_user]['balance']:
-                                users[target_user]['balance'][balance_key] = 0
+                            # Добавляем сумму к балансу при успешном статусе
                             users[target_user]['balance'][balance_key] += topup['amount']
+                            print(f"Баланс увеличен на {topup['amount']}$ для {target_user}. Новый баланс: {users[target_user]['balance'][balance_key]}$")
+                            
                         elif old_status == 'Success' and new_status != 'Success':
-                            balance_key = network.lower() if network != 'Card' else 'card'
-                            if balance_key in users[target_user]['balance']:
-                                users[target_user]['balance'][balance_key] = max(0, users[target_user]['balance'][balance_key] - topup['amount'])
+                            # Вычитаем сумму из баланса при смене успешного статуса на другой
+                            users[target_user]['balance'][balance_key] = max(0, users[target_user]['balance'][balance_key] - topup['amount'])
+                            print(f"Баланс уменьшен на {topup['amount']}$ для {target_user}. Новый баланс: {users[target_user]['balance'][balance_key]}$")
+                        
                         break
                 
                 flash('Статус пополнения обновлен', 'success')
+                save_data()  # Не забудьте сохранить изменения!
 
             elif action == 'delete_user':
                 del users[target_user]
@@ -1151,16 +1174,7 @@ def orders():
         reverse=True
     )
 
-    if userorders:
-        last_order = userorders[0]
-        if not last_order.get('notification_sent'):
-            send_telegram_notification(
-                username=username,
-                message_type='new_order',
-                order_data=last_order
-            )
-            last_order['notification_sent'] = True
-            save_data()
+    save_data()
 
     return render_template('orders.html',
                          username=username,
@@ -2832,7 +2846,7 @@ def bep20_success():
         print("Ошибка: некорректный формат суммы!")
         return render_template('donebep20.html', username=username, balances=balances)
 
-    network = 'TON'
+    network = 'BEP20'
     status = 'Pending'
 
     topups = user_info.get('topups', [])
@@ -3067,7 +3081,7 @@ def product31():
     # Если у пользователя есть активный магазин, применяем фиксированную скидку 3%
     store_discount = 0
     if has_active_store:
-        store_discount = 3
+        store_discount = 2
         if store_discount > current_discount:
             current_discount = store_discount
             discount_source = 'store'
@@ -3175,7 +3189,7 @@ def product33():
                           if order.get('category') in ['Steam', 'Steam Wallet Code | USA']]
         purchases_count = len(steam_purchases)
 
-    # Проверяем лимиты (та же логика что и в product31)
+    # Проверяем лимиты
     if (user_info.get('had_high_balance', False) or total_balance >= 400) and not kyc_verified:
         max_amount = 5
         purchase_limit = 4
@@ -3187,15 +3201,10 @@ def product33():
         if purchases_count >= purchase_limit:
             kyc_required = True
 
-    products = {
-        "366": "Steam Wallet Code | US | 5 USD",
-        "367": "Steam Wallet Code | US | 10 USD",
-        "368": "Steam Wallet Code | US | 20 USD",
-        "369": "Steam Wallet Code | US | 25 USD",
-        "370": "Steam Wallet Code | US | 50 USD",
-        "371": "Steam Wallet Code | US | 75 USD",
-        "372": "Steam Wallet Code | US | 100 USD",
-    }
+    # Получаем товары из products.json
+    category_products = {}
+    if 'categories' in products and 'steam_wallet_us' in products['categories']:
+        category_products = products['categories']['steam_wallet_us']['products']
     
     if request.method == 'POST':
         if kyc_required:
@@ -3203,9 +3212,17 @@ def product33():
         else:
             product_id = request.form.get('product_id')
             amount = int(request.form.get('amount', 0))
-            price = float(request.form.get('price', 0))
-            total_price = amount * price
+            
+            # Получаем цену из products.json
+            product_price = None
+            if product_id in category_products:
+                product_price = category_products[product_id]['price']
+                product_name = category_products[product_id]['name']
+            else:
+                error = "Product not found"
+                product_price = 0
 
+            total_price = amount * product_price
             formatted_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             if amount <= 0:
@@ -3225,7 +3242,7 @@ def product33():
                 new_order = {
                     'id': str(uuid.uuid4()),
                     'category': 'Steam Wallet Code | USA',
-                    'product': products.get(product_id, f'Unknown Product {product_id}'),
+                    'product': product_name,
                     'price': total_price,
                     'amount': amount,
                     'date': formatted_date,
@@ -3244,7 +3261,9 @@ def product33():
                          max_amount=max_amount,
                          purchases_count=purchases_count,
                          purchase_limit=purchase_limit,
-                         kyc_verified=kyc_verified)
+                         kyc_verified=kyc_verified,
+                         products=category_products)
+
 @app.route('/product/34', methods=['GET', 'POST'])
 @check_blocked
 def product34():
