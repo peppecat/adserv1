@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Управление скидками Steam | Админ панель</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --danger: #FF0000;
+            --warning: #FFA500;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .admin-sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .admin-sidebar .nav-link {
+            color: var(--text-dark) !important;
+            padding: 0.75rem 1rem !important;
+            margin: 0.25rem 0;
+            border-radius: 6px;
+        }
+        
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .admin-sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+        
+        .discount-level-row {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .individual-discount-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            border-radius: 8px 8px 0 0 !important;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25);
+        }
+        
+        .btn {
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68900;
+            border-color: #e68900;
+            color: #111;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            border-color: var(--warning);
+            color: #111;
+        }
+        
+        .btn-outline-success {
+            color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-outline-success:hover {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-outline-warning {
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+        
+        .btn-outline-warning:hover {
+            background-color: var(--warning);
+            border-color: var(--warning);
+            color: #111;
+        }
+        
+        .btn-outline-danger {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .badge {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin">
+                            <i class="fas fa-cog me-1"></i> Админ панель
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-percentage me-2"></i>Управление скидками Steam
+                </h1>
+                <p class="text-muted">Настройка комиссий и скидок для пополнения Steam</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 mb-4">
+                <div class="admin-sidebar">
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="/admin">
+                            <i class="fas fa-tachometer-alt"></i> Дашборд
+                        </a>
+                        <a class="nav-link" href="/admin/users">
+                            <i class="fas fa-users"></i> Пользователи
+                        </a>
+                        <a class="nav-link" href="/admin/finances">
+                            <i class="fas fa-money-bill-wave"></i> Средства
+                        </a>
+                        <a class="nav-link" href="/admin/orders">
+                            <i class="fas fa-clipboard-list"></i> Заказы
+                        </a>
+                        <a class="nav-link" href="/admin/payment_settings">
+                            <i class="fas fa-wallet"></i> Прием средств
+                        </a>
+                        <a class="nav-link active" href="/admin/steam_discounts">
+                            <i class="fas fa-percentage"></i> Скидки Steam
+                        </a>
+                        <a class="nav-link" href="/admin/data_management">
+                            <i class="fas fa-database"></i> Управление данными
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Базовая комиссия -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-cog me-2"></i>Базовая комиссия
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted mb-4">
+                            Базовая комиссия применяется ко всем пополнениям Steam после применения скидок.
+                        </p>
+                        <form id="baseFeeForm">
+                            <div class="row align-items-end">
+                                <div class="col-md-6">
+                                    <label class="form-label">Комиссия (%)</label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="baseFeeInput"
+                                           value="{{ steam_base_fee }}"
+                                           min="0" 
+                                           max="100" 
+                                           step="0.1"
+                                           required>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-save me-2"></i>Обновить комиссию
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Уровни скидок по балансу -->
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-line me-2"></i>Уровни скидок по балансу
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted mb-4">
+                            Настройте автоматические скидки в зависимости от общего баланса пользователя.
+                            Скидки применяются последовательно - выбирается максимальная доступная скидка.
+                        </p>
+                        
+                        <div id="discountLevelsContainer">
+                            {% for level in discount_levels %}
+                            <div class="discount-level-row">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-5">
+                                        <label class="form-label">Минимальный баланс ($)</label>
+                                        <input type="number" 
+                                               class="form-control threshold-input"
+                                               value="{{ level[0] }}"
+                                               min="0" 
+                                               step="1"
+                                               required>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label">Скидка (%)</label>
+                                        <input type="number" 
+                                               class="form-control discount-input"
+                                               value="{{ level[1] }}"
+                                               min="0" 
+                                               max="100" 
+                                               step="0.1"
+                                               required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-outline-danger remove-level-btn w-100" {% if loop.first %}disabled{% endif %}>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-outline-success me-2" id="addLevelBtn">
+                                <i class="fas fa-plus me-2"></i>Добавить уровень
+                            </button>
+                            <button type="button" class="btn btn-success" id="saveLevelsBtn">
+                                <i class="fas fa-save me-2"></i>Сохранить все уровни
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Индивидуальные скидки -->
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-user-tag me-2"></i>Индивидуальные скидки
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted mb-4">
+                            Установите персональные скидки для конкретных пользователей. 
+                            Эти скидки имеют приоритет над автоматическими скидками по балансу.
+                        </p>
+                        
+                        <!-- Форма добавления индивидуальной скидки -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">Добавить индивидуальную скидку</h6>
+                                <form id="addIndividualDiscountForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-5">
+                                            <label class="form-label">Пользователь</label>
+                                            <select class="form-select" id="userSelect" required>
+                                                <option value="">Выберите пользователя...</option>
+                                                {% for username in all_usernames %}
+                                                <option value="{{ username }}">{{ username }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label">Скидка (%)</label>
+                                            <input type="number" 
+                                                   class="form-control" 
+                                                   id="individualDiscountInput"
+                                                   min="0" 
+                                                   max="100" 
+                                                   step="0.1"
+                                                   required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-warning w-100 mt-4">
+                                                <i class="fas fa-plus me-2"></i>Добавить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Список индивидуальных скидок -->
+                        <h6 class="mb-3">Текущие индивидуальные скидки</h6>
+                        <div id="individualDiscountsList">
+                            {% if individual_discounts %}
+                                {% for username, discount in individual_discounts.items() %}
+                                <div class="individual-discount-card">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <strong class="text-dark">{{ username }}</strong>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span class="badge bg-success fs-6">{{ discount }}%</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger remove-individual-btn"
+                                                    data-username="{{ username }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted text-center py-4">
+                                    <i class="fas fa-info-circle me-2"></i>Индивидуальные скидки не настроены
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if individual_discounts %}
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-outline-danger" id="resetAllIndividualBtn">
+                                <i class="fas fa-trash me-2"></i>Удалить все индивидуальные скидки
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Обновление базовой комиссии
+        document.getElementById('baseFeeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const baseFee = parseFloat(document.getElementById('baseFeeInput').value);
+            
+            fetch('/admin/steam_discounts/update_base_fee', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ base_fee: baseFee })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при обновлении комиссии');
+            });
+        });
+
+        // Добавление нового уровня скидки
+        document.getElementById('addLevelBtn').addEventListener('click', function() {
+            const container = document.getElementById('discountLevelsContainer');
+            const newLevel = document.createElement('div');
+            newLevel.className = 'discount-level-row';
+            newLevel.innerHTML = `
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-5">
+                        <label class="form-label">Минимальный баланс ($)</label>
+                        <input type="number" 
+                               class="form-control threshold-input"
+                               value="0"
+                               min="0" 
+                               step="1"
+                               required>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">Скидка (%)</label>
+                        <input type="number" 
+                               class="form-control discount-input"
+                               value="0"
+                               min="0" 
+                               max="100" 
+                               step="0.1"
+                               required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-outline-danger remove-level-btn w-100">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newLevel);
+            
+            // Добавляем обработчик для новой кнопки удаления
+            newLevel.querySelector('.remove-level-btn').addEventListener('click', function() {
+                newLevel.remove();
+            });
+        });
+
+        // Удаление уровня скидки
+        document.querySelectorAll('.remove-level-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.disabled) {
+                    this.closest('.discount-level-row').remove();
+                }
+            });
+        });
+
+        // Сохранение всех уровней скидок
+        document.getElementById('saveLevelsBtn').addEventListener('click', function() {
+            const levels = [];
+            const levelRows = document.querySelectorAll('.discount-level-row');
+            
+            levelRows.forEach(row => {
+                const threshold = parseFloat(row.querySelector('.threshold-input').value);
+                const discount = parseFloat(row.querySelector('.discount-input').value);
+                levels.push([threshold, discount]);
+            });
+            
+            // Сортируем по порогу
+            levels.sort((a, b) => a[0] - b[0]);
+            
+            fetch('/admin/steam_discounts/update_levels', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ discount_levels: levels })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при сохранении уровней скидок');
+            });
+        });
+
+        // Добавление индивидуальной скидки
+        document.getElementById('addIndividualDiscountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('userSelect').value;
+            const discount = parseFloat(document.getElementById('individualDiscountInput').value);
+            
+            fetch('/admin/steam_discounts/add_individual', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, discount })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при добавлении индивидуальной скидки');
+            });
+        });
+
+        // Удаление индивидуальной скидки
+        document.querySelectorAll('.remove-individual-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const username = this.dataset.username;
+                
+                if (confirm(`Удалить индивидуальную скидку для пользователя ${username}?`)) {
+                    fetch(`/admin/steam_discounts/remove_individual/${username}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            location.reload();
+                        } else {
+                            alert('Ошибка: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Произошла ошибка при удалении индивидуальной скидки');
+                    });
+                }
+            });
+        });
+
+        // Сброс всех индивидуальных скидок
+        document.getElementById('resetAllIndividualBtn')?.addEventListener('click', function() {
+            if (confirm('Вы уверены, что хотите удалить ВСЕ индивидуальные скидки?')) {
+                fetch('/admin/steam_discounts/reset_individual', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Ошибка: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при сбросе индивидуальных скидок');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

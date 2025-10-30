@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Страница не найдена | KEYZPANEL</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --danger: #FF0000;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        
+        .error-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .error-code {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 500;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #FF8F00;
+            border-color: #FF8F00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #F7F7F7;
+            border-color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 576px) {
+            .error-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Анимация */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .error-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Дополнительная информация */
+        .error-help {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .help-list {
+            text-align: left;
+            margin: 0;
+            padding-left: 1rem;
+        }
+        
+        .help-list li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="error-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="error-card">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        
+                        <div class="error-code">
+                            404
+                        </div>
+                        
+                        <div class="error-title">
+                            Страница не найдена
+                        </div>
+                        
+                        <div class="error-message">
+                            К сожалению, запрашиваемая страница не существует или была перемещена.
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <a href="/dashboard" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i>На главную
+                            </a>
+                            <button onclick="history.back()" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Назад
+                            </button>
+                        </div>
+                        
+                        <div class="error-help">
+                            <p class="text-muted mb-2">Что можно сделать:</p>
+                            <ul class="help-list">
+                                <li>Проверьте правильность введенного адреса</li>
+                                <li>Вернитесь на предыдущую страницу</li>
+                                <li>Перейдите на главную страницу</li>
+                                <li>Если проблема повторяется, свяжитесь с поддержкой</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Автоматический редирект на главную через 30 секунд
+        setTimeout(function() {
+            window.location.href = '/dashboard';
+        }, 30000);
+        
+        // Показ таймера редиректа
+        document.addEventListener('DOMContentLoaded', function() {
+            let seconds = 30;
+            const timerElement = document.createElement('div');
+            timerElement.className = 'text-muted mt-3 small';
+            timerElement.innerHTML = `Автоматический переход на главную через <span id="countdown">${seconds}</span> секунд`;
+            
+            document.querySelector('.error-card').appendChild(timerElement);
+            
+            const countdown = setInterval(function() {
+                seconds--;
+                document.getElementById('countdown').textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

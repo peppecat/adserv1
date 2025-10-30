@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользовательское соглашение - KeyzPanel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --info: #0066C0;
+            --warning: #FFC107;
+            --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #FF9900 0%, #FF8F00 100%);
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .section {
+            padding: 3rem 0;
+        }
+        
+        .section-dark {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .terms-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .terms-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .terms-section h3 {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+        
+        .terms-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .terms-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .terms-list li:before {
+            content: '•';
+            position: absolute;
+            left: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, #fff3e6 0%, #ffe6cc 100%);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .important-note h4 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            padding: 2rem 0;
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .terms-content {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL.COM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn-success me-2" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/register">
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="section">
+            <div class="terms-content">
+                <h2 class="section-title">Пользовательское соглашение</h2>
+                
+                <div class="important-note">
+                    <h4><i class="fas fa-exclamation-circle me-2"></i>Важная информация</h4>
+                    <p class="mb-0">Настоящее Пользовательское соглашение определяет правила и условия использования нашего веб-сайта и услуг.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h3>1. Общие положения</h3>
+                    <ul class="terms-list">
+                        <li>Пользователи должны соблюдать настоящее Соглашение для доступа и использования веб-сайта.</li>
+                        <li>Администрация оставляет за собой право изменять настоящее Соглашение в любое время.</li>
+                        <li>Пользователи несут ответственность за регулярное ознакомление с обновлениями Соглашения.</li>
+                        <li>Продолжение использования веб-сайта означает принятие обновленного Соглашения.</li>
+                        <li>Пользователи должны быть не моложе 14 лет для использования веб-сайта.</li>
+                        <li>Веб-сайт не несет ответственности за контент третьих сторон, ссылки на который размещены на его страницах.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>2. Обязанности пользователей</h3>
+                    <ul class="terms-list">
+                        <li>Пользователи должны предоставлять точную и актуальную информацию при регистрации.</li>
+                        <li>Пользователи обязаны предоставлять любую информацию касательно своего аккаунта по требованию администрации.</li>
+                        <li>В случае предоставления недостоверной информации или ее сокрытия аккаунт будет заблокирован без возврата средств.</li>
+                        <li>Пользователи не должны заниматься мошенничеством или незаконной деятельностью на веб-сайте.</li>
+                        <li>Пользователи должны уважать права интеллектуальной собственности и не распространять защищенный авторским правом контент без разрешения.</li>
+                        <li>Пользователи не должны использовать ботов, скрипты или автоматизацию для доступа к услугам веб-сайта или их манипуляции.</li>
+                        <li>Пользователи несут ответственность за сохранение конфиденциальности своих учетных данных.</li>
+                        <li>Использование технологий скрытия местоположения, включая VPN и анонимайзеры, может привести к блокировке аккаунта и отказу в обслуживании.</li>
+                        <li>Администрация оставляет за собой право приостанавливать или удалять учетные записи, нарушающие настоящее Соглашение.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>3. Оплата и возвраты</h3>
+                    <ul class="terms-list">
+                        <li>Все транзакции являются окончательными, если не указано иное.</li>
+                        <li>Возвраты средств доступны только в исключительных случаях по усмотрению Администрации.</li>
+                        <li>Мошеннические транзакции и связанные с ними операции будут переданы в соответствующие органы.</li>
+                        <li>Администрация не несет ответственности за колебания обменных курсов валют.</li>
+                        <li>Пользователи несут ответственность за правильность своих платежных реквизитов.</li>
+                        <li>Оспаривание платежей приведет к приостановке учетной записи и, при необходимости, к юридическим последствиям.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>4. Запрещенная деятельность</h3>
+                    <ul class="terms-list">
+                        <li>Пользователям запрещено заниматься спамом или рассылкой несанкционированных сообщений.</li>
+                        <li>Взлом, фишинг и любые попытки получения несанкционированного доступа к данным веб-сайта строго запрещены.</li>
+                        <li>Пользователям запрещено выдавать себя за других лиц или организации.</li>
+                        <li>Запрещено распространение вредоносного программного обеспечения через веб-сайт.</li>
+                        <li>Любая попытка манипулирования функциональностью веб-сайта приведет к немедленному прекращению действия учетной записи.</li>
+                        <li>Администрация оставляет за собой право отслеживать активность и принимать меры против нарушителей.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>5. Политика конфиденциальности</h3>
+                    <ul class="terms-list">
+                        <li>Веб-сайт собирает и обрабатывает персональные данные в соответствии с Политикой конфиденциальности.</li>
+                        <li>Персональные данные пользователей не будут проданы или переданы третьим лицам.</li>
+                        <li>Пользователи могут запросить удаление своих данных, обратившись в службу поддержки.</li>
+                        <li>Веб-сайт использует файлы cookie для улучшения пользовательского опыта.</li>
+                        <li>Пользователи могут отказаться от определенных практик сбора данных через настройки браузера.</li>
+                        <li>Приняты меры безопасности для защиты информации пользователей.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>6. Разрешение споров</h3>
+                    <ul class="terms-list">
+                        <li>Все споры должны разрешаться путем переговоров, когда это возможно.</li>
+                        <li>Если спор не может быть разрешен полюбовно, он будет урегулирован в соответствии с применимыми законами.</li>
+                        <li>Администрация оставляет за собой право принимать окончательные решения относительно споров по учетным записям.</li>
+                        <li>Пользователи соглашаются отказаться от коллективных исков против Администрации.</li>
+                        <li>Место рассмотрения юридических споров определяется Администрацией.</li>
+                        <li>Веб-сайт не несет ответственности за действия третьих лиц, влияющие на учетные записи пользователей.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>7. Прекращение действия и приостановка</h3>
+                    <ul class="terms-list">
+                        <li>Администрация может прекратить или приостановить действие учетных записей без предварительного уведомления.</li>
+                        <li>Пользователи, нарушающие настоящее Соглашение, не имеют права на возврат средств.</li>
+                        <li>Пользователи могут запросить прекращение действия учетной записи, обратившись в службу поддержки.</li>
+                        <li>Администрация оставляет за собой право восстанавливать приостановленные учетные записи при определенных условиях.</li>
+                        <li>Пользователям запрещено создавать несколько учетных записей для обхода ограничений.</li>
+                        <li>В случаях мошенничества могут быть предприняты юридические действия против нарушившего пользователя.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>8. Заключительные положения</h3>
+                    <ul class="terms-list">
+                        <li>Если какое-либо положение настоящего Соглашения будет признано недействительным, остальные положения остаются в силе.</li>
+                        <li>Администрация оставляет за собой право обновлять настоящее Соглашение в любое время.</li>
+                        <li>Продолжение использования веб-сайта означает согласие с последней версией Соглашения.</li>
+                        <li>Пользователи должны обращаться в службу поддержки по любым вопросам, касающимся настоящего Соглашения.</li>
+                        <li>Веб-сайт не несет ответственности за временные простои во время to технического обслуживания.</li>
+                        <li>Настоящее Соглашение представляет собой полное соглашение между пользователями и Администрацией.</li>
+                    </ul>
+                </div>
+
+                <div class="important-note">
+                    <h4><i class="fas fa-check-circle me-2"></i>Согласие с условиями</h4>
+                    <p class="mb-0"><strong>Используя этот веб-сайт, вы соглашаетесь с настоящими Условиями использования.</strong></p>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Вернуться на главную
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="copyright mb-3">&copy; 2025 KEYZPANEL.COM. Все права защищены.</p>
+                    <nav>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item"><a href="/terms_of_use">Пользовательское соглашение</a></li>
+                            <li class="list-inline-item"><a href="/user_agreement">Политика конфиденциальности</a></li>
+                            <li class="list-inline-item"><a href="/support">Поддержка</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Пополнение Steam кошелька | KEYZPANEL</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --danger: #FF0000;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            border-radius: 4px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.2);
+        }
+        
+        .input-group-text {
+            background-color: #F7F7F7;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #FF8F00;
+            border-color: #FF8F00;
+        }
+        
+        .processing-time {
+            background-color: #F7F7F7;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: #F7F7F7;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 0.75rem;
+        }
+        
+        .table td {
+            padding: 0.75rem;
+            vertical-align: middle;
+            border-color: var(--border-color);
+        }
+        
+        .status-current {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            color: var(--success);
+        }
+        
+        .status-locked {
+            color: var(--text-light);
+        }
+        
+        .current-level {
+            background-color: #FFF8E6 !important;
+        }
+        
+        .balance-info {
+            background-color: #F7F7F7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        #button-steam {
+            width: 100%;
+            padding: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        #button-steam:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .modal-content {
+            border-radius: 8px;
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* User info card styles */
+        .user-info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-balance {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .kyc-alert {
+            background-color: #FFF3F3;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .purchase-limit-info {
+            background-color: #F0F7FF;
+            border-left: 4px solid #0066CC;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-toggler {
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Amazon-like breadcrumb */
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            font-size: 0.85rem;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        /* Price styling */
+        .price {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* Section titles */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* KYC Modal Styles */
+        .kyc-step {
+            display: none;
+        }
+        
+        .kyc-step.active {
+            display: block;
+        }
+        
+        .document-option {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .document-option:hover {
+            border-color: var(--primary);
+            background-color: #FFF8E6;
+        }
+        
+        .document-option.selected {
+            border-color: var(--primary);
+            background-color: #FFF8E6;
+        }
+        
+        .document-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Currency conversion styles */
+        .currency-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            background-color: #F7F7F7;
+            transition: all 0.2s;
+        }
+
+        .currency-card:hover {
+            border-color: var(--primary);
+            background-color: #FFF8E6;
+        }
+
+        .currency-flag {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .currency-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .currency-rate {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .currency-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Calculation info styles */
+        .calculation-info {
+            background-color: #F0F7FF;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .calculation-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .calculation-row:last-child {
+            margin-bottom: 0;
+            border-top: 1px solid #DDD;
+            padding-top: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .discount-positive {
+            color: var(--success);
+        }
+        
+        .fee-negative {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link " href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">
+                            <i class="fas fa-user me-1"></i> Аккаунт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my_store">
+                            <i class="fas fa-store me-1"></i> Мой магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reseller">
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div class="row mb-3">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="/dashboard">Магазин</a></li>
+                        <li class="breadcrumb-item active">Пополнение Steam</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- User Info Card -->
+        <div class="user-info-card d-flex align-items-center mb-4">
+            <div class="user-avatar">
+                {{ username[0].upper() }}
+            </div>
+            <div class="user-details">
+                <div class="user-name">{{ username }}</div>
+                <div class="user-balance">
+                    Баланс: ${{ "{:,.2f}".format(total_balance) }}
+                    {% if kyc_verified %}
+                        <span class="badge bg-success ms-2">KYC Verified</span>
+                    {% endif %}
+                    {% if individual_discount is not none %}
+                        <span class="badge bg-warning ms-2">Individual Discount: {{ individual_discount }}%</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h2 class="h5 mb-0">Пополнение Steam кошелька</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <input type="hidden" name="csrfmiddlewaretoken" value="0qKwK9eT1KHhkgjMi1aNPpYmTq9f2GgJgswQ5zt7gcxyZLcQxU8BuuPc0U79eNEf">
+                            <input type="hidden" id="currentDiscount" value="{{ current_discount }}">
+                            <input type="hidden" id="baseFee" value="{{ steam_base_fee }}">
+                            <input type="hidden" id="totalBalance" value="{{ total_balance }}">
+                            <input type="hidden" id="totalExpenses" value="{{ expenses }}">
+                            <input type="hidden" id="maxAmount" value="{{ max_amount }}">
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="steamLogin" class="form-label">Логин Steam</label>
+                                    <input type="text" name="steamLogin" id="steamLogin" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="amount" class="form-label">Сумма пополнения (USD)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" name="amount" id="amount" 
+                                               class="form-control" 
+                                               step="0.01" 
+                                               min="0.01" 
+                                               max="{{ max_amount }}" 
+                                               value="0.13" 
+                                               required>
+                                    </div>
+                                    <small class="text-muted">Макс: ${{ max_amount }}</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Блок расчета суммы -->
+                            <div class="calculation-info" id="calculationInfo" style="display: none;">
+                                <div class="calculation-row">
+                                    <span>Сумма пополнения:</span>
+                                    <span id="calcRequestedAmount">$0.00</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>Скидка (<span id="calcDiscountPercent">0</span>%):</span>
+                                    <span class="discount-positive" id="calcDiscountAmount">-$0.00</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>Комиссия (+<span id="calcFeePercent">0</span>%):</span>
+                                    <span class="fee-negative" id="calcFeeAmount">+$0.00</span>
+                                </div>
+                                <div class="calculation-row">
+                                    <span>Итого к списанию:</span>
+                                    <span id="calcFinalAmount">$0.00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="processing-time">
+                                <p class="mb-0"><i class="fas fa-shipping-fast me-2"></i>Время доставки: <strong>2-3 минуты</strong></p>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" id="button-steam" class="btn btn-primary" {% if kyc_required %}disabled{% endif %}>
+                                    <i class="fas fa-cart-plus me-2"></i>Рассчитать сумму
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Блок конвертации валют -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="h5 mb-0">Конвертация валют</h3>
+                        <small class="text-muted" id="exchange-rate-time">Курс обновляется каждые 10 минут</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="currency-card">
+                                    <div class="currency-flag">🇷🇺</div>
+                                    <div class="currency-info">
+                                        <div class="currency-name">Российский рубль (RUB)</div>
+                                        <div class="currency-rate" id="rub-rate">Загрузка...</div>
+                                        <div class="currency-amount" id="rub-amount">0.00 ₽</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="currency-card">
+                                    <div class="currency-flag">🇺🇦</div>
+                                    <div class="currency-info">
+                                        <div class="currency-name">Украинская гривна (UAH)</div>
+                                        <div class="currency-rate" id="uah-rate">Загрузка...</div>
+                                        <div class="currency-amount" id="uah-amount">0.00 ₴</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="currency-card">
+                                    <div class="currency-flag">🇰🇿</div>
+                                    <div class="currency-info">
+                                        <div class="currency-name">Казахстанский тенге (KZT)</div>
+                                        <div class="currency-rate" id="kzt-rate">Загрузка...</div>
+                                        <div class="currency-amount" id="kzt-amount">0.00 ₸</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h5 mb-0">Программа лояльности</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if individual_discount is not none %}
+                        <div class="alert alert-info mb-4">
+                            <h5><i class="fas fa-star me-2"></i>Индивидуальная скидка</h5>
+                            <p class="mb-0">
+                                Вам предоставлена индивидуальная скидка <strong>{{ individual_discount }}%</strong> 
+                                вне зависимости от вашего баланса.
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="table-responsive">
+                            <table class="table mb-4">
+                                <thead>
+                                    <tr>
+                                        <th>Баланс</th>
+                                        <th>Скидка</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for level in discount_levels %}
+                                    <tr class="{% if total_balance >= level[0] and (loop.last or total_balance < discount_levels[loop.index][0]) %}current-level{% endif %}">
+                                        <td>${{ "{:,.0f}".format(level[0]) }}+</td>
+                                        <td>{{ level[1] }}%</td>
+                                        <td>
+                                            {% if total_balance >= level[0] %}
+                                                {% if loop.last or total_balance < discount_levels[loop.index][0] %}
+                                                    <span class="status-current"><i class="fas fa-circle-notch me-1"></i> Текущий</span>
+                                                {% else %}
+                                                    <span class="status-completed"><i class="fas fa-check-circle me-1"></i> Завершен</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="status-locked"><i class="fas fa-lock me-1"></i> Заблокирован</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="balance-info">
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <p class="mb-0"><strong>Ваш баланс:</strong> <span class="price">${{ "{:,.2f}".format(total_balance) }}</span></p>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <p class="mb-0"><strong>Базовая комиссия:</strong> <span class="price">+{{ steam_base_fee }}%</span></p>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <p class="mb-0"><strong>Ваша скидка:</strong> <span class="price">{{ current_discount }}%</span></p>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <p class="mb-0"><strong>Итоговая комиссия:</strong> 
+                                        <span class="price {% if (steam_base_fee - current_discount) > 0 %}text-danger{% else %}text-success{% endif %}">
+                                            {{ "%+.1f"|format(steam_base_fee - current_discount) }}%
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Ошибка</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="error-message">Недостаточно средств на вашем балансе.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        // Функция для расчета суммы с учетом скидки и комиссии
+        function calculateFinalAmount(requestedAmount, discountPercent, baseFeePercent) {
+            // Применяем скидку (уменьшаем сумму)
+            const amountAfterDiscount = requestedAmount * (1 - discountPercent / 100);
+            const discountAmount = requestedAmount - amountAfterDiscount;
+            
+            // Применяем комиссию (увеличиваем сумму)
+            const finalAmount = amountAfterDiscount * (1 + baseFeePercent / 100);
+            const feeAmount = finalAmount - amountAfterDiscount;
+            
+            return {
+                requestedAmount: requestedAmount,
+                discountPercent: discountPercent,
+                discountAmount: discountAmount,
+                baseFeePercent: baseFeePercent,
+                feeAmount: feeAmount,
+                finalAmount: finalAmount,
+                amountAfterDiscount: amountAfterDiscount
+            };
+        }
+
+        // Функция для обновления блока расчета
+        function updateCalculationInfo() {
+            const amountInput = document.getElementById('amount');
+            const currentDiscount = parseFloat(document.getElementById('currentDiscount').value) || 0;
+            const baseFee = parseFloat(document.getElementById('baseFee').value) || 0;
+            const calculationInfo = document.getElementById('calculationInfo');
+            
+            if (amountInput && calculationInfo) {
+                const requestedAmount = parseFloat(amountInput.value) || 0;
+                
+                if (requestedAmount > 0) {
+                    const calculation = calculateFinalAmount(requestedAmount, currentDiscount, baseFee);
+                    
+                    // Обновляем значения в блоке расчета
+                    document.getElementById('calcRequestedAmount').textContent = `$${calculation.requestedAmount.toFixed(2)}`;
+                    document.getElementById('calcDiscountPercent').textContent = calculation.discountPercent.toFixed(1);
+                    document.getElementById('calcDiscountAmount').textContent = `-$${calculation.discountAmount.toFixed(2)}`;
+                    document.getElementById('calcFeePercent').textContent = calculation.baseFeePercent.toFixed(1);
+                    document.getElementById('calcFeeAmount').textContent = `+$${calculation.feeAmount.toFixed(2)}`;
+                    document.getElementById('calcFinalAmount').textContent = `$${calculation.finalAmount.toFixed(2)}`;
+                    
+                    // Показываем блок расчета
+                    calculationInfo.style.display = 'block';
+                    
+                    return calculation;
+                } else {
+                    // Скрываем блок расчета если сумма 0
+                    calculationInfo.style.display = 'none';
+                }
+            }
+            return null;
+        }
+
+        // Функция для обновления текста кнопки с учетом скидки и комиссии
+        function updateButtonText() {
+            const amountInput = document.getElementById('amount');
+            const steamLoginInput = document.getElementById('steamLogin');
+            const button = document.getElementById('button-steam');
+            const currentDiscount = parseFloat(document.getElementById('currentDiscount').value) || 0;
+            const baseFee = parseFloat(document.getElementById('baseFee').value) || 0;
+            const totalBalance = parseFloat(document.getElementById('totalBalance').value) || 0;
+            
+            if (amountInput && steamLoginInput && button) {
+                const amount = parseFloat(amountInput.value) || 0;
+                const steamLogin = steamLoginInput.value.trim();
+                
+                if (amount > 0 && steamLogin) {
+                    // Рассчитываем финальную сумму
+                    const calculation = calculateFinalAmount(amount, currentDiscount, baseFee);
+                    const finalAmount = calculation.finalAmount;
+                    
+                    // Проверяем достаточно ли средств
+                    const hasSufficientFunds = totalBalance >= finalAmount;
+                    
+                    let buttonText = `<i class="fas fa-cart-plus me-2"></i>`;
+                    if (hasSufficientFunds) {
+                        buttonText += `Оплатить $${finalAmount.toFixed(2)}`;
+                    } else {
+                        buttonText += `Недостаточно средств`;
+                    }
+                    
+                    // Добавляем информацию о скидке и комиссии
+                    buttonText += `<br><small class="fw-normal">`;
+                    if (currentDiscount > 0) {
+                        buttonText += ` Скидка: ${currentDiscount}%`;
+                    }
+                    if (baseFee > 0) {
+                        if (currentDiscount > 0) buttonText += ` •`;
+                        buttonText += ` Комиссия: +${baseFee}%`;
+                    }
+                    buttonText += `</small>`;
+                    
+                    button.innerHTML = buttonText;
+                    button.disabled = !steamLogin || amount <= 0 || !hasSufficientFunds;
+                    
+                    // Меняем цвет кнопки если недостаточно средств
+                    if (!hasSufficientFunds) {
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-danger');
+                    } else {
+                        button.classList.remove('btn-danger');
+                        button.classList.add('btn-primary');
+                    }
+                } else {
+                    button.innerHTML = `<i class="fas fa-cart-plus me-2"></i>Рассчитать сумму`;
+                    button.disabled = !steamLogin || amount <= 0;
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-primary');
+                }
+            }
+        }
+
+        // Функция для отправки запроса к нашему API для пополнения Steam
+        async function sendSteamTopup(amount, steamLogin) {
+            try {
+                console.log('Отправляем запрос на пополнение Steam...');
+                
+                const payload = {
+                    "amount": amount,
+                    "steamLogin": steamLogin
+                };
+                
+                const response = await fetch('/api/steam_topup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                console.log('Ответ от нашего API:', data);
+                
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+                
+                return data;
+                
+            } catch (error) {
+                console.error('Ошибка при отправке запроса:', error);
+                throw error;
+            }
+        }
+
+        // Функция для получения курсов валют через наш сервер
+        async function getExchangeRates() {
+            const currencies = [
+                { code: 'rub', symbol: '₽' },
+                { code: 'uah', symbol: '₴' },
+                { code: 'kzt', symbol: '₸' }
+            ];
+
+            try {
+                console.log('Запрашиваем курсы валют...');
+                const response = await fetch('/api/exchange_rates');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Получены курсы:', data);
+                    
+                    for (const currency of currencies) {
+                        if (data[currency.code]) {
+                            const rateData = data[currency.code];
+                            
+                            // Сохраняем курс в localStorage
+                            localStorage.setItem(`exchange_rate_${currency.code}`, JSON.stringify(rateData));
+                            
+                            // Обновляем отображение курса
+                            updateCurrencyDisplay(currency.code, rateData);
+                            
+                            // Обновляем конвертацию если есть сумма
+                            updateCurrencyConversion(currency.code, rateData.rate, currency.symbol);
+                        }
+                    }
+                    
+                    // Обновляем время последнего обновления
+                    updateLastUpdateTime();
+                    
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Ошибка при получении курсов:', error);
+                // Используем сохраненные данные
+                loadSavedRates();
+            }
+        }
+
+        // Функция для обновления отображения курса
+        function updateCurrencyDisplay(currencyCode, rateData) {
+            const rateElement = document.getElementById(`${currencyCode}-rate`);
+            const currencies = { rub: '₽', uah: '₴', kzt: '₸' };
+            
+            if (rateData.fake) {
+                rateElement.textContent = `1 USD = ${rateData.rate.toFixed(2)} ${currencies[currencyCode]} (тест)`;
+                rateElement.style.color = 'orange';
+            } else {
+                rateElement.textContent = `1 USD = ${rateData.rate.toFixed(2)} ${currencies[currencyCode]}`;
+                rateElement.style.color = '';
+            }
+        }
+
+        // Функция для обновления времени последнего обновления
+        function updateLastUpdateTime() {
+            const now = new Date();
+            document.getElementById('exchange-rate-time').textContent = 
+                `Курс обновлен: ${now.toLocaleTimeString()}`;
+        }
+
+        // Функция для обновления конвертированных сумм
+        function updateCurrencyConversion(currencyCode, rate, symbol) {
+            const amountInput = document.getElementById('amount');
+            if (amountInput && amountInput.value) {
+                const usdAmount = parseFloat(amountInput.value) || 0;
+                const convertedAmount = usdAmount * parseFloat(rate);
+                document.getElementById(`${currencyCode}-amount`).textContent = `${convertedAmount.toFixed(2)} ${symbol}`;
+            }
+        }
+
+        // Функция для загрузки сохраненных курсов
+        function loadSavedRates() {
+            const currencies = [
+                { code: 'rub', symbol: '₽' },
+                { code: 'uah', symbol: '₴' },
+                { code: 'kzt', symbol: '₸' }
+            ];
+            
+            let hasSavedData = false;
+            
+            for (const currency of currencies) {
+                const savedRate = localStorage.getItem(`exchange_rate_${currency.code}`);
+                if (savedRate) {
+                    hasSavedData = true;
+                    const rateData = JSON.parse(savedRate);
+                    updateCurrencyDisplay(currency.code, rateData);
+                    updateCurrencyConversion(currency.code, rateData.rate, currency.symbol);
+                } else {
+                    document.getElementById(`${currency.code}-rate`).textContent = 'Загрузка...';
+                }
+            }
+            
+            // Если нет сохраненных данных, используем фиктивные
+            if (!hasSavedData) {
+                const fakeRates = { rub: 90.5, uah: 38.2, kzt: 450.3 };
+                for (const currency of currencies) {
+                    document.getElementById(`${currency.code}-rate`).textContent = 
+                        `1 USD = ${fakeRates[currency.code].toFixed(2)} ${currency.symbol} (оффлайн)`;
+                    document.getElementById(`${currency.code}-rate`).style.color = 'orange';
+                    updateCurrencyConversion(currency.code, fakeRates[currency.code], currency.symbol);
+                }
+            }
+            
+            updateLastUpdateTime();
+        }
+
+        // Обработчик изменения суммы и логина
+        function initializeFormHandlers() {
+            const amountInput = document.getElementById('amount');
+            const steamLoginInput = document.getElementById('steamLogin');
+            const form = document.querySelector('form');
+            
+            // Обновляем расчет при изменении суммы или логина
+            if (amountInput && steamLoginInput) {
+                amountInput.addEventListener('input', function() {
+                    updateCalculationInfo();
+                    updateButtonText();
+                    
+                    // Также обновляем конвертацию валют
+                    const currencies = [
+                        { code: 'rub', symbol: '₽' },
+                        { code: 'uah', symbol: '₴' },
+                        { code: 'kzt', symbol: '₸' }
+                    ];
+                    
+                    for (const currency of currencies) {
+                        const savedRate = localStorage.getItem(`exchange_rate_${currency.code}`);
+                        if (savedRate) {
+                            const rateData = JSON.parse(savedRate);
+                            updateCurrencyConversion(currency.code, rateData.rate, currency.symbol);
+                        }
+                    }
+                });
+                
+                steamLoginInput.addEventListener('input', function() {
+                    updateButtonText();
+                });
+                
+                // Инициализируем при загрузке
+                updateCalculationInfo();
+                updateButtonText();
+            }
+            
+            // Обработчик отправки формы
+            if (form) {
+                form.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    
+                    const amountInput = document.getElementById('amount');
+                    const steamLoginInput = document.getElementById('steamLogin');
+                    const button = document.getElementById('button-steam');
+                    
+                    if (!amountInput || !steamLoginInput || !button) {
+                        return;
+                    }
+                    
+                    const amount = parseFloat(amountInput.value);
+                    const steamLogin = steamLoginInput.value.trim();
+                    
+                    if (!amount || amount <= 0 || !steamLogin) {
+                        alert('Пожалуйста, заполните все поля корректно');
+                        return;
+                    }
+                    
+                    // Блокируем кнопку на время обработки
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Обработка...';
+                    button.disabled = true;
+                    
+                    try {
+                        // Отправляем запрос к нашему API
+                        const result = await sendSteamTopup(amount, steamLogin);
+                        
+                        if (result.success) {
+                            // Успешное пополнение
+                            let successMessage = `Пополнение успешно!\n`;
+                            successMessage += `Транзакция: ${result.transaction_id}\n`;
+                            successMessage += `Списано: $${result.amount_paid.toFixed(2)}\n`;
+                            successMessage += `Зачислено: $${result.amount_received.toFixed(2)}\n`;
+                            
+                            if (result.discount_applied > 0) {
+                                successMessage += `Скидка: ${result.discount_applied}%\n`;
+                            }
+                            if (result.base_fee_applied > 0) {
+                                successMessage += `Комиссия: +${result.base_fee_applied}%`;
+                            }
+                            
+                            alert(successMessage);
+                            
+                            // Перезагружаем страницу для обновления баланса
+                            window.location.reload();
+                        } else {
+                            throw new Error(result.error || 'Unknown error');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Ошибка:', error);
+                        alert(`Ошибка: ${error.message}`);
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }
+                });
+            }
+        }
+
+        // Обработчик изменения суммы для конвертации валют
+        function initializeCurrencyConverter() {
+            const amountInput = document.getElementById('amount');
+            
+            // Сначала загружаем сохраненные курсы для быстрого отображения
+            loadSavedRates();
+            
+            // Затем делаем запрос к серверу для обновления курсов (если нужно)
+            getExchangeRates();
+            
+            // Обновляем конвертацию при изменении суммы
+            if (amountInput) {
+                amountInput.addEventListener('input', function() {
+                    const currencies = [
+                        { code: 'rub', symbol: '₽' },
+                        { code: 'uah', symbol: '₴' },
+                        { code: 'kzt', symbol: '₸' }
+                    ];
+                    
+                    for (const currency of currencies) {
+                        const savedRate = localStorage.getItem(`exchange_rate_${currency.code}`);
+                        if (savedRate) {
+                            const rateData = JSON.parse(savedRate);
+                            updateCurrencyConversion(currency.code, rateData.rate, currency.symbol);
+                        }
+                    }
+                });
+                
+                // Триггерим событие input для первоначального расчета
+                amountInput.dispatchEvent(new Event('input'));
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Инициализация конвертера валют и формы...');
+            initializeCurrencyConverter();
+            initializeFormHandlers();
+        });
+    </script>
+</body>
+</html>

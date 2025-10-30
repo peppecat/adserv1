@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Аккаунт | KEYZPANEL</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --danger: #FF0000;
+            --warning: #FFA500;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: #F7F7F7;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: var(--border-color);
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Status badges */
+        .status-completed {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .status-failed {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .status-processing {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+        }
+        
+        /* User info card styles */
+        .user-info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-balance {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* Balance cards */
+        .balance-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .balance-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .balance-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .balance-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .balance-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Stats cards */
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Payment method cards */
+        .payment-method {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary);
+            background-color: rgba(255, 153, 0, 0.05);
+        }
+        
+        .payment-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-toggler {
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Amazon-like breadcrumb */
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            font-size: 0.85rem;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        /* Price styling */
+        .price {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--border-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68900;
+            border-color: #e68900;
+            color: #111;
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/orders">
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/account">
+                            <i class="fas fa-user me-1"></i> Аккаунт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my_store">
+                            <i class="fas fa-store me-1"></i> Мой магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reseller">
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div class="row mb-3">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                        <li class="breadcrumb-item active">Аккаунт</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- User Info Card -->
+        <div class="user-info-card d-flex align-items-center mb-4">
+            <div class="user-avatar">
+                {{ username[0].upper() }}
+            </div>
+            <div class="user-details">
+                <div class="user-name">{{ username }}</div>
+                <div class="user-balance">
+                    Общий баланс: ${{ "{:,.2f}".format(total_balance) }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Balance Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card balance-card h-100">
+                    <div class="card-body text-center">
+                        <div class="balance-icon text-primary">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="balance-amount text-primary">
+                            ${{ "{:,.2f}".format(balances.get('card', 0)) }}
+                        </div>
+                        <div class="balance-label">Банковская карта</div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#topupModal" onclick="selectPaymentMethod('card')">
+                            <i class="fas fa-plus me-1"></i>Пополнить
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card balance-card h-100">
+                    <div class="card-body text-center">
+                        <div class="balance-icon text-success">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="balance-amount text-success">
+                            ${{ "{:,.2f}".format(balances.get('bep20', 0)) }}
+                        </div>
+                        <div class="balance-label">BEP20 (USDT)</div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#topupModal" onclick="selectPaymentMethod('bep20')">
+                            <i class="fas fa-plus me-1"></i>Пополнить
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card balance-card h-100">
+                    <div class="card-body text-center">
+                        <div class="balance-icon text-info">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="balance-amount text-info">
+                            ${{ "{:,.2f}".format(balances.get('ton', 0)) }}
+                        </div>
+                        <div class="balance-label">TON (USDT)</div>
+                        <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#topupModal" onclick="selectPaymentMethod('ton')">
+                            <i class="fas fa-plus me-1"></i>Пополнить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body">
+                        <div class="stat-number">{{ total_orders }}</div>
+                        <div class="stat-label">Всего заказов</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body">
+                        <div class="stat-number">${{ "{:,.2f}".format(total_expenses) }}</div>
+                        <div class="stat-label">Общие расходы</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Topup History -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">История пополнений</h2>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#topupModal">
+                    <i class="fas fa-plus me-1"></i>Пополнить баланс
+                </button>
+            </div>
+            <div class="card-body p-0">
+                {% if topup_history %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Сумма</th>
+                                <th>Метод оплаты</th>
+                                <th>Дата и время</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for topup in topup_history %}
+                            <tr>
+                                <td>
+                                    <span class="price">${{ "%.2f"|format(topup.amount) }}</span>
+                                </td>
+                                <td>
+                                    {% if topup.method == 'card' %}
+                                    <i class="fas fa-credit-card me-1"></i>Банковская карта
+                                    {% elif topup.method == 'bep20' %}
+                                    <i class="fab fa-bitcoin me-1"></i>BEP20 (USDT)
+                                    {% elif topup.method == 'ton' %}
+                                    <i class="fas fa-coins me-1"></i>TON (USDT)
+                                    {% else %}
+                                    {{ topup.method }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ topup.date }}
+                                    </small>
+                                </td>
+                                <td>
+                                    {% if topup.status == 'completed' %}
+                                    <span class="badge status-completed">
+                                        <i class="fas fa-check-circle me-1"></i>Завершено
+                                    </span>
+                                    {% elif topup.status == 'pending' %}
+                                    <span class="badge status-pending">
+                                        <i class="fas fa-clock me-1"></i>В обработке
+                                    </span>
+                                    {% elif topup.status == 'failed' %}
+                                    <span class="badge status-failed">
+                                        <i class="fas fa-times-circle me-1"></i>Ошибка
+                                    </span>
+                                    {% else %}
+                                    <span class="badge status-processing">
+                                        <i class="fas fa-sync-alt me-1"></i>Обрабатывается
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h4>История пополнений пуста</h4>
+                    <p class="text-muted">Пополните баланс, чтобы начать совершать покупки</p>
+                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#topupModal">
+                        <i class="fas fa-plus me-2"></i>Пополнить баланс
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Topup Modal -->
+    <div class="modal fade" id="topupModal" tabindex="-1" aria-labelledby="topupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="topupModalLabel">
+                        <i class="fas fa-wallet me-2"></i>Пополнение баланса
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/account">
+                    <div class="modal-body">
+                        <!-- Payment Method Selection -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Выберите метод оплаты:</label>
+                            <div class="row g-3">
+                                <div class="col-4">
+                                    <div class="payment-method text-center" id="cardMethod" onclick="selectPaymentMethod('card')">
+                                        <div class="payment-icon text-primary">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="small">Банковская карта</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="payment-method text-center" id="bep20Method" onclick="selectPaymentMethod('bep20')">
+                                        <div class="payment-icon text-success">
+                                            <i class="fab fa-bitcoin"></i>
+                                        </div>
+                                        <div class="small">BEP20 (USDT)</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="payment-method text-center" id="tonMethod" onclick="selectPaymentMethod('ton')">
+                                        <div class="payment-icon text-info">
+                                            <i class="fas fa-coins"></i>
+                                        </div>
+                                        <div class="small">TON (USDT)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="paymentMethod" name="payment_method" required>
+                        </div>
+                        
+                        <!-- Amount Input -->
+                        <div class="mb-3">
+                            <label for="amount" class="form-label fw-semibold">Сумма пополнения ($):</label>
+                            <input type="number" class="form-control" id="amount" name="amount" 
+                                   min="1" max="10000" step="0.01" placeholder="Введите сумму" required>
+                            <div class="form-text">Минимальная сумма: $1, Максимальная: $10,000</div>
+                        </div>
+                        
+                        <!-- Instructions based on selected method -->
+                        <div id="paymentInstructions" class="alert alert-info" style="display: none;">
+                            <h6 class="alert-heading">Инструкции по оплате:</h6>
+                            <div id="instructionsContent"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary" id="submitTopup" disabled>
+                            <i class="fas fa-paper-plane me-1"></i>Создать заявку
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <script>
+        let selectedMethod = null;
+        
+        function selectPaymentMethod(method) {
+            selectedMethod = method;
+            
+            // Remove selected class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selected class to chosen method
+            document.getElementById(method + 'Method').classList.add('selected');
+            
+            // Set hidden input value
+            document.getElementById('paymentMethod').value = method;
+            
+            // Enable submit button
+            document.getElementById('submitTopup').disabled = false;
+            
+            // Show payment instructions
+            showPaymentInstructions(method);
+        }
+        
+        function showPaymentInstructions(method) {
+            const instructions = document.getElementById('paymentInstructions');
+            const content = document.getElementById('instructionsContent');
+            
+            let instructionsText = '';
+            
+            switch(method) {
+                case 'card':
+                    instructionsText = `
+                        <p>Для пополнения баланса банковской картой:</p>
+                        <ol>
+                            <li>Создайте заявку на пополнение</li>
+                            <li>Дождитесь подтверждения от администратора</li>
+                            <li>После подтверждения вы получите реквизиты для оплаты</li>
+                            <li>Оплатите указанную сумму</li>
+                            <li>Баланс будет пополнен после подтверждения оплаты</li>
+                        </ol>
+                    `;
+                    break;
+                case 'bep20':
+                    instructionsText = `
+                        <p>Для пополнения баланса через BEP20 (USDT):</p>
+                        <ol>
+                            <li>Нажмите кнопку "Пополнить"</li>
+                            <li>Будет открыта страница оплаты с адресом кошелька</li>
+                            <li>Отправьте точную сумму USDT на указанный адрес в сети BEP20</li>
+                            <li>Нажмите кнопку "Я оплатил(а)" после отправки</li>
+                            <li>Баланс будет пополнен после подтверждения транзакции</li>
+                        </ol>
+                        <div class="alert alert-warning mt-2 mb-0">
+                            <small><i class="fas fa-exclamation-triangle me-1"></i> У вас есть 10 минут для завершения оплаты</small>
+                        </div>
+                    `;
+                    break;
+                case 'ton':
+                    instructionsText = `
+                        <p>Для пополнения баланса через TON (USDT):</p>
+                        <ol>
+                            <li>Нажмите кнопку "Пополнить"</li>
+                            <li>Будет открыта страница оплаты с адресом кошелька</li>
+                            <li>Отправьте точную сумму USDT на указанный адрес в сети TON</li>
+                            <li>Нажмите кнопку "Я оплатил(а)" после отправки</li>
+                            <li>Баланс будет пополнен после подтверждения транзакции</li>
+                        </ol>
+                        <div class="alert alert-warning mt-2 mb-0">
+                            <small><i class="fas fa-exclamation-triangle me-1"></i> У вас есть 10 минут для завершения оплаты</small>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            content.innerHTML = instructionsText;
+            instructions.style.display = 'block';
+        }
+        
+        // Form validation
+        document.getElementById('amount').addEventListener('input', function() {
+            const amount = parseFloat(this.value);
+            const submitBtn = document.getElementById('submitTopup');
+            
+            if (amount >= 1 && amount <= 10000 && selectedMethod) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Обработка отправки формы пополнения
+        document.getElementById('submitTopup').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const amount = document.getElementById('amount').value;
+            const method = document.getElementById('paymentMethod').value;
+            
+            if (!amount || !method) {
+                alert('Пожалуйста, выберите метод оплаты и укажите сумму');
+                return;
+            }
+            
+            // Для карты - стандартная отправка формы
+            if (method === 'card') {
+                document.querySelector('form').submit();
+                return;
+            }
+            
+            // Для BEP20 и TON - AJAX запрос для создания платежа
+            fetch('/payment/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                    method: method
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Ошибка: ' + data.error);
+                } else {
+                    // Закрываем модальное окно и перенаправляем на страницу оплаты
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('topupModal'));
+                    modal.hide();
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при создании платежа. Попробуйте еще раз.');
+            });
+        });
+
+        // Альтернативная обработка через событие формы (для совместимости)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const method = document.getElementById('paymentMethod').value;
+            
+            // Если метод BEP20 или TON, отменяем стандартную отправку и используем AJAX
+            if (method === 'bep20' || method === 'ton') {
+                e.preventDefault();
+                document.getElementById('submitTopup').click();
+            }
+            // Для карты - стандартная отправка продолжается
+        });
+        
+        // Initialize modal
+        const topupModal = document.getElementById('topupModal');
+        if (topupModal) {
+            topupModal.addEventListener('show.bs.modal', function() {
+                // Reset form when modal opens
+                selectedMethod = null;
+                document.getElementById('paymentMethod').value = '';
+                document.getElementById('amount').value = '';
+                document.getElementById('submitTopup').disabled = true;
+                document.querySelectorAll('.payment-method').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                document.getElementById('paymentInstructions').style.display = 'none';
+            });
+
+            // Обработка закрытия модального окна
+            topupModal.addEventListener('hidden.bs.modal', function() {
+                // Дополнительная очистка при закрытии
+                selectedMethod = null;
+                document.getElementById('paymentMethod').value = '';
+                document.getElementById('amount').value = '';
+            });
+        }
+
+        // Вспомогательные функции
+        function formatAmount(input) {
+            // Форматирование суммы при вводе
+            let value = input.value.replace(/[^\d.]/g, '');
+            let parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            if (parts[1] && parts[1].length > 2) {
+                value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
+            input.value = value;
+        }
+
+        // Добавляем форматирование для поля ввода суммы
+        document.getElementById('amount').addEventListener('input', function() {
+            formatAmount(this);
+        });
+
+        // Добавляем обработку клавиш для поля ввода
+        document.getElementById('amount').addEventListener('keypress', function(e) {
+            // Разрешаем только цифры, точку и управляющие клавиши
+            if (!/[0-9.]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab') {
+                e.preventDefault();
+            }
+        });
+
+        // Быстрый выбор популярных сумм (опционально)
+        function setQuickAmount(amount) {
+            document.getElementById('amount').value = amount;
+            document.getElementById('amount').dispatchEvent(new Event('input'));
+        }
+
+        // Автоматический выбор метода оплаты при клике на карточку баланса
+        window.selectPaymentMethodFromCard = function(method) {
+            selectPaymentMethod(method);
+            // Устанавливаем фокус на поле ввода суммы
+            setTimeout(() => {
+                document.getElementById('amount').focus();
+            }, 100);
+        }
+
+        // Показываем подсказки при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Добавляем быстрые суммы в модальное окно (опционально)
+            const quickAmounts = [10, 50, 100, 500];
+            const quickAmountsContainer = document.createElement('div');
+            quickAmountsContainer.className = 'mb-3';
+            quickAmountsContainer.innerHTML = `
+                <label class="form-label fw-semibold">Быстрый выбор суммы:</label>
+                <div class="d-flex gap-2 flex-wrap">
+                    ${quickAmounts.map(amount => 
+                        `<button type="button" class="btn btn-outline-secondary btn-sm" onclick="setQuickAmount(${amount})">$${amount}</button>`
+                    ).join('')}
+                </div>
+            `;
+            
+            const amountInput = document.getElementById('amount');
+            if (amountInput && amountInput.parentNode) {
+                amountInput.parentNode.insertBefore(quickAmountsContainer, amountInput);
+            }
+        });
+    </script>
+</body>
+</html>

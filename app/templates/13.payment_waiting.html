@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ожидание подтверждения | KEYZPANEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+        }
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+        }
+        .waiting-card {
+            max-width: 500px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="waiting-card pulse">
+            <div class="card-header text-center bg-warning text-dark">
+                <h4 class="mb-0"><i class="fas fa-clock me-2"></i>Ожидание подтверждения</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <!-- Анимация загрузки -->
+                <div class="spinner-border text-primary spinner mb-3" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+                
+                <h5 class="text-primary mb-3">Ожидаем получение вашего платежа</h5>
+                
+                <!-- Информация о платеже -->
+                <div class="alert alert-info text-start">
+                    <p class="mb-1"><strong>Метод оплаты:</strong> {{ method }}</p>
+                    <p class="mb-1"><strong>Сумма:</strong> ${{ amount }}</p>
+                    <p class="mb-0"><strong>Адрес:</strong> <small>{{ wallet_address }}</small></p>
+                </div>
+                
+                <p class="text-muted mb-4">
+                    Мы ожидаем поступления вашего платежа в сеть. 
+                    Обычно это занимает от 1 до 5 минут. 
+                    После подтверждения транзакции баланс будет пополнен автоматически.
+                </p>
+                
+                <!-- Кнопка возврата -->
+                <div class="d-grid">
+                    <a href="/account" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Вернуться в профиль
+                    </a>
+                </div>
+                
+                <small class="text-muted mt-3 d-block">
+                    Вы можете отслеживать статус пополнения в истории баланса
+                </small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

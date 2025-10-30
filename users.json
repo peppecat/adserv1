@@ -1,0 +1,93 @@
+{
+    "12345": {
+        "password": "qwerty12345",
+        "balance": {
+            "card": 0,
+            "ton": 3.0,
+            "bep20": 0
+        },
+        "orders": 0,
+        "expenses": 0,
+        "userorders": [],
+        "topups": [
+            {
+                "id": "acdc8ae2-01c2-47a7-b89d-02b7d5f804c9",
+                "amount": 3.0,
+                "method": "ton",
+                "date": "2025-10-28 17:28:08",
+                "timestamp": 1761661688.462584,
+                "status": "completed",
+                "wallet_address": "UQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N",
+                "payment_confirmed": true
+            },
+            {
+                "id": "69d7c996-a209-4d52-8904-6c5b3fba38ab",
+                "amount": 1.0,
+                "method": "bep20",
+                "date": "2025-10-28 19:21:54",
+                "timestamp": 1761668514.01959,
+                "status": "pending",
+                "wallet_address": "0x742d35Cc6634C0532925a3b8D4B5b875aD0B0000",
+                "payment_confirmed": false
+            },
+            {
+                "id": "dc1d2a97-beb7-4fff-acda-b2955acdd933",
+                "amount": 2.0,
+                "method": "bep20",
+                "date": "2025-10-28 19:22:07",
+                "timestamp": 1761668527.082701,
+                "status": "failed",
+                "wallet_address": "0x742d35Cc6634C0532925a3b8D4B5b875aD0B0000",
+                "payment_confirmed": false
+            }
+        ],
+        "status": "active",
+        "unbanned_by": "admin",
+        "unbanned_date": "2025-10-28 17:50:40",
+        "last_login": "2025-10-28 19:21:42"
+    },
+    "admin": {
+        "password": "12345",
+        "balance": {
+            "card": 0,
+            "ton": 0,
+            "bep20": 0
+        },
+        "orders": 0,
+        "expenses": 0,
+        "userorders": [],
+        "topups": [],
+        "status": "active",
+        "registration_date": "2025-10-28 17:46:18",
+        "last_login": "2025-10-30 03:40:54"
+    },
+    "qwerty1": {
+        "password": "qwerty1",
+        "balance": {
+            "card": 0,
+            "ton": 0,
+            "bep20": 0
+        },
+        "orders": 0,
+        "expenses": 0,
+        "userorders": [],
+        "topups": [],
+        "status": "active",
+        "registration_date": "2025-10-28 19:35:00"
+    },
+    "user2": {
+        "password": "user2",
+        "balance": {
+            "card": 0,
+            "ton": 0,
+            "bep20": 0
+        },
+        "orders": 0,
+        "expenses": 0,
+        "userorders": [],
+        "topups": [],
+        "status": "active",
+        "registration_date": "2025-10-28 20:02:39",
+        "last_login": "2025-10-28 20:02:42"
+    }
+}

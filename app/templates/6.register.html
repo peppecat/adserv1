@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - KeyzPanel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --info: #0066C0;
+            --warning: #FFC107;
+            --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #FF9900 0%, #FF8F00 100%);
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .register-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .register-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .register-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            border-radius: 4px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        .password-requirements {
+            background: linear-gradient(135deg, #f7f9fc 0%, #edf2f7 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--info);
+        }
+        
+        .password-requirements h6 {
+            color: var(--info);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .requirements-list li {
+            padding: 0.25rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .requirements-list li:before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .terms-check {
+            margin: 1.5rem 0;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .form-check-label {
+            font-size: 0.9rem;
+        }
+        
+        .form-check-label a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .login-link a:hover {
+            color: #e68a00;
+        }
+        
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        @media (max-width: 576px) {
+            .register-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .register-title {
+                font-size: 1.5rem;
+            }
+            
+            .password-requirements {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="register-logo">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </div>
+            <h1 class="register-title">Создание аккаунта</h1>
+            <p class="register-subtitle">Заполните информацию для регистрации</p>
+        </div>
+
+        <form method="POST" action="">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="mb-3">
+                <label class="form-label">Логин</label>
+                <input type="text" name="username" class="form-control" placeholder="Придумайте логин" required maxlength="150">
+                <small class="text-muted">Обязательное поле. Не более 150 символов. Только буквы, цифры и @/./+/-/_</small>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label class="form-label">Пароль</label>
+                <div class="input-group">
+                    <input type="password" name="password1" class="form-control" autocomplete="new-password" placeholder="Создайте пароль" required id="password1">
+                    <span class="password-toggle" onclick="togglePassword('password1', 'passwordIcon1')">
+                        <i class="fas fa-eye" id="passwordIcon1"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label class="form-label">Подтверждение пароля</label>
+                <div class="input-group">
+                    <input type="password" name="password2" class="form-control" autocomplete="new-password" placeholder="Повторите пароль" required id="password2">
+                    <span class="password-toggle" onclick="togglePassword('password2', 'passwordIcon2')">
+                        <i class="fas fa-eye" id="passwordIcon2"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="password-requirements">
+                <h6><i class="fas fa-shield-alt me-2"></i>Требования к паролю:</h6>
+                <ul class="requirements-list">
+                    <li>Пароль не должен быть слишком похож на другую вашу личную информацию</li>
+                    <li>Пароль должен содержать минимум 8 символов</li>
+                    <li>Пароль не должен быть commonly used password</li>
+                    <li>Пароль не может состоять только из цифр</li>
+                </ul>
+            </div>
+
+            <div class="terms-check">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="terms" id="id_terms" required>
+                    <label class="form-check-label" for="id_terms">
+                        Я прочитал и согласен с <a href="/terms_of_use" target="_blank">пользовательским соглашением</a>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3">
+                <i class="fas fa-user-plus me-2"></i>Зарегистрироваться
+            </button>
+
+            <div class="login-link">
+                <small>Уже есть аккаунт? <a href="/login">Войти</a></small>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const passwordIcon = document.getElementById(iconId);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Автоматическое скрытие алертов через 5 секунд
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

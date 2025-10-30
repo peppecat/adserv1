@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поддержка - KeyzPanel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --info: #0066C0;
+            --warning: #FFC107;
+            --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #FF9900 0%, #FF8F00 100%);
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .section {
+            padding: 3rem 0;
+        }
+        
+        .section-dark {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .support-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .support-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .support-section h3 {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+        
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .contact-card {
+            flex: 1;
+            min-width: 250px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .contact-card h4 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .contact-card p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .btn-telegram {
+            background-color: #0088cc;
+            border-color: #0088cc;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .btn-telegram:hover {
+            background-color: #006da3;
+            border-color: #006da3;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-email {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .btn-email:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        .faq-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .faq-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-list li:before {
+            content: '•';
+            position: absolute;
+            left: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, #fff3e6 0%, #ffe6cc 100%);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .important-note h4 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            padding: 2rem 0;
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .support-content {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .contact-methods {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL.COM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn-success me-2" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/register">
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="section">
+            <div class="support-content">
+                <h2 class="section-title">Служба поддержки</h2>
+                
+                <div class="important-note">
+                    <h4><i class="fas fa-exclamation-circle me-2"></i>Мы всегда готовы помочь!</h4>
+                    <p class="mb-0">Наша команда поддержки работает круглосуточно, чтобы решить любые ваши вопросы. Выберите удобный способ связи.</p>
+                </div>
+
+                <div class="contact-methods">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <h4>Telegram</h4>
+                        <p>Самый быстрый способ получить помощь. Напишите нам в Telegram, и мы ответим в течение нескольких минут.</p>
+                        <a href="https://t.me/keyzpanel_manager" target="_blank" class="btn btn-telegram">
+                            <i class="fab fa-telegram me-2"></i>Написать в Telegram
+                        </a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h4>Электронная почта</h4>
+                        <p>Напишите нам на email, и мы ответим в течение 24 часов. Прикрепляйте скриншоты для более быстрого решения вопроса.</p>
+                        <a href="mailto:keyzpanel.ru@gmail.com" class="btn btn-email">
+                            <i class="fas fa-envelope me-2"></i>keyzpanel.ru@gmail.com
+                        </a>
+                    </div>
+                </div>
+
+                <div class="support-section">
+                    <h3>Часто задаваемые вопросы</h3>
+                    <ul class="faq-list">
+                        <li><strong>Какие методы оплаты вы принимаете?</strong> Мы принимаем банковские карты, электронные кошельки и криптовалюту.</li>
+                        <li><strong>Сколько времени занимает доставка ключа?</strong> Ключи доставляются автоматически в течение 1-5 минут после оплаты.</li>
+                        <li><strong>Что делать, если ключ не работает?</strong> Свяжитесь с нами через Telegram или email, и мы решим проблему.</li>
+                        <li><strong>Есть ли возврат средств?</strong> Возврат возможен в течение 14 дней при условии, что ошибка на нашей стороне и ключ не был активирован.</li>
+                        <li><strong>Как работает партнерская программа?</strong> Подробности партнерской программы доступны в вашем личном кабинете.</li>
+                    </ul>
+                </div>
+
+                <div class="support-section">
+                    <h3>Время ответа поддержки</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fab fa-telegram me-2 text-primary"></i>Telegram</h5>
+                                    <p class="card-text">Среднее время ответа: <strong>5-15 минут</strong></p>
+                                    <p class="card-text">Работаем: <strong>круглосуточно</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="fas fa-envelope me-2 text-primary"></i>Электронная почта</h5>
+                                    <p class="card-text">Среднее время ответа: <strong>2-12 часов</strong></p>
+                                    <p class="card-text">Работаем: <strong>круглосуточно</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Вернуться на главную
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="copyright mb-3">&copy; 2025 KEYZPANEL.COM. Все права защищены.</p>
+                    <nav>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item"><a href="/terms_of_use">Пользовательское соглашение</a></li>
+                            <li class="list-inline-item"><a href="/user_agreement">Политика конфиденциальности</a></li>
+                            <li class="list-inline-item"><a href="/support">Поддержка</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности - KeyzPanel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --info: #0066C0;
+            --warning: #FFC107;
+            --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            --gradient-primary: linear-gradient(135deg, #FF9900 0%, #FF8F00 100%);
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .section {
+            padding: 3rem 0;
+        }
+        
+        .section-dark {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .terms-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .terms-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .terms-section h3 {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+        
+        .terms-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .terms-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .terms-list li:before {
+            content: '•';
+            position: absolute;
+            left: 1rem;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, #fff3e6 0%, #ffe6cc 100%);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .important-note h4 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #111;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background-color: var(--secondary);
+            padding: 2rem 0;
+            color: white;
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .terms-content {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL.COM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn-success me-2" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/register">
+                            <i class="fas fa-user-plus me-1"></i> Регистрация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="section">
+            <div class="terms-content">
+                <h2 class="section-title">Политика конфиденциальности</h2>
+                
+                <div class="important-note">
+                    <h4><i class="fas fa-exclamation-circle me-2"></i>Важная информация</h4>
+                    <p class="mb-0">Настоящая Политика конфиденциальности описывает, как мы собираем, используем и защищаем ваши личные данные.</p>
+                </div>
+
+                <div class="terms-section">
+                    <h3>1. Общие положения</h3>
+                    <ul class="terms-list">
+                        <li>Настоящая Политика конфиденциальности регулирует порядок обработки и защиты информации о пользователях сайта KEYZPANEL.COM.</li>
+                        <li>Используя наш сайт, вы соглашаетесь с условиями сбора и использования данных в соответствии с настоящей политикой.</li>
+                        <li>Мы обязуемся защищать вашу конфиденциальность и обеспечивать безопасность ваших персональных данных.</li>
+                        <li>Администрация оставляет за собой право изменять настоящую Политику конфиденциальности в любое время.</li>
+                        <li>Продолжение использования сайта после внесения изменений означает ваше согласие с новой редакцией Политики.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>2. Собираемая информация</h3>
+                    <ul class="terms-list">
+                        <li>Мы собираем информацию, которую вы предоставляете при регистрации, включая имя, адрес электронной почты и другую контактную информацию.</li>
+                        <li>При совершении покупок мы собираем данные, необходимые для обработки платежей.</li>
+                        <li>Автоматически собирается техническая информация: IP-адрес, тип браузера, данные об устройстве и история посещений.</li>
+                        <li>Мы используем файлы cookie и аналогичные технологии для анализа предпочтений пользователей и улучшения работы сайта.</li>
+                        <li>Мы можем получать информацию от третьих сторон, включая платежные системы и партнеров по маркетингу.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>3. Использование информации</h3>
+                    <ul class="terms-list">
+                        <li>Собранная информация используется для предоставления и улучшения наших услуг, обработки транзакций и обслуживания клиентов.</li>
+                        <li>Мы используем ваши данные для персонализации вашего опыта и предоставления релевантного контента.</li>
+                        <li>Ваша информация может использоваться для отправки уведомлений о изменениях в услугах, специальных предложениях и обновлениях.</li>
+                        <li>Мы можем использовать данные для анализа тенденций, администрирования сайта и сбора демографической информации.</li>
+                        <li>Анонимизированные данные могут использоваться в маркетинговых и аналитических целях.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>4. Защита данных</h3>
+                    <ul class="terms-list">
+                        <li>Мы реализуем соответствующие технические и организационные меры для защиты ваших персональных данных.</li>
+                        <li>Все передаваемые данные шифруются с использованием технологии SSL.</li>
+                        <li>Доступ к персональным данным имеют только уполномоченные сотрудники, которым эта информация необходима для выполнения служебных обязанностей.</li>
+                        <li>Мы регулярно пересматриваем наши практики сбора, хранения и обработки данных для обеспечения безопасности.</li>
+                        <li>Несмотря на наши усилия, ни один метод передачи через интернет или метод электронного хранения не является на 100% безопасным.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>5. Передача данных третьим лицам</h3>
+                    <ul class="terms-list">
+                        <li>Мы не продаем, не обмениваем и не передаем ваши персональные данные третьим лицам без вашего согласия, за исключением случаев, предусмотренных законом.</li>
+                        <li>Мы можем передавать информацию доверенным третьим сторонам, которые помогают нам в работе сайта, при условии соблюдения ими конфиденциальности.</li>
+                        <li>Ваши данные могут передаваться в случае реорганизации компании, слияния или продажи активов.</li>
+                        <li>Мы можем раскрывать информацию, если это требуется по закону или для защиты наших прав, собственности или безопасности.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>6. Файлы cookie</h3>
+                    <ul class="terms-list">
+                        <li>Мы используем файлы cookie для улучшения работы пользователей, анализа трафика и персонализации контента.</li>
+                        <li>Cookie — это небольшие файлы, которые сохраняются на вашем устройстве при посещении веб-сайтов.</li>
+                        <li>Вы можете настроить свой браузер так, чтобы он отклонял все файлы cookie или оповещал об их отправке.</li>
+                        <li>Отключение cookie может ограничить функциональность некоторых разделов сайта.</li>
+                        <li>Мы используем как сессионные cookie (удаляемые после закрытия браузера), так и постоянные cookie (сохраняемые на устройстве).</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>7. Ваши права</h3>
+                    <ul class="terms-list">
+                        <li>Вы имеете право запросить доступ, исправление или удаление ваших персональных данных.</li>
+                        <li>Вы можете возразить против обработки ваших данных или запросить ограничение их обработки.</li>
+                        <li>Вы имеете право отозвать свое согласие на обработку данных в любое время.</li>
+                        <li>Вы можете запросить предоставление данных в структурированном, машиночитаемом формате.</li>
+                        <li>Для реализации своих прав вы можете связаться с нами через контактную информацию на сайте.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>8. Хранение данных</h3>
+                    <ul class="terms-list">
+                        <li>Мы храним ваши персональные данные только в течение времени, необходимого для достижения целей, для которых они были собраны.</li>
+                        <li>Срок хранения данных зависит от их характера и целей обработки.</li>
+                        <li>Некоторые данные могут храниться в течение более длительного периода в соответствии с требованиями законодательства.</li>
+                        <li>После истечения срока хранения данные надежно удаляются или анонимизируются.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>9. Контакты</h3>
+                    <ul class="terms-list">
+                        <li>По всем вопросам, связанным с настоящей Политикой конфиденциальности, вы можете связаться с нами через форму обратной связи на сайте.</li>
+                        <li>Мы обязуемся отвечать на все запросы в разумные сроки, обычно в течение 30 дней.</li>
+                        <li>Если у вас есть жалоба на обработку ваших данных, вы имеете право подать жалобу в соответствующий орган по защите данных.</li>
+                    </ul>
+                </div>
+
+                <div class="important-note">
+                    <h4><i class="fas fa-check-circle me-2"></i>Согласие с политикой</h4>
+                    <p class="mb-0"><strong>Используя наш сайт, вы соглашаетесь с условиями настоящей Политики конфиденциальности.</strong></p>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Вернуться на главную
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="copyright mb-3">&copy; 2025 KEYZPANEL.COM. Все права защищены.</p>
+                    <nav>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item"><a href="/terms_of_use">Пользовательское соглашение</a></li>
+                            <li class="list-inline-item"><a href="/user_agreement">Политика конфиденциальности</a></li>
+                            <li class="list-inline-item"><a href="/support">Поддержка</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

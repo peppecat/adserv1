@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Мои заказы | KEYZPANEL</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicon & Logo -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary: #FF9900;
+            --secondary: #232F3E;
+            --light-bg: #FFFFFF;
+            --border-color: #DDDDDD;
+            --text-dark: #131921;
+            --text-light: #565959;
+            --success: #067D62;
+            --danger: #FF0000;
+            --warning: #FFA500;
+        }
+        
+        body {
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background-color: #F3F3F3;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        
+        .navbar {
+            background-color: var(--secondary) !important;
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 0.25rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary);
+            color: #111 !important;
+        }
+        
+        .card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: #F7F7F7;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: var(--border-color);
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Status badges */
+        .status-completed {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .status-pending {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .status-failed {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .status-processing {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+        }
+        
+        /* User info card styles */
+        .user-info-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-balance {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        @media (max-width: 768px) {
+            .navbar-toggler {
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Amazon-like breadcrumb */
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            font-size: 0.85rem;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        /* Price styling */
+        .price {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--border-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Button styles */
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Order details modal */
+        .order-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .detail-value {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-shopping-bag me-2"></i>KEYZPANEL
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-home me-1"></i> Магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/orders">
+                            <i class="fas fa-clipboard-list me-1"></i> Заказы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">
+                            <i class="fas fa-user me-1"></i> Аккаунт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my_store">
+                            <i class="fas fa-store me-1"></i> Мой магазин
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reseller">
+                            <i class="fas fa-layer-group me-1"></i> Реселлер
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выйти
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <div class="row mb-3">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/dashboard">Главная</a></li>
+                        <li class="breadcrumb-item active">Мои заказы</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- User Info Card -->
+        <div class="user-info-card d-flex align-items-center mb-4">
+            <div class="user-avatar">
+                {{ username[0].upper() }}
+            </div>
+            <div class="user-details">
+                <div class="user-name">{{ username }}</div>
+                <div class="user-balance">
+                    Баланс: ${{ "{:,.2f}".format(total_balance) }}
+                    <span class="badge bg-secondary ms-2">Всего заказов: {{ total_orders }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">История заказов</h2>
+                <span class="text-muted small">Всего: {{ total_orders }} заказов</span>
+            </div>
+            <div class="card-body p-0">
+                {% if user_orders %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Категория</th>
+                                <th>Продукт</th>
+                                <th>Цена</th>
+                                <th>Количество</th>
+                                <th>Дата</th>
+                                <th>Статус</th>
+                                <th>Детали</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in user_orders %}
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">{{ order.category }}</span>
+                                </td>
+                                <td>{{ order.product }}</td>
+                                <td>
+                                    <span class="price">${{ "%.2f"|format(order.price) }}</span>
+                                    {% if order.discount and order.discount > 0 %}
+                                    <br>
+                                    <small class="text-success">Скидка {{ order.discount }}%</small>
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ order.date }}
+                                    </small>
+                                </td>
+                                <td>
+                                    {% if order.transaction_status == 'completed' or order.status == 'completed' %}
+                                    <span class="badge status-completed">
+                                        <i class="fas fa-check-circle me-1"></i>Завершен
+                                    </span>
+                                    {% elif order.transaction_status == 'pending' or order.status == 'pending' %}
+                                    <span class="badge status-pending">
+                                        <i class="fas fa-clock me-1"></i>В обработке
+                                    </span>
+                                    {% elif order.transaction_status == 'failed' or order.status == 'failed' %}
+                                    <span class="badge status-failed">
+                                        <i class="fas fa-times-circle me-1"></i>Ошибка
+                                    </span>
+                                    {% else %}
+                                    <span class="badge status-processing">
+                                        <i class="fas fa-sync-alt me-1"></i>Обрабатывается
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.category == 'Steam' and order.steamLogin %}
+                                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#orderDetailsModal"
+                                            data-order-id="{{ order.id }}"
+                                            data-order-category="{{ order.category }}"
+                                            data-order-product="{{ order.product }}"
+                                            data-order-price="{{ order.price }}"
+                                            data-order-amount="{{ order.amount }}"
+                                            data-order-date="{{ order.date }}"
+                                            data-order-status="{% if order.transaction_status %}{{ order.transaction_status }}{% else %}{{ order.status }}{% endif %}"
+                                            data-order-steamlogin="{{ order.steamLogin }}"
+                                            data-order-transactionid="{{ order.transaction_id }}"
+                                            data-order-paidamount="{{ order.paid_amount }}"
+                                            data-order-requestedamount="{{ order.requested_amount }}">
+                                        <i class="fas fa-eye me-1"></i>Детали
+                                    </button>
+                                    {% else %}
+                                    <button type="button" class="btn btn-outline-primary btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#orderDetailsModal"
+                                            data-order-id="{{ order.id }}"
+                                            data-order-category="{{ order.category }}"
+                                            data-order-product="{{ order.product }}"
+                                            data-order-price="{{ order.price }}"
+                                            data-order-amount="{{ order.amount }}"
+                                            data-order-date="{{ order.date }}"
+                                            data-order-status="{% if order.transaction_status %}{{ order.transaction_status }}{% else %}{{ order.status }}{% endif %}"
+                                            data-order-transactionid="{{ order.transaction_id }}"
+                                            data-order-paidamount="{{ order.paid_amount }}"
+                                            data-order-requestedamount="{{ order.requested_amount }}">
+                                        <i class="fas fa-key me-1"></i>Показать ключ
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h4>Заказов пока нет</h4>
+                    <p class="text-muted">Совершите первую покупку в нашем магазине</p>
+                    <a href="/dashboard" class="btn btn-primary mt-3">
+                        <i class="fas fa-shopping-bag me-2"></i>Перейти в магазин
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">
+                        <i class="fas fa-info-circle me-2"></i>Детали заказа
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <span class="detail-label">ID заказа:</span>
+                                <span class="detail-value" id="modal-order-id">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Категория:</span>
+                                <span class="detail-value" id="modal-order-category">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Продукт:</span>
+                                <span class="detail-value" id="modal-order-product">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Количество:</span>
+                                <span class="detail-value" id="modal-order-amount">-</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <span class="detail-label">Цена:</span>
+                                <span class="detail-value" id="modal-order-price">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Дата:</span>
+                                <span class="detail-value" id="modal-order-date">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value">
+                                    <span id="modal-order-status-badge"></span>
+                                </span>
+                            </div>
+                            <div class="detail-item" id="modal-steam-login-item" style="display: none;">
+                                <span class="detail-label">Логин Steam:</span>
+                                <span class="detail-value" id="modal-order-steamlogin">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional details for Steam orders -->
+                    <div class="order-details mt-3" id="steam-order-details" style="display: none;">
+                        <h6 class="mb-3"><i class="fas fa-steam me-2"></i>Информация о пополнении Steam</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span class="detail-label">Запрошенная сумма:</span>
+                                    <span class="detail-value" id="modal-order-requestedamount">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Списано с баланса:</span>
+                                    <span class="detail-value" id="modal-order-paidamount">-</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <span class="detail-label">ID транзакции:</span>
+                                    <span class="detail-value" id="modal-order-transactionid">-</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Экономия:</span>
+                                    <span class="detail-value text-success" id="modal-order-savings">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key display for other products -->
+                    <div class="order-details mt-3" id="key-order-details" style="display: none;">
+                        <h6 class="mb-3"><i class="fas fa-key me-2"></i>Ключ продукта</h6>
+                        <div class="alert alert-info">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Нажмите чтобы показать ключ</span>
+                                <button class="btn btn-primary btn-sm" onclick="showProductKey()">
+                                    <i class="fas fa-eye me-1"></i>Показать ключ
+                                </button>
+                            </div>
+                            <div id="product-key" class="mt-2" style="display: none;">
+                                <code class="bg-light p-2 rounded d-block">XXXX-XXXX-XXXX-XXXX</code>
+                                <small class="text-muted">Сохраните ключ в надежном месте</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize modal with order details
+        const orderDetailsModal = document.getElementById('orderDetailsModal');
+        if (orderDetailsModal) {
+            orderDetailsModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                
+                // Extract order data from button attributes
+                const orderId = button.getAttribute('data-order-id');
+                const orderCategory = button.getAttribute('data-order-category');
+                const orderProduct = button.getAttribute('data-order-product');
+                const orderPrice = button.getAttribute('data-order-price');
+                const orderAmount = button.getAttribute('data-order-amount');
+                const orderDate = button.getAttribute('data-order-date');
+                const orderStatus = button.getAttribute('data-order-status');
+                const orderSteamLogin = button.getAttribute('data-order-steamlogin');
+                const orderTransactionId = button.getAttribute('data-order-transactionid');
+                const orderPaidAmount = button.getAttribute('data-order-paidamount');
+                const orderRequestedAmount = button.getAttribute('data-order-requestedamount');
+                
+                // Update modal content
+                document.getElementById('modal-order-id').textContent = orderId;
+                document.getElementById('modal-order-category').textContent = orderCategory;
+                document.getElementById('modal-order-product').textContent = orderProduct;
+                document.getElementById('modal-order-price').textContent = '$' + parseFloat(orderPrice).toFixed(2);
+                document.getElementById('modal-order-amount').textContent = orderAmount;
+                document.getElementById('modal-order-date').textContent = orderDate;
+                
+                // Update status badge
+                const statusBadge = document.getElementById('modal-order-status-badge');
+                statusBadge.innerHTML = '';
+                let statusClass = 'status-processing';
+                let statusText = 'Обрабатывается';
+                let statusIcon = 'fas fa-sync-alt';
+                
+                if (orderStatus === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Завершен';
+                    statusIcon = 'fas fa-check-circle';
+                } else if (orderStatus === 'pending') {
+                    statusClass = 'status-pending';
+                    statusText = 'В обработке';
+                    statusIcon = 'fas fa-clock';
+                } else if (orderStatus === 'failed') {
+                    statusClass = 'status-failed';
+                    statusText = 'Ошибка';
+                    statusIcon = 'fas fa-times-circle';
+                }
+                
+                statusBadge.innerHTML = `<span class="badge ${statusClass}"><i class="${statusIcon} me-1"></i>${statusText}</span>`;
+                
+                // Show/hide Steam login and details
+                const steamLoginItem = document.getElementById('modal-steam-login-item');
+                const steamOrderDetails = document.getElementById('steam-order-details');
+                const keyOrderDetails = document.getElementById('key-order-details');
+                
+                if (orderCategory === 'Steam' && orderSteamLogin) {
+                    steamLoginItem.style.display = 'flex';
+                    document.getElementById('modal-order-steamlogin').textContent = orderSteamLogin;
+                    steamOrderDetails.style.display = 'block';
+                    keyOrderDetails.style.display = 'none';
+                    
+                    // Update Steam order details
+                    if (orderRequestedAmount && orderPaidAmount) {
+                        document.getElementById('modal-order-requestedamount').textContent = '$' + parseFloat(orderRequestedAmount).toFixed(2);
+                        document.getElementById('modal-order-paidamount').textContent = '$' + parseFloat(orderPaidAmount).toFixed(2);
+                        
+                        // Calculate savings
+                        const savings = parseFloat(orderRequestedAmount) - parseFloat(orderPaidAmount);
+                        if (savings > 0) {
+                            document.getElementById('modal-order-savings').textContent = '$' + savings.toFixed(2) + ' (2%)';
+                        }
+                    }
+                    
+                    if (orderTransactionId) {
+                        document.getElementById('modal-order-transactionid').textContent = orderTransactionId;
+                    }
+                } else {
+                    steamLoginItem.style.display = 'none';
+                    steamOrderDetails.style.display = 'none';
+                    keyOrderDetails.style.display = 'block';
+                }
+            });
+        }
+        
+        // Function to show product key
+        function showProductKey() {
+            const keyElement = document.getElementById('product-key');
+            if (keyElement.style.display === 'none') {
+                keyElement.style.display = 'block';
+                // In a real application, you would fetch the actual key from your server
+                // For now, we'll just show a placeholder
+                keyElement.querySelector('code').textContent = 'ABCD-EFGH-IJKL-MNOP';
+            } else {
+                keyElement.style.display = 'none';
+            }
+        }
+        
+        // Auto-refresh page every 5 min. for pending orders
+        setTimeout(function() {
+            const pendingOrders = document.querySelectorAll('.status-pending, .status-processing');
+            if (pendingOrders.length > 0) {
+                window.location.reload();
+            }
+        }, 300000);
+    </script>
+</body>
+</html>
